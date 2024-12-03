@@ -284,7 +284,8 @@ PrefabInstance:
       propertyPath: m_ApplyRootMotion
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 5866666021909216657, guid: 8b1a1ff4b6b68894f96e886d0f00e1f0, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 8b1a1ff4b6b68894f96e886d0f00e1f0, type: 3}
@@ -297,6 +298,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 8b1a1ff4b6b68894f96e886d0f00e1f0, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1704743255}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 8b1a1ff4b6b68894f96e886d0f00e1f0, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1704743256}
   m_SourcePrefab: {fileID: 100100000, guid: 8b1a1ff4b6b68894f96e886d0f00e1f0, type: 3}
 --- !u!1 &274597060
 GameObject:
@@ -976,11 +980,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 8b1a1ff4b6b68894f96e886d0f00e1f0, type: 3}
   m_PrefabInstance: {fileID: 205560038}
   m_PrefabAsset: {fileID: 0}
---- !u!95 &1704743252 stripped
-Animator:
-  m_CorrespondingSourceObject: {fileID: 5866666021909216657, guid: 8b1a1ff4b6b68894f96e886d0f00e1f0, type: 3}
-  m_PrefabInstance: {fileID: 205560038}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1704743253 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 8b1a1ff4b6b68894f96e886d0f00e1f0, type: 3}
@@ -998,12 +997,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bbf231cb905724911b9ffb88381d4927, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  animator: {fileID: 1704743252}
+  animatorController: {fileID: 9100000, guid: 3458a797f48994ea2ad283eeab8b8059, type: 2}
   minionPrefab: {fileID: 1884058158}
   attackInterval: 5
-  rotationSpeed: 5
-  summonDistance: 3
   maxMinions: 3
+  health: 50
 --- !u!65 &1704743255
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1025,6 +1023,27 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!95 &1704743256
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1704743251}
+  m_Enabled: 1
+  m_Avatar: {fileID: 9000000, guid: 8b1a1ff4b6b68894f96e886d0f00e1f0, type: 3}
+  m_Controller: {fileID: 0}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1001 &1736543300
 PrefabInstance:
   m_ObjectHideFlags: 0

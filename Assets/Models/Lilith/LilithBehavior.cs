@@ -1,36 +1,48 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Collections;
 using UnityEngine;
 
 public class LilithBehavior : MonoBehaviour
 {
-    public Animator animator; // Reference to Animator
+    public RuntimeAnimatorController animatorController; // Reference to Animator Controller
     public GameObject minionPrefab; // Minion prefab (Ch25_nonPBR)
     public float attackInterval = 5f; // Time between attacks
-    public float rotationSpeed = 5f; // Speed at which Lilith rotates towards the cursor
-    public float summonDistance = 1.5f; // Distance in front of Lilith to summon minions
     public int maxMinions = 3; // Maximum number of minions Lilith can summon
 
+    public int health = 50;
+
+    private Animator animator; // Internal reference to Animator component
     private GameObject[] activeMinions; // Array to track currently summoned minions
-    private bool isSummoning = true; // Alternate between summon and divebomb
 
     private void Start()
     {
+        // Ensure Animator component is attached and assign the controller
+        animator = GetComponent<Animator>();
+        if (animator == null)
+        {
+            Debug.LogError("No Animator component found on Lilith!");
+            return;
+        }
+
+        if (animatorController != null)
+        {
+            animator.runtimeAnimatorController = animatorController;
+        }
+        else
+        {
+            Debug.LogError("No Animator Controller assigned to Lilith!");
+        }
+
         activeMinions = new GameObject[maxMinions];
         StartCoroutine(Phase1AttackLoop());
     }
 
-    private void Update()
-    {
-        RotateTowardsCursor();
-    }
-
     private IEnumerator Phase1AttackLoop()
     {
-        while (true) // Infinite loop for testing
+        while (true)
         {
-            if (isSummoning)
+            // Check if all minions are defeated
+            if (AreAllMinionsDefeated())
             {
                 PerformSummon();
             }
@@ -39,54 +51,51 @@ public class LilithBehavior : MonoBehaviour
                 PerformDivebomb();
             }
 
-            // Alternate attacks
-            isSummoning = !isSummoning;
+            yield return new WaitForSeconds(attackInterval);
+        }
+    }
 
-            yield return new WaitForSeconds(attackInterval); // Wait before the next attack
+    public void takeDamage(int damage)
+    {
+        // health -= damage;
+        // Debug.Log($"Lilith took {damage} damage. Remaining health: {health}");
+
+        // // Play hit reaction animation
+        // animator.SetTrigger("HitReaction");
+
+        if (AreAllMinionsDefeated())
+        {
+            // Play dying animation and disable behavior
+            health -= damage;
+            animator.SetTrigger("HitReaction");
+
         }
     }
 
     private void PerformSummon()
-{
-    Debug.Log("Lilith is summoning!");
-    animator.SetTrigger("Summon");
-
-    if (AreAllMinionsDefeated())
     {
-        // Define offsets for minion positions relative to Lilith
-        Vector3[] offsets = new Vector3[]
-        {
-            transform.forward * summonDistance,               // Front
-            transform.forward + transform.right * 2f, // Right
-            transform.forward - transform.right * 2f  // Left
-        };
+        Debug.Log("Lilith is summoning!");
+        animator.SetBool("Summon", true);
 
+        // Spawn minions at random positions
         for (int i = 0; i < maxMinions; i++)
         {
-            // Calculate spawn position based on offsets
-            Vector3 spawnPosition = transform.position + offsets[i];
+            float randomX = Random.Range(-40f, 40f);
+            float randomZ = Random.Range(-15f, 32f);
+            Vector3 spawnPosition = new Vector3(randomX, transform.position.y, randomZ);
 
-            // Instantiate and disable minion
             GameObject newMinion = Instantiate(minionPrefab, spawnPosition, Quaternion.identity);
             newMinion.SetActive(false); // Initially disable
-
-            activeMinions[i] = newMinion; // Store reference
+            activeMinions[i] = newMinion;
         }
 
-        // Enable minions after summon animation begins
+        // Enable minions after the summoning animation
         StartCoroutine(EnableMinionsAfterSummon());
     }
-    else
-    {
-        Debug.Log("Previous minions are still alive. Cannot summon.");
-    }
-}
-
 
     private IEnumerator EnableMinionsAfterSummon()
     {
-        // Wait for the summon animation to complete (adjust delay as needed)
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSeconds(1.0f); // Adjust to match animation duration
 
         foreach (GameObject minion in activeMinions)
         {
@@ -103,26 +112,8 @@ public class LilithBehavior : MonoBehaviour
     {
         Debug.Log("Lilith is performing Divebomb!");
         animator.SetTrigger("Divebomb");
-        // Add divebomb logic here if needed (e.g., damage player)
-    }
-
-    private void RotateTowardsCursor()
-    {
-        // Get the mouse position in the world
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        if (Physics.Raycast(ray, out RaycastHit hitInfo))
-        {
-            // Get the point where the ray hits
-            Vector3 targetPosition = hitInfo.point;
-
-            // Calculate the direction to the target position
-            Vector3 direction = (targetPosition - transform.position).normalized;
-            direction.y = 0; // Ignore the Y axis to keep Lilith upright
-
-            // Smoothly rotate towards the target direction
-            Quaternion targetRotation = Quaternion.LookRotation(direction);
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
-        }
+        animator.SetBool("Summon", false);
+        // Add divebomb logic if needed
     }
 
     private bool AreAllMinionsDefeated()
@@ -132,10 +123,5 @@ public class LilithBehavior : MonoBehaviour
             if (minion != null) return false;
         }
         return true;
-    }
-
-    private void takeDamage()
-    {
-        // Placeholder for taking damage
     }
 }
