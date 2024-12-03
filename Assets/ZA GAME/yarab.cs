@@ -16,12 +16,15 @@ public class yarab : MonoBehaviour
     public GameObject sorc;
     public GameObject rogue;
     public GameObject lilith;
+    public GameObject minion;
 
     public GameObject barbShield;
 
     public AnimatorController barbAnimator;
     public AnimatorController sorcAnimator;
     public AnimatorController rogueAnimator;
+    public AnimatorController lilithAnimatorPhase1;
+    public AnimatorController lilithAnimatorPhase2;
 
 
     public Movement movement;
@@ -36,6 +39,10 @@ public class yarab : MonoBehaviour
     private Animator animator;
 
     public Barbarian_Abilities Barbarian_Abilities;
+    public LilithBehavior LilithPhase1;
+    public lilithphase2testingscript Lilithphase2;
+
+    private int health = 100;
 
 
     // Start is called before the first frame update
@@ -78,6 +85,7 @@ public class yarab : MonoBehaviour
         }
         gameObject.GetComponent<CameraFollow>().target = currentCharacter.transform;
 
+        currentCharacter.AddComponent<BoxCollider>();
         currentCharacter.AddComponent<NavMeshAgent>();
         currentCharacter.AddComponent(movement.GetComponent<Movement>().GetType());
         currentCharacter.GetComponent<Movement>().camera = camera;
@@ -85,6 +93,7 @@ public class yarab : MonoBehaviour
         animator.applyRootMotion = false;
         minimapCamera.AddComponent<CameraFollow>();
         minimapCamera.GetComponent<CameraFollow>().target = marker.transform;
+        currentCharacter.tag = "Player";
 
         if (level == 1)
         {
@@ -98,8 +107,12 @@ public class yarab : MonoBehaviour
             currentBoss.GetComponent<BoxCollider>().center = new Vector3(0, 2, 0);
             currentBoss.GetComponent<BoxCollider>().size = new Vector3(1, 4, 1);
             currentBoss.tag = "Enemy";
-            //animator.applyRootMotion = false;
-
+            currentBoss.AddComponent<LilithBehavior>();
+            currentBoss.GetComponent<Animator>().runtimeAnimatorController = lilithAnimatorPhase1;
+            currentBoss.GetComponent<LilithBehavior>().animatorController = lilithAnimatorPhase1;
+            currentBoss.GetComponent<LilithBehavior>().minionPrefab = minion;
+            currentBoss.GetComponent<LilithBehavior>().cameraForYarab = camera;
+            currentBoss.GetComponent<Animator>().applyRootMotion = false;
         }
 
 
@@ -117,5 +130,27 @@ public class yarab : MonoBehaviour
             currentBoss.transform.LookAt(currentCharacter.transform);
         }
 
+    }
+
+    public void takeDamage(int damage)
+    {
+        if (currentCharacterName == "Barbarian")
+        {
+            if (currentCharacter.GetComponent<Barbarian_Abilities>().shieldActive == true) 
+                return;
+        }
+
+
+        
+        health -= damage;
+        if (health <= 0)
+        {
+            animator.SetTrigger("death"); 
+        }
+        else
+        {
+            animator.SetTrigger("hit reaction");
+
+        }
     }
 }

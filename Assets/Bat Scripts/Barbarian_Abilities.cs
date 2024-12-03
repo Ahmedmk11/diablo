@@ -23,6 +23,7 @@ public class Barbarian_Abilities : MonoBehaviour
     public float rotationSpeed = 10f; // Speed for rotating towards the enemy
 
     public GameObject shieldLight; // The Point Light (Shield)
+    public bool shieldActive = false; // Flag to indicate if the shield is active
    
     private NavMeshAgent agent; // NavMeshAgent for movement
 
@@ -50,7 +51,11 @@ public class Barbarian_Abilities : MonoBehaviour
         agent = GetComponent<NavMeshAgent>(); // Initialize NavMeshAgent
 
         // Ensure shield light and glow effect are initially inactive
-        if (shieldLight != null) shieldLight.SetActive(false);
+        if (shieldLight != null)
+        {
+            shieldLight.SetActive(false);
+            shieldActive = false;
+        }
 
     }
 
@@ -216,8 +221,11 @@ public class Barbarian_Abilities : MonoBehaviour
     {
         StartCooldown("Defensive");
 
-        if (shieldLight != null) 
+        if (shieldLight != null)
+        {
             shieldLight.SetActive(true);
+            shieldActive = true;
+        }
 
         animator.SetTrigger("TriggerDefensive");
         Debug.Log("Defensive ability triggered.");
@@ -348,7 +356,11 @@ public class Barbarian_Abilities : MonoBehaviour
     {
         yield return new WaitForSeconds(duration);
 
-        if (shieldLight != null) shieldLight.SetActive(false);
+        if (shieldLight != null)
+        {
+            shieldLight.SetActive(false);
+            shieldActive = false;
+        } 
 
         Debug.Log("Shield Deactivated");
     }

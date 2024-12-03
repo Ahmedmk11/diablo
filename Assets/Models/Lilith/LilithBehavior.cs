@@ -1,17 +1,19 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Animations;
 using UnityEngine;
 
 public class LilithBehavior : MonoBehaviour
 {
-    public RuntimeAnimatorController animatorController; // Reference to Animator Controller
+    public Camera cameraForYarab;
+    public AnimatorController animatorController; // Reference to Animator Controller
     public GameObject minionPrefab; // Minion prefab (Ch25_nonPBR)
     public float attackInterval = 5f; // Time between attacks
     public int maxMinions = 3; // Maximum number of minions Lilith can summon
 
     public int health = 50;
 
-    private Animator animator; // Internal reference to Animator component
+    private Animator animator; // Reference to Animator component
     private GameObject[] activeMinions; // Array to track currently summoned minions
 
     private void Start()
@@ -80,9 +82,9 @@ public class LilithBehavior : MonoBehaviour
         // Spawn minions at random positions
         for (int i = 0; i < maxMinions; i++)
         {
-            float randomX = Random.Range(-40f, 40f);
-            float randomZ = Random.Range(-15f, 32f);
-            Vector3 spawnPosition = new Vector3(randomX, transform.position.y, randomZ);
+            float randomX = Random.Range(-57f, 10f);
+            float randomZ = Random.Range(45f, 32f);
+            Vector3 spawnPosition = new Vector3(randomX, 4.5f, randomZ);
 
             GameObject newMinion = Instantiate(minionPrefab, spawnPosition, Quaternion.identity);
             newMinion.SetActive(false); // Initially disable
@@ -113,8 +115,36 @@ public class LilithBehavior : MonoBehaviour
         Debug.Log("Lilith is performing Divebomb!");
         animator.SetTrigger("Divebomb");
         animator.SetBool("Summon", false);
-        // Add divebomb logic if needed
+
+        // Define the radius of effect and get the position for the sphere
+        float radius = 5f; // Adjust radius as needed
+        Vector3 explosionPosition = transform.position; // Assuming the divebomb's impact point is Lilith's position
+
+        // Detect all colliders within the radius
+        Collider[] hitColliders = Physics.OverlapSphere(explosionPosition, radius);
+
+        // Iterate through colliders and apply damage to enemies
+        foreach (Collider collider in hitColliders)
+        {
+            if (collider.CompareTag("Player")) // Ensure to replace with the correct tag
+            {
+
+              
+
+                yarab yarab = cameraForYarab.GetComponent<yarab>();
+
+                yarab.takeDamage(20); // Adjust damage value as needed
+                Debug.Log($"Damaging {collider.name}");
+            }
+        }
+
+        // Optional: Visualize the explosion area for debugging
+        Debug.DrawLine(transform.position, transform.position + Vector3.up * 0.1f, Color.red, 1.0f);
+        Debug.DrawLine(transform.position + Vector3.right * radius, transform.position - Vector3.right * radius, Color.red, 1.0f);
+        Debug.DrawLine(transform.position + Vector3.forward * radius, transform.position - Vector3.forward * radius, Color.red, 1.0f);
     }
+
+
 
     private bool AreAllMinionsDefeated()
     {
