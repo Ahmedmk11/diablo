@@ -84,7 +84,6 @@ public class CreateCamp : MonoBehaviour
                 navMeshAgent.speed = 0.5f;
                 navMeshAgent.angularSpeed = 10f;
                 navMeshAgent.avoidancePriority = 10 + (currentMinion * 5);
-                navMeshAgent.obstacleAvoidanceType = ObstacleAvoidanceType.HighQualityObstacleAvoidance;
                 navMeshAgent.stoppingDistance = 1.5f;
                 
                 Minion minionScript = agent.AddComponent<Minion>();
@@ -92,16 +91,13 @@ public class CreateCamp : MonoBehaviour
                 minionScript.campManager = campManagerInstance;
                 minionScript.player = player.gameObject;
 
-                Debug.Log("ABOUZ");
 
                 Animator animator = agent.GetComponent<Animator>();
-                Debug.Log("AFTER ANIMATOR");
                 animator.runtimeAnimatorController = minionController;
                 animator.applyRootMotion = false;
 
-                Debug.Log("WESELT");
 
-                agent.tag = "Minion" + currentMinion;
+                agent.tag = "Enemy";
 
                 currentMinion++;
             }
@@ -121,13 +117,12 @@ public class CreateCamp : MonoBehaviour
             Vector3 agentPosition = new Vector3(x, centerPoint.y, z);
 
             GameObject agent = Instantiate(demonPrefab, agentPosition, Quaternion.identity);
-            agent.AddComponent<BoxCollider>();
+                            agent.AddComponent<BoxCollider>();
 
             NavMeshAgent navMeshAgent = agent.AddComponent<NavMeshAgent>();
             navMeshAgent.speed = 0.5f;
             navMeshAgent.angularSpeed = 10f;
             navMeshAgent.avoidancePriority = i * 5;
-            navMeshAgent.obstacleAvoidanceType = ObstacleAvoidanceType.HighQualityObstacleAvoidance;
             navMeshAgent.stoppingDistance = 1.5f;
 
             Demon demonScript = agent.AddComponent<Demon>();
@@ -139,7 +134,7 @@ public class CreateCamp : MonoBehaviour
             animator.runtimeAnimatorController = demonController;
             animator.applyRootMotion = false;
 
-            agent.tag = "Demon" + i;
+            agent.tag = "Enemy";
         }
     }
 

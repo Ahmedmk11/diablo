@@ -34,7 +34,10 @@ public class Minion : MonoBehaviour
             animator = GetComponent<Animator>();
         }
 
-        campManager.RegisterMinion(this);
+        if (campManager != null)
+        {
+            campManager.RegisterMinion(this);
+        }
     }
 
     private void Update()
@@ -59,6 +62,8 @@ public class Minion : MonoBehaviour
         }
 
         FaceMovementDirection();
+        // remove
+        if (hp < 20) print("Minion:"+hp);
     }
 
     void FaceMovementDirection()
@@ -95,7 +100,7 @@ public class Minion : MonoBehaviour
         Debug.Log("Minion Punch");
     }
 
-    public void TakeDamage(float damage)
+    public void takeDamage(float damage)
     {
         hp -= damage;
         if (hp <= 0)

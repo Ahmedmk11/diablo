@@ -6783,10 +6783,12 @@ MonoBehaviour:
   rogueAnimator: {fileID: 9100000, guid: ecc6a213e1bd1f643966c41028308be1, type: 2}
   lilithAnimatorPhase1: {fileID: 9100000, guid: 3458a797f48994ea2ad283eeab8b8059, type: 2}
   lilithAnimatorPhase2: {fileID: 9100000, guid: ceb402c1632537445b49b4afa64ed02b, type: 2}
+  minionAnimator: {fileID: 9100000, guid: b810b645bc0ce4c4ea06176edcb0a386, type: 2}
   movement: {fileID: 704810928}
   camera: {fileID: 150665590}
   minimapCamera: {fileID: 1682804100}
   marker: {fileID: 1270899414}
+  currentCharacter: {fileID: 0}
   Barbarian_Abilities: {fileID: 704810927}
   LilithPhase1: {fileID: 607552197}
   Lilithphase2: {fileID: 607552196}
@@ -18027,6 +18029,8 @@ MonoBehaviour:
   attackInterval: 5
   maxMinions: 3
   health: 50
+  minionController: {fileID: 9100000, guid: b810b645bc0ce4c4ea06176edcb0a386, type: 2}
+  player: {fileID: 0}
 --- !u!4 &607552198
 Transform:
   m_ObjectHideFlags: 0

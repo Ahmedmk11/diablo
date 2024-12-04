@@ -206,8 +206,7 @@ public class Barbarian_Abilities : MonoBehaviour
         StartCooldown("Basic"); // Start cooldown for the ability
 
         // wahwah
-        int damage = 10;
-        findAndDamageEnemy(damage);
+        findAndDamageEnemy(5, null);
 
         yield return new WaitForSeconds(1f); // Wait for the cooldown duration
 
@@ -255,7 +254,7 @@ public class Barbarian_Abilities : MonoBehaviour
             if (collider.CompareTag("Enemy"))
             {
                 // wahwah
-                findAndDamageEnemy(10);
+                findAndDamageEnemy(10, collider);
                 Debug.Log($"Damaged enemy: {collider.name}");
             }
         }
@@ -299,7 +298,7 @@ public class Barbarian_Abilities : MonoBehaviour
             if (hit.collider.CompareTag("Enemy"))
             {
                 // wahwah
-                findAndDamageEnemy(10);
+                findAndDamageEnemy(100, hit.collider);
                 Debug.Log($"Damaged enemy: {hit.collider.name}");
             }
         }
@@ -365,25 +364,32 @@ public class Barbarian_Abilities : MonoBehaviour
         Debug.Log("Shield Deactivated");
     }
 
-    private void findAndDamageEnemy(int damage)
+    private void findAndDamageEnemy(int damage, Collider collider)
     {
-        lilithphase2testingscript lilith = targetEnemy.GetComponent<lilithphase2testingscript>();
+        Transform target = collider == null ? targetEnemy : collider.transform;
+
+        LilithBehavior lilith = target.GetComponent<LilithBehavior>();
+        lilithphase2testingscript lilith2 = target.GetComponent<lilithphase2testingscript>();
+        Minion minion = target.GetComponent<Minion>();
+        Demon demon = target.GetComponent<Demon>();
+
         if (lilith != null)
         {
-            lilith.takeDamage(10);
+            if (damage == 100) damage = 20;
+            lilith.takeDamage(damage);
         }
-        /*else {
-            script minion = targetEnemy.GetComponent<scriptMinion>();
-            if (minion != null)
-            {
-                minion.takeDamage(10);
-            } else {
-                script demon = targetEnemy.GetComponent<scriptDemon>();
-                if (demon != null)
-                {
-                    demon.takeDamage(10);
-                }
-            }
-        }*/
+        else if (lilith2 != null)
+        {
+            if (damage == 100) damage = 20;
+            lilith2.takeDamage(damage);
+        }
+        else if (minion != null)
+        {
+            minion.takeDamage(damage);
+        }
+        else if (demon != null)
+        {
+            demon.takeDamage(damage);
+        }
     }
 }
