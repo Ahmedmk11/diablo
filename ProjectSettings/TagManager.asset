@@ -26,6 +26,8 @@ TagManager:
   - Demon0
   - Demon1
   - FollowPlayerScript
+  - Ground
+  - Enemy
   layers:
   - Default
   - TransparentFX
