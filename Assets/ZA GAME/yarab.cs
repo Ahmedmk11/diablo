@@ -32,7 +32,7 @@ public class yarab : MonoBehaviour
     public Camera minimapCamera;
     public GameObject marker;
 
-    private GameObject currentCharacter;
+    public GameObject currentCharacter;
     private string currentCharacterName;
     private GameObject currentBoss;
 
@@ -49,7 +49,7 @@ public class yarab : MonoBehaviour
     void Start()
     {
         // TEMP
-        level = 2;
+        level = 1;
         // ha5od variable men character selection screen 1: barb 2: sorc 3: rogue
         int character = 1;
         // TEMP
@@ -93,6 +93,7 @@ public class yarab : MonoBehaviour
         animator.applyRootMotion = false;
         minimapCamera.AddComponent<CameraFollow>();
         minimapCamera.GetComponent<CameraFollow>().target = marker.transform;
+        GetComponent<CreateCamp>().player = currentCharacter.transform;
         currentCharacter.tag = "Player";
 
         if (level == 1)

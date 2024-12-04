@@ -78,7 +78,7 @@ public class Demon : MonoBehaviour
             agent.stoppingDistance = 0f;
         }
 
-        if (Vector3.Distance(player.transform.position, transform.position) <= maxStoppingDistance)
+        if (followingPlayer && agent.remainingDistance <= 1f)
         {
             // randomly do one attack 
 

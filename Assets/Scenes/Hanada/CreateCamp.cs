@@ -2,6 +2,7 @@ using UnityEditor.Animations;
 using UnityEngine;
 using UnityEngine.AI;
 using System.Collections.Generic;
+using static UnityEngine.GraphicsBuffer;
 
 public class CreateCamp : MonoBehaviour
 {
@@ -11,14 +12,14 @@ public class CreateCamp : MonoBehaviour
     public AnimatorController demonController;
     public AnimatorController minionController;
     public List<Vector3> campPositions;
-    public string campTag;
     private float demonsPatrolRadius = 8f;
     private float minionsIdleRadius = 1.5f;
     private int numberOfMinions = 16;
     public CampManager campManagerPrefab;
     private CampManager campManagerInstance;
+    private bool firstTime = true;
 
-    private void Start()
+/*    private void Start()
     {
         foreach (Vector3 campPosition in campPositions)
         {
@@ -30,6 +31,26 @@ public class CreateCamp : MonoBehaviour
 
 
             SpawnMinionsAndDemons(campManagerInstance, campPosition);
+        }
+    }*/
+
+    void LateUpdate()
+    {
+        if (firstTime)
+        {
+            foreach (Vector3 campPosition in campPositions)
+            {
+                CampManager campManagerInstance = Instantiate(campManagerPrefab, campPosition, Quaternion.identity);
+                campManagerInstance.transform.position = campPosition;
+                campManagerInstance.player = player;
+                campManagerInstance.campRadius = demonsPatrolRadius;
+                campManagerInstance.centerPoint = campPosition;
+
+
+                SpawnMinionsAndDemons(campManagerInstance, campPosition);
+            }
+
+            firstTime = false;
         }
     }
 
@@ -57,7 +78,8 @@ public class CreateCamp : MonoBehaviour
 
                 Vector3 agentPosition = new Vector3(x, centerPoint.y, z);
                 GameObject agent = Instantiate(minionPrefab, agentPosition, Quaternion.identity);
-
+                
+                agent.AddComponent<BoxCollider>();
                 NavMeshAgent navMeshAgent = agent.AddComponent<NavMeshAgent>();
                 navMeshAgent.speed = 0.5f;
                 navMeshAgent.angularSpeed = 10f;
@@ -70,9 +92,14 @@ public class CreateCamp : MonoBehaviour
                 minionScript.campManager = campManagerInstance;
                 minionScript.player = player.gameObject;
 
+                Debug.Log("ABOUZ");
+
                 Animator animator = agent.GetComponent<Animator>();
+                Debug.Log("AFTER ANIMATOR");
                 animator.runtimeAnimatorController = minionController;
                 animator.applyRootMotion = false;
+
+                Debug.Log("WESELT");
 
                 agent.tag = "Minion" + currentMinion;
 
@@ -94,6 +121,7 @@ public class CreateCamp : MonoBehaviour
             Vector3 agentPosition = new Vector3(x, centerPoint.y, z);
 
             GameObject agent = Instantiate(demonPrefab, agentPosition, Quaternion.identity);
+            agent.AddComponent<BoxCollider>();
 
             NavMeshAgent navMeshAgent = agent.AddComponent<NavMeshAgent>();
             navMeshAgent.speed = 0.5f;
