@@ -22,29 +22,32 @@ public class Movement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) )
         {
+            print("mouse down");
             Ray ray = camera.ScreenPointToRay(Input.mousePosition);
-            if (Physics.Raycast(ray, out hit))
+            if (Physics.Raycast(ray, out hit) && !UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject())
             {
-                
-                
-                    agent.SetDestination(hit.point);
-                   
-                
+
+                agent.SetDestination(hit.point);
+
+
             }
             Vector3 direction = hit.point - transform.position;
-            
+
             Quaternion rotation = Quaternion.LookRotation(direction);
             transform.rotation = Quaternion.Lerp(transform.rotation, rotation, 0.5f);
         }
-        float speed = agent.velocity.magnitude ; // Get the current speed of the player
-        if (speed > 3) {
+        float speed = agent.velocity.magnitude; // Get the current speed of the player
+        if (speed > 3)
+        {
             speedo = -1;
-        }else if (speed > 0)
+        }
+        else if (speed > 0)
         {
             speedo = 1;
-        }else
+        }
+        else
         {
             speedo = 0;
         }

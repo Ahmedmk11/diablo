@@ -4,7 +4,30 @@
 TagManager:
   serializedVersion: 2
   tags:
+  - Camp0
+  - Camp1
+  - Camp2
+  - Minion0
+  - Minion1
+  - Minion2
+  - Minion3
+  - Minion4
+  - Minion5
+  - Minion6
+  - Minion7
+  - Minion8
+  - Minion9
+  - Minion10
+  - Minion11
+  - Minion12
+  - Minion13
+  - Minion14
+  - Minion15
+  - Demon0
+  - Demon1
+  - FollowPlayerScript
   - Ground
+  - Enemy
   layers:
   - Default
   - TransparentFX
@@ -12,9 +35,9 @@ TagManager:
   - 
   - Water
   - UI
-  - 
-  - 
-  - 
+  - Walkable
+  - Obstacle
+  - Not Walkable
   - 
   - 
   - 
