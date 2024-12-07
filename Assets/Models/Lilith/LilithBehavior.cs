@@ -58,7 +58,8 @@ public class LilithBehavior : MonoBehaviour
                     firsttime = false;
                     PerformSummon();
                 }
-                else{
+                else
+                {
                     yield return new WaitForSeconds(15.0f);
                     PerformSummon();
                 }
@@ -109,17 +110,19 @@ public class LilithBehavior : MonoBehaviour
             NavMeshAgent navMeshAgent = newMinion.AddComponent<NavMeshAgent>();
             navMeshAgent.speed = 0.5f;
             navMeshAgent.angularSpeed = 10f;
-            navMeshAgent.obstacleAvoidanceType = ObstacleAvoidanceType.HighQualityObstacleAvoidance;
+            navMeshAgent.stoppingDistance = 2.0f;
+            // navMeshAgent.obstacleAvoidanceType = ObstacleAvoidanceType.HighQualityObstacleAvoidance;
 
             Minion minionScript = newMinion.AddComponent<Minion>();
             minionScript.followingPlayer = true;
             minionScript.player = player.gameObject;
-
+            minionScript.yarabScript = cameraForYarab.GetComponent<yarab>();
 
             Animator minionAnimator = newMinion.GetComponent<Animator>();
             minionAnimator.runtimeAnimatorController = minionController;
             minionAnimator.applyRootMotion = false;
 
+            newMinion.tag = "Enemy";
 
             newMinion.SetActive(false); // Initially disable
             activeMinions[i] = newMinion;
@@ -165,7 +168,7 @@ public class LilithBehavior : MonoBehaviour
             if (collider.CompareTag("Player")) // Ensure to replace with the correct tag
             {
 
-              
+
 
                 yarab yarab = cameraForYarab.GetComponent<yarab>();
 
@@ -184,7 +187,7 @@ public class LilithBehavior : MonoBehaviour
 
     private bool AreAllMinionsDefeated()
     {
-        
+
         foreach (GameObject minion in activeMinions)
         {
             if (minion != null) return false;
