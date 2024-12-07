@@ -6778,6 +6778,10 @@ MonoBehaviour:
   lilith: {fileID: 919132149155446097, guid: 8b1a1ff4b6b68894f96e886d0f00e1f0, type: 3}
   minion: {fileID: 919132149155446097, guid: fb34bf0f01f461f4cbbcee38a18c2c78, type: 3}
   barbShield: {fileID: 325983411}
+  arrow1: {fileID: 1566359048267273319, guid: 215c729eb6cf80c4c8a8ad9eed918f7b, type: 3}
+  shower: {fileID: 6240992605899186232, guid: 759bb212fcb79224ea53e36b8e6fc3bc, type: 3}
+  smoke: {fileID: 2522079221440020892, guid: fea3ce10f04060240be32c1d98584399, type: 3}
+  spark: {fileID: 2523170635868714095, guid: f063682089c3a6343a01ffe730347ead, type: 3}
   barbAnimator: {fileID: 9100000, guid: 6edcf24ee02c1694b93cf6ab2d09b458, type: 2}
   sorcAnimator: {fileID: 0}
   rogueAnimator: {fileID: 9100000, guid: ecc6a213e1bd1f643966c41028308be1, type: 2}
@@ -6789,9 +6793,15 @@ MonoBehaviour:
   minimapCamera: {fileID: 1682804100}
   marker: {fileID: 1270899414}
   currentCharacter: {fileID: 0}
+  animator: {fileID: 0}
   Barbarian_Abilities: {fileID: 704810927}
   LilithPhase1: {fileID: 607552197}
   Lilithphase2: {fileID: 607552196}
+  playerAnimationTrigger: {fileID: 704810930}
+  arrowShower: {fileID: 704810931}
+  bomb: {fileID: 704810932}
+  dash: {fileID: 704810933}
+  health: 100
 --- !u!114 &150665593
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -23788,6 +23798,10 @@ GameObject:
   - component: {fileID: 704810929}
   - component: {fileID: 704810928}
   - component: {fileID: 704810927}
+  - component: {fileID: 704810933}
+  - component: {fileID: 704810932}
+  - component: {fileID: 704810931}
+  - component: {fileID: 704810930}
   m_Layer: 0
   m_Name: GameObject
   m_TagString: Untagged
@@ -23842,6 +23856,84 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &704810930
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 704810926}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 14be761508eefda4493bb314f88cf55c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  arrowPrefab: {fileID: 0}
+  camera: {fileID: 0}
+  arrowSpawnPoint: {fileID: 0}
+  selectedEnemy: {fileID: 0}
+  launchForce: 20
+  arrowLifetime: 5
+--- !u!114 &704810931
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 704810926}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f7d1b1d7ab338e643b7e971e2afc0f4b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  arrowPrefab: {fileID: 0}
+  camera: {fileID: 0}
+  arrowSpawnPoint: {fileID: 0}
+  selectedEnemy: {fileID: 0}
+  position: {x: 0, y: 0, z: 0}
+  launchForce: 20
+  arrowLifetime: 5
+  enemyLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  detectionRadius: 2
+--- !u!114 &704810932
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 704810926}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 13a777aa5e343f54dab3a850b9ea1864, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  arrowPrefab: {fileID: 0}
+  camera: {fileID: 0}
+  arrowSpawnPoint: {fileID: 0}
+  position: {x: 0, y: 0, z: 0}
+  smoke: {fileID: 0}
+  launchForce: 7
+  arrowLifetime: 9
+  detectionRadius: 5
+  enemyLayer:
+    serializedVersion: 2
+    m_Bits: 0
+--- !u!114 &704810933
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 704810926}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e5ea0328a95d63049ac5bed88a170803, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  camera: {fileID: 0}
+  position: {x: 0, y: 0, z: 0}
 --- !u!1 &709369736
 GameObject:
   m_ObjectHideFlags: 0

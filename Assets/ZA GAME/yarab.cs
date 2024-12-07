@@ -20,6 +20,11 @@ public class yarab : MonoBehaviour
 
     public GameObject barbShield;
 
+    public GameObject arrow1;
+    public GameObject shower;
+    public GameObject smoke;
+    public GameObject spark;
+
     public AnimatorController barbAnimator;
     public AnimatorController sorcAnimator;
     public AnimatorController rogueAnimator;
@@ -43,6 +48,11 @@ public class yarab : MonoBehaviour
     public LilithBehavior LilithPhase1;
     public lilithphase2testingscript Lilithphase2;
 
+    public PlayerAnimationTrigger playerAnimationTrigger;
+    public ArrowShower arrowShower;
+    public Bomb bomb;
+    public Dash dash;
+
     public int health = 100;
     private int xp = 0;
 
@@ -52,7 +62,7 @@ public class yarab : MonoBehaviour
         // TEMP
         level = 1;
         // ha5od variable men character selection screen 1: barb 2: sorc 3: rogue
-        int character = 1;
+        int character = 3;
         // TEMP
 
         //Vector3 initVector = level == 1 ? new Vector3(-3.41f, 5, -25.5f) : new Vector3(50, 50, 50);
@@ -83,6 +93,32 @@ public class yarab : MonoBehaviour
             currentCharacterName = "Rogue";
             currentCharacter = Instantiate(rogue, initVector, Quaternion.identity);
             currentCharacter.GetComponent<Animator>().runtimeAnimatorController = rogueAnimator;
+            currentCharacter.AddComponent<PlayerAnimationTrigger>();
+            currentCharacter.GetComponent<PlayerAnimationTrigger>().camera = camera;
+            currentCharacter.GetComponent<PlayerAnimationTrigger>().arrowPrefab = arrow1;
+            currentCharacter.GetComponent<PlayerAnimationTrigger>().arrowSpawnPoint = currentCharacter.transform.GetChild(4).transform;
+            currentCharacter.GetComponent<PlayerAnimationTrigger>().launchForce = 17;
+            currentCharacter.GetComponent<PlayerAnimationTrigger>().arrowLifetime = 5;
+
+            currentCharacter.AddComponent<ArrowShower>();
+            currentCharacter.GetComponent<ArrowShower>().arrowPrefab = shower;
+            currentCharacter.GetComponent<ArrowShower>().camera = camera;
+            currentCharacter.GetComponent<ArrowShower>().launchForce = 20;
+            currentCharacter.GetComponent<ArrowShower>().arrowLifetime = 5;
+            currentCharacter.GetComponent<ArrowShower>().detectionRadius = 2;
+
+
+            currentCharacter.AddComponent<Bomb>();
+            currentCharacter.GetComponent<Bomb>().arrowPrefab = smoke;
+            currentCharacter.GetComponent<Bomb>().camera = camera;
+            currentCharacter.GetComponent<Bomb>().arrowSpawnPoint = currentCharacter.transform.GetChild(1).transform;
+            currentCharacter.GetComponent<Bomb>().smoke = spark;
+            currentCharacter.GetComponent<Bomb>().launchForce = 7;
+            currentCharacter.GetComponent<Bomb>().arrowLifetime = 5;
+            currentCharacter.GetComponent<Bomb>().detectionRadius = 5;
+
+            currentCharacter.AddComponent<Dash>();
+            currentCharacter.GetComponent<Dash>().camera = camera;
         }
         gameObject.GetComponent<CameraFollow>().target = currentCharacter.transform;
 

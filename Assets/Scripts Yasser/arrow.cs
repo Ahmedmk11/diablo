@@ -14,7 +14,7 @@ public class PlayerAnimationTrigger : MonoBehaviour
     public GameObject selectedEnemy;
 
     private bool isCooldown = false; // Cooldown flag
-    private float cooldownTime = 5f; // Cooldown duration
+    private float cooldownTime = 1f; // Cooldown duration
 
 
     public float launchForce = 20f; // Initial force applied to the arrow
@@ -54,12 +54,13 @@ public class PlayerAnimationTrigger : MonoBehaviour
             }
         }
         // Check for the key press (K) to shoot an arrow
-        if (Input.GetKeyDown(KeyCode.A) && !isCooldown)
+        if (!isCooldown)
         {
             if (selectedEnemy != null)
             {
                 // Set the "Arrow" trigger in the Animator
                 animator.SetTrigger("Arrow");
+                findAndDamageEnemy(5, selectedEnemy.GetComponent<Collider>());
                 StartCoroutine(DelayFunctionCall());
                 StartCoroutine(Cooldown());
             }
@@ -118,6 +119,33 @@ public class PlayerAnimationTrigger : MonoBehaviour
 
         // Reset cooldown flag
         isCooldown = false;
+    }
+
+    private void findAndDamageEnemy(int damage, Collider collider)
+    {
+        LilithBehavior lilith = collider.GetComponent<LilithBehavior>();
+        lilithphase2testingscript lilith2 = collider.GetComponent<lilithphase2testingscript>();
+        Minion minion = collider.GetComponent<Minion>();
+        Demon demon = collider.GetComponent<Demon>();
+
+        if (lilith != null)
+        {
+            if (damage == 100) damage = 20;
+            lilith.takeDamage(damage);
+        }
+        else if (lilith2 != null)
+        {
+            if (damage == 100) damage = 20;
+            lilith2.takeDamage(damage);
+        }
+        else if (minion != null)
+        {
+            minion.takeDamage(damage);
+        }
+        else if (demon != null)
+        {
+            demon.takeDamage(damage);
+        }
     }
 
 

@@ -39,10 +39,10 @@ public class Barbarian_Abilities : MonoBehaviour
     // Cooldown timers
     private Dictionary<string, float> abilityCooldownTimers = new Dictionary<string, float>
     {
-        { "Basic", 0f },
-        { "Defensive", 0f },
-        { "Wildcard", 0f },
-        { "Ultimate", 0f }
+        { "Basic", 1f },
+        { "Defensive", 10f },
+        { "Wildcard", 5f },
+        { "Ultimate", 10f }
     };
 
     private void Start()
