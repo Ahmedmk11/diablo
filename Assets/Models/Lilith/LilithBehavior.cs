@@ -134,6 +134,8 @@ public class LilithBehavior : MonoBehaviour
 
     private void PerformDivebomb()
     {
+
+        animator.SetTrigger("Dwarf Idle");
         Debug.Log("Lilith is performing Divebomb!");
         animator.SetTrigger("Divebomb");
         animator.SetBool("Summon", false);
