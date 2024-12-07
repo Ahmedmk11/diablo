@@ -101,7 +101,6 @@ public class LilithBehavior : MonoBehaviour
 
             Minion minionScript = newMinion.AddComponent<Minion>();
             minionScript.followingPlayer = true;
-            minionScript.minionController = minionController;
             minionScript.player = player.gameObject;
 
 

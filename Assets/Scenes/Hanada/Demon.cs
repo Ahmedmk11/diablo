@@ -178,7 +178,7 @@ public class Demon : MonoBehaviour
         yarabScript.gainXP((int)xp);
 
         campManager.UnregisterDemon(this);
-        Destroy(gameObject, 2f);
+        // Destroy(gameObject, 2f);
     }
 
     IEnumerator PatrolRandomly()

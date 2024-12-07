@@ -21,7 +21,6 @@ public class Minion : MonoBehaviour
     public yarab yarabScript;
     private bool isAttacking = false;
 
-
     private void Start()
     {
         if (agent == null)
@@ -107,7 +106,7 @@ public class Minion : MonoBehaviour
         animator.SetTrigger("isPunching");
         
         AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
-        float clipLength = 0f;
+        float clipLength = stateInfo.length;
 
         yarabScript.takeDamage((int)damage, "Minion", clipLength);
     }
@@ -119,6 +118,7 @@ public class Minion : MonoBehaviour
         Punch();
 
         yield return new WaitForSeconds(1.5f); 
+        isAttacking = false;
     }
 
     public void takeDamage(float damage)
