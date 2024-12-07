@@ -16727,6 +16727,7 @@ MonoBehaviour:
   - {x: 2, y: 5, z: 49.8}
   - {x: 53.18, y: 5, z: 43.18}
   campManagerPrefab: {fileID: 3363401093037399405, guid: 7b4bfb8a165b442b496ad7d237195fc3, type: 3}
+  particleSystem: {fileID: 4799787391677844021, guid: 749f0fd9bc2624a77b08b1b87ee345ff, type: 3}
 --- !u!1001 &802682352
 PrefabInstance:
   m_ObjectHideFlags: 0
