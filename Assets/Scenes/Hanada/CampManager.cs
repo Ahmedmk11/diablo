@@ -160,21 +160,21 @@ public class CampManager : MonoBehaviour
             }
         }
         
-        var outermostMinions = minions
-            .OrderBy(minion => Vector3.Distance(minion.transform.position, player.transform.position))
-            .ToList();
+        // var outermostMinions = minions
+        //     .OrderBy(minion => Vector3.Distance(minion.transform.position, player.transform.position))
+        //     .ToList();
 
-        foreach (Minion minion in outermostMinions)
-        {
-            if (alertedMinions.Count >= maxMinionsAlerted)
-                break;
+        // foreach (Minion minion in outermostMinions)
+        // {
+        //     if (alertedMinions.Count >= maxMinionsAlerted)
+        //         break;
 
-            if (!alertedMinions.Contains(minion))
-            {
-                alertedMinions.Add(minion);
-                minion.StartFollowingPlayer(player.gameObject);
-            }
-        }
+        //     if (!alertedMinions.Contains(minion))
+        //     {
+        //         alertedMinions.Add(minion);
+        //         minion.StartFollowingPlayer(player.gameObject);
+        //     }
+        // }
     }
 
     private void ResetNearbyEntities()

@@ -172,6 +172,8 @@ public class yarab : MonoBehaviour
             currentBoss.transform.LookAt(currentCharacter.transform);
         }
 
+        Debug.Log("Player xp: " + xp);
+
     }
 
     public void takeDamage(int damage, string attacker = "Enemy", float clipLength = 0)

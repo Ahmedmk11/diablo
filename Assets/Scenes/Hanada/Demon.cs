@@ -26,6 +26,8 @@ public class Demon : MonoBehaviour
     public int swings = 0;
     public yarab yarabScript;
     private bool isAttacking = false;
+    public GameObject particleSystem;
+    private ParticleSystem particleSystemInstance;
 
     private void Start()
     {
@@ -110,13 +112,22 @@ public class Demon : MonoBehaviour
         player = null;
     }
 
+    public void CreateExplosion(float clipLength)
+    {
+        particleSystemInstance = Instantiate(particleSystem, transform.position, Quaternion.identity).GetComponent<ParticleSystem>();
+        particleSystemInstance.transform.position = transform.position + (transform.forward * 1.5f) + new Vector3(0, 1, 0);
+
+        StartCoroutine(ActivateParticleSystemWithDelay(clipLength));
+    }
+
     IEnumerator AttackPlayer()
     {
         isAttacking = true;
 
         if (swings < 3)
         {
-            MeleeAttack();
+            // MeleeAttack();
+            ExplosiveAttack();
         }
         else
         {
@@ -141,7 +152,7 @@ public class Demon : MonoBehaviour
         AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
         float clipLength = stateInfo.length;
 
-        yarabScript.takeDamage((int)damageExplosive, "Demon", clipLength);
+        yarabScript.takeDamage((int)damageSwing, "Demon", clipLength);
     }
 
     public void ExplosiveAttack()
@@ -157,6 +168,7 @@ public class Demon : MonoBehaviour
 
         AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
         float clipLength = stateInfo.length;
+        CreateExplosion(clipLength);
 
         yarabScript.takeDamage((int)damageExplosive, "Demon", clipLength);
     }
@@ -221,5 +233,12 @@ public class Demon : MonoBehaviour
                 yield return null;
             }
         }
+    }
+
+    IEnumerator ActivateParticleSystemWithDelay(float delay)
+    {
+        particleSystemInstance.Stop();
+        yield return new WaitForSeconds(delay);
+        particleSystemInstance.Play();
     }
 }
