@@ -8,7 +8,6 @@ public class Minion : MonoBehaviour
 {
     public CampManager campManager;
     public Animator animator;
-    public AnimatorController minionController;
     public NavMeshAgent agent;
     private float hp = 20;
     private float xp = 10;
@@ -19,6 +18,9 @@ public class Minion : MonoBehaviour
     public float minStoppingDistance = 1.5f;
     public float maxStoppingDistance = 2.5f;
     private float currentStoppingDistance;
+    public yarab yarabScript;
+    private bool isAttacking = false;
+
 
     private void Start()
     {
@@ -50,8 +52,13 @@ public class Minion : MonoBehaviour
 
         if (followingPlayer)
         {
-            Debug.Log("Minion starts following the player");
             agent.SetDestination(player.transform.position);
+
+            if (!isAttacking && agent.velocity.sqrMagnitude <= 0.01f &&
+                Vector3.Distance(transform.position, player.transform.position) <= agent.stoppingDistance)
+            {
+                StartCoroutine(AttackPlayer());
+            }
         }
         else
         {
@@ -85,19 +92,34 @@ public class Minion : MonoBehaviour
         player = null;
     }
 
-    public void DropXP()
+    public void Punch()
     {
-        Debug.Log("Minion XP dropped");
+        if (yarabScript.health <= 0) {
+            return;
+        }
+
+        Debug.Log("Minion punch");
+        animator.SetTrigger("isPunching");
+        
+        AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
+        float clipLength = 0f;
+
+        yarabScript.takeDamage((int)damage, "Minion", clipLength);
     }
 
-    public void MeleeAttack()
+    IEnumerator AttackPlayer()
     {
-        Debug.Log("Minion Punch");
+        isAttacking = true;
+        
+        Punch();
+
+        yield return new WaitForSeconds(1.5f); 
     }
 
     public void TakeDamage(float damage)
     {
         hp -= damage;
+        animator.SetTrigger("isTakingDamage");
         if (hp <= 0)
         {
             Die();
@@ -107,5 +129,11 @@ public class Minion : MonoBehaviour
     public void Die()
     {
         Debug.Log("Minion died");
+        animator.SetTrigger("isDying");
+        yarabScript.gainXP((int)xp);
+
+        campManager.UnregisterMinion(this);
+
+        // Destroy(gameObject, 2f);
     }
 }

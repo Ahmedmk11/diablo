@@ -5,8 +5,8 @@ using System.Linq;
 public class CampManager : MonoBehaviour
 {
     public Transform player;
-    public int maxDemonsAlerted = 1;
-    public int maxMinionsAlerted = 5;
+    private int maxDemonsAlerted = 1;
+    private int maxMinionsAlerted = 1;
     public Vector3 centerPoint;
     public float campRadius;
     private List<Minion> minions = new List<Minion>();
@@ -17,7 +17,8 @@ public class CampManager : MonoBehaviour
     private Dictionary<Minion, Vector3> minionPositions = new Dictionary<Minion, Vector3>();
     private bool isPlayerInsideCampRadius = false;
     private System.Random random = new System.Random();
-
+    private bool playerDied = false;
+    public int playerHealth;
     private void Start()
     {
         float initialDistanceToCenter = Vector3.Distance(player.position, centerPoint);
@@ -40,6 +41,14 @@ public class CampManager : MonoBehaviour
             isPlayerInsideCampRadius = false;
             ResetNearbyEntities();
         }
+
+        if (!playerDied && demons[0].yarabScript.health <= 0)
+        // if (!playerDied && playerHealth <= 0)
+        {
+            playerDied = true;
+            ResetNearbyEntities();
+            Debug.Log("Player died (testing reset)");
+        }
     }
 
     public void RegisterMinion(Minion minion)
@@ -58,6 +67,79 @@ public class CampManager : MonoBehaviour
             demons.Add(demon);
             demonPositions[demon] = demon.transform.position;
         }
+    }
+
+    public void UnregisterMinion(Minion minion)
+    {
+        if (minions.Contains(minion))
+        {
+            minions.Remove(minion);
+            minionPositions.Remove(minion);
+
+            if (alertedMinions.Contains(minion))
+            {
+                alertedMinions.Remove(minion);
+            }
+
+            if (alertedMinions.Count < maxMinionsAlerted)
+            {
+                var outermostMinions = minions
+                    .OrderBy(minion => Vector3.Distance(minion.transform.position, player.transform.position))
+                    .ToList();
+
+                foreach (Minion newMinion in outermostMinions)
+                {
+                    if (!alertedMinions.Contains(newMinion))
+                    {
+                        alertedMinions.Add(newMinion);
+                        newMinion.StartFollowingPlayer(player.gameObject);
+                        break;
+                    }
+                }
+            }
+        }
+
+        if (IsCampGenocided())
+        {
+            Debug.Log("What have I done?");
+        }
+    }
+
+    public void UnregisterDemon(Demon demon)
+    {
+        if (demons.Contains(demon))
+        {
+            demons.Remove(demon);
+            demonPositions.Remove(demon);
+        }
+
+        if (alertedDemons.Contains(demon))
+        {
+            alertedDemons.Remove(demon);
+        }
+
+        if (alertedDemons.Count < maxDemonsAlerted)
+        {
+            foreach (Demon newDemon in demons)
+            {
+                if (!alertedDemons.Contains(newDemon))
+                {
+                    alertedDemons.Add(newDemon);
+                    newDemon.StartFollowingPlayer(player.gameObject);
+                    break;
+                }
+            }
+        }
+
+        if (IsCampGenocided())
+        {
+            Debug.Log("What have I done?");
+        }
+    }
+
+    private bool IsCampGenocided()
+    {
+        return demons.Count == 0 && minions.Count == 0;
     }
 
     private void AlertNearbyEntities()
@@ -101,7 +183,9 @@ public class CampManager : MonoBehaviour
         {
             demon.goingBack = true;
             demon.agent.ResetPath();
+            Debug.Log("before: Resetting demon path to initial");
             demon.agent.SetDestination(demonPositions[demon]);
+            Debug.Log("after: Resetting demon path to initial");
             demon.StopFollowingPlayer();
         }
 

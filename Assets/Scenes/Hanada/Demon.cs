@@ -1,18 +1,14 @@
 using System.Collections;
-using System.Collections.Generic;
-using UnityEditor.Animations;
 using UnityEngine;
 using UnityEngine.AI;
 
 public class Demon : MonoBehaviour
 {
-
     private float hp = 40;
     private float xp = 30;
     private float damageSwing = 10;
     private float damageExplosive = 15;
     public CampManager campManager;
-    public AnimatorController demonController;
     public Animator animator;
     public NavMeshAgent agent;
     public bool patrolling = true;
@@ -24,9 +20,12 @@ public class Demon : MonoBehaviour
     public bool followingPlayer = false;
     public GameObject player;
     public float minStoppingDistance = 1.5f;
-    public float maxStoppingDistance = 4f;
+    public float maxStoppingDistance = 2.5f;
     private float currentStoppingDistance;
     public bool goingBack = false;
+    public int swings = 0;
+    public yarab yarabScript;
+    private bool isAttacking = false;
 
     private void Start()
     {
@@ -45,7 +44,7 @@ public class Demon : MonoBehaviour
         }
 
         campManager.RegisterDemon(this);
-        
+
         StartCoroutine(PatrolRandomly());
     }
 
@@ -53,13 +52,12 @@ public class Demon : MonoBehaviour
     {
         if (goingBack)
         {
-            Debug.Log("half patrol on");
             patrolling = true;
             halfPatrol = true;
             goingBack = false;
         }
 
-        if (agent.velocity.sqrMagnitude > 0.01f)
+        if (agent.velocity.sqrMagnitude > 0.1f)
         {
             animator.SetBool("isMoving", true);
         }
@@ -70,28 +68,17 @@ public class Demon : MonoBehaviour
 
         if (followingPlayer)
         {
-            Debug.Log("Demon starts following the player");
             agent.SetDestination(player.transform.position);
+
+            if (!isAttacking && agent.velocity.sqrMagnitude <= 0.01f &&
+                Vector3.Distance(transform.position, player.transform.position) <= agent.stoppingDistance)
+            {
+                StartCoroutine(AttackPlayer());
+            }
         }
         else
         {
             agent.stoppingDistance = 0f;
-        }
-
-        if (followingPlayer && agent.remainingDistance <= 1f)
-        {
-            // randomly do one attack 
-
-            // System.Random random = System.Random(0, 2);
-            Debug.Log("bedan");
-
-            // MeleeAttack();
-            ExplosiveAttack();
-        }
-        else 
-        {
-            animator.SetBool("isSwinging", false);
-            animator.SetBool("isThrowing", false);
         }
 
         FaceMovementDirection();
@@ -121,27 +108,61 @@ public class Demon : MonoBehaviour
         player = null;
     }
 
-    public void DropXP()
+    IEnumerator AttackPlayer()
     {
-        Debug.Log("Demon XP dropped");
+        isAttacking = true;
+
+        if (swings < 3)
+        {
+            MeleeAttack();
+        }
+        else
+        {
+            ExplosiveAttack();
+        }
+
+        swings++;
+        yield return new WaitForSeconds(1.5f);
+        isAttacking = false;
     }
 
     public void MeleeAttack()
     {
+        if (yarabScript.health <= 0)
+        {
+            return;
+        }
+
         Debug.Log("Demon Swing");
-        animator.SetBool("isSwinging", true);
+        animator.SetTrigger("isSwinging");
+
+        AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
+        float clipLength = stateInfo.length;
+
+        yarabScript.takeDamage((int)damageExplosive, "Demon", clipLength);
     }
 
     public void ExplosiveAttack()
     {
+        if (yarabScript.health <= 0)
+        {
+            return;
+        }
+
         Debug.Log("Explosion");
-        animator.SetBool("isThrowing", true);
+        swings = 0;
+        animator.SetTrigger("isThrowing");
+
+        AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
+        float clipLength = stateInfo.length;
+
+        yarabScript.takeDamage((int)damageExplosive, "Demon", clipLength);
     }
 
     public void TakeDamage(float damage)
     {
         hp -= damage;
-        animator.SetBool("isTakingDamage", true);
+        animator.SetTrigger("isTakingDamage");
         if (hp <= 0)
         {
             Die();
@@ -151,9 +172,11 @@ public class Demon : MonoBehaviour
     public void Die()
     {
         Debug.Log("Demon died");
-        animator.SetBool("isDying", true);
+        animator.SetTrigger("isDying");
+        yarabScript.gainXP((int)xp);
 
-        // Destroy(gameObject, 2f);
+        campManager.UnregisterDemon(this);
+        Destroy(gameObject, 2f);
     }
 
     IEnumerator PatrolRandomly()
@@ -165,27 +188,16 @@ public class Demon : MonoBehaviour
                 yield return new WaitForSeconds(waitTime);
 
                 float z;
-                float actualPatrolDistance;
+                float actualPatrolDistance = halfPatrol ? patrolDistance / 2 : patrolDistance;
+                halfPatrol = false;
 
-                if (halfPatrol) {
-                    halfPatrol = false;
-                    actualPatrolDistance = patrolDistance / 2;
-                } else {
-                    actualPatrolDistance = patrolDistance;
+                if (agent.tag.Contains('0'))
+                {
+                    z = direction ? transform.position.z + actualPatrolDistance : transform.position.z - actualPatrolDistance;
                 }
-
-                if (agent.tag.Contains('0')) {
-                    if (direction) {
-                        z = transform.position.z + actualPatrolDistance;
-                    } else {
-                        z = transform.position.z - actualPatrolDistance;
-                    }
-                } else {
-                    if (!direction) {
-                        z = transform.position.z + actualPatrolDistance;
-                    } else {
-                        z = transform.position.z - actualPatrolDistance;
-                    }
+                else
+                {
+                    z = !direction ? transform.position.z + actualPatrolDistance : transform.position.z - actualPatrolDistance;
                 }
 
                 direction = !direction;
@@ -196,7 +208,7 @@ public class Demon : MonoBehaviour
                 agent.SetDestination(nextPosition);
 
                 while (agent.pathPending || agent.remainingDistance > agent.stoppingDistance)
-                {   
+                {
                     yield return null;
                 }
 

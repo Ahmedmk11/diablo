@@ -18,21 +18,12 @@ public class CreateCamp : MonoBehaviour
     public CampManager campManagerPrefab;
     private CampManager campManagerInstance;
     private bool firstTime = true;
+    private yarab yarabScript;
 
-/*    private void Start()
+    private void Start()
     {
-        foreach (Vector3 campPosition in campPositions)
-        {
-            CampManager campManagerInstance = Instantiate(campManagerPrefab, campPosition, Quaternion.identity);
-            campManagerInstance.transform.position = campPosition;
-            campManagerInstance.player = player;
-            campManagerInstance.campRadius = demonsPatrolRadius;
-            campManagerInstance.centerPoint = campPosition;
-
-
-            SpawnMinionsAndDemons(campManagerInstance, campPosition);
-        }
-    }*/
+        yarabScript = GetComponent<yarab>();
+    }
 
     void LateUpdate()
     {
@@ -45,6 +36,8 @@ public class CreateCamp : MonoBehaviour
                 campManagerInstance.player = player;
                 campManagerInstance.campRadius = demonsPatrolRadius;
                 campManagerInstance.centerPoint = campPosition;
+                campManagerInstance.playerHealth = yarabScript.health;
+                campManagerInstance.name = "Camp" + campPositions.IndexOf(campPosition);
 
 
                 SpawnMinionsAndDemons(campManagerInstance, campPosition);
@@ -83,23 +76,17 @@ public class CreateCamp : MonoBehaviour
                 NavMeshAgent navMeshAgent = agent.AddComponent<NavMeshAgent>();
                 navMeshAgent.speed = 0.5f;
                 navMeshAgent.angularSpeed = 10f;
-                navMeshAgent.avoidancePriority = 10 + (currentMinion * 5);
                 navMeshAgent.obstacleAvoidanceType = ObstacleAvoidanceType.HighQualityObstacleAvoidance;
                 navMeshAgent.stoppingDistance = 1.5f;
                 
                 Minion minionScript = agent.AddComponent<Minion>();
-                minionScript.minionController = minionController;
                 minionScript.campManager = campManagerInstance;
                 minionScript.player = player.gameObject;
-
-                Debug.Log("ABOUZ");
+                minionScript.yarabScript = yarabScript;
 
                 Animator animator = agent.GetComponent<Animator>();
-                Debug.Log("AFTER ANIMATOR");
                 animator.runtimeAnimatorController = minionController;
                 animator.applyRootMotion = false;
-
-                Debug.Log("WESELT");
 
                 agent.tag = "Minion" + currentMinion;
 
@@ -126,14 +113,13 @@ public class CreateCamp : MonoBehaviour
             NavMeshAgent navMeshAgent = agent.AddComponent<NavMeshAgent>();
             navMeshAgent.speed = 0.5f;
             navMeshAgent.angularSpeed = 10f;
-            navMeshAgent.avoidancePriority = i * 5;
             navMeshAgent.obstacleAvoidanceType = ObstacleAvoidanceType.HighQualityObstacleAvoidance;
             navMeshAgent.stoppingDistance = 1.5f;
 
             Demon demonScript = agent.AddComponent<Demon>();
-            demonScript.demonController = demonController;
             demonScript.campManager = campManagerInstance;
             demonScript.player = player.gameObject;
+            demonScript.yarabScript = yarabScript;
 
             Animator animator = agent.GetComponent<Animator>();
             animator.runtimeAnimatorController = demonController;

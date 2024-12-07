@@ -9,7 +9,7 @@ using UnityEngine.AI;
 public class yarab : MonoBehaviour
 {
     private int level;
-
+    private bool isDead = false;
 
 
     public GameObject barb;
@@ -36,14 +36,14 @@ public class yarab : MonoBehaviour
     private string currentCharacterName;
     private GameObject currentBoss;
 
-    private Animator animator;
+    public Animator animator;
 
     public Barbarian_Abilities Barbarian_Abilities;
     public LilithBehavior LilithPhase1;
     public lilithphase2testingscript Lilithphase2;
 
-    private int health = 100;
-
+    public int health = 100;
+    private int xp = 0;
 
     // Start is called before the first frame update
     void Start()
@@ -133,25 +133,48 @@ public class yarab : MonoBehaviour
 
     }
 
-    public void takeDamage(int damage)
+    public void takeDamage(int damage, string attacker = "Enemy", float clipLength = 0)
     {
         if (currentCharacterName == "Barbarian")
         {
             if (currentCharacter.GetComponent<Barbarian_Abilities>().shieldActive == true) 
                 return;
         }
-
-
         
         health -= damage;
-        if (health <= 0)
+
+        if (!isDead && health <= 0)
         {
-            animator.SetTrigger("death"); 
+            isDead = true;
+            StartCoroutine(WaitForAnimationToDie(clipLength)); 
+            Debug.Log("took damage from " + attacker + " and died");
         }
         else
         {
-            animator.SetTrigger("hit reaction");
-
+            StartCoroutine(WaitForAnimationToGetHit(clipLength)); 
+            Debug.Log("took damage from " + attacker + " " + health);
         }
+    }
+
+    private IEnumerator WaitForAnimationToDie(float clipLength)
+    {
+        yield return new WaitForSeconds(clipLength);
+        animator.SetTrigger("death");
+    }
+
+    private IEnumerator WaitForAnimationToGetHit(float clipLength)
+    {
+        yield return new WaitForSeconds(clipLength);
+
+        if (health > 0) 
+        {
+            animator.SetTrigger("hit reaction");
+        }
+    }
+
+    public int gainXP(int xp)
+    {
+        this.xp += xp;
+        return this.xp;
     }
 }
