@@ -26,9 +26,16 @@ public class Demon : MonoBehaviour
     public int swings = 0;
     public yarab yarabScript;
     private bool isAttacking = false;
+    public GameObject particleSystem;
+    private ParticleSystem particleSystemInstance;
 
     private void Start()
     {
+
+        particleSystemInstance = Instantiate(particleSystem, transform.position, Quaternion.identity).GetComponent<ParticleSystem>();
+        particleSystemInstance.transform.Rotate(90, 0, 0);
+        particleSystemInstance.gameObject.SetActive(false);
+
         if (agent == null)
         {
             agent = GetComponent<NavMeshAgent>();
@@ -141,7 +148,7 @@ public class Demon : MonoBehaviour
         AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
         float clipLength = stateInfo.length;
 
-        yarabScript.takeDamage((int)damageExplosive, "Demon", clipLength);
+        yarabScript.takeDamage((int)damageSwing, "Demon", clipLength);
     }
 
     public void ExplosiveAttack()
@@ -154,6 +161,7 @@ public class Demon : MonoBehaviour
         Debug.Log("Explosion");
         swings = 0;
         animator.SetTrigger("isThrowing");
+        StartCoroutine(ActivateParticleSystemWithDelay());
 
         AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
         float clipLength = stateInfo.length;
@@ -221,5 +229,17 @@ public class Demon : MonoBehaviour
                 yield return null;
             }
         }
+    }
+
+    IEnumerator ActivateParticleSystemWithDelay()
+    {
+        yield return new WaitForSeconds(0.8f);
+        Quaternion rotation = Quaternion.Euler(90, 3, transform.rotation.eulerAngles.y);
+        particleSystemInstance.transform.rotation = rotation;
+        Vector3 spawnPosition = transform.position + transform.forward * 8;
+        particleSystemInstance.transform.position = spawnPosition;
+        particleSystemInstance.gameObject.SetActive(true);
+        particleSystemInstance.Play();
+        Debug.Log("Particle system activated at " + spawnPosition);
     }
 }

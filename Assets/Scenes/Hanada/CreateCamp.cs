@@ -19,6 +19,7 @@ public class CreateCamp : MonoBehaviour
     private CampManager campManagerInstance;
     private bool firstTime = true;
     private yarab yarabScript;
+    public GameObject particleSystem;
 
     private void Start()
     {
@@ -121,6 +122,7 @@ public class CreateCamp : MonoBehaviour
             demonScript.campManager = campManagerInstance;
             demonScript.player = player.gameObject;
             demonScript.yarabScript = yarabScript;
+            demonScript.particleSystem = particleSystem;
 
             Animator animator = agent.GetComponent<Animator>();
             animator.runtimeAnimatorController = demonController;
