@@ -14,6 +14,8 @@ public class LilithBehavior : MonoBehaviour
 
     public int health = 50;
 
+    public bool firsttime = true;
+
     private Animator animator; // Reference to Animator component
     private GameObject[] activeMinions; // Array to track currently summoned minions
 
@@ -51,10 +53,20 @@ public class LilithBehavior : MonoBehaviour
             // Check if all minions are defeated
             if (AreAllMinionsDefeated())
             {
-                PerformSummon();
+                if (firsttime)
+                {
+                    firsttime = false;
+                    PerformSummon();
+                }
+                else{
+                    yield return new WaitForSeconds(15.0f);
+                    PerformSummon();
+                }
+
             }
             else
             {
+                yield return new WaitForSeconds(10.0f);
                 PerformDivebomb();
             }
 
@@ -172,6 +184,7 @@ public class LilithBehavior : MonoBehaviour
 
     private bool AreAllMinionsDefeated()
     {
+        
         foreach (GameObject minion in activeMinions)
         {
             if (minion != null) return false;
