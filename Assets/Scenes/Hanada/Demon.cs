@@ -31,11 +31,6 @@ public class Demon : MonoBehaviour
 
     private void Start()
     {
-
-        particleSystemInstance = Instantiate(particleSystem, transform.position, Quaternion.identity).GetComponent<ParticleSystem>();
-        particleSystemInstance.transform.Rotate(90, 0, 0);
-        particleSystemInstance.gameObject.SetActive(false);
-
         if (agent == null)
         {
             agent = GetComponent<NavMeshAgent>();
@@ -117,13 +112,22 @@ public class Demon : MonoBehaviour
         player = null;
     }
 
+    public void CreateExplosion(float clipLength)
+    {
+        particleSystemInstance = Instantiate(particleSystem, transform.position, Quaternion.identity).GetComponent<ParticleSystem>();
+        particleSystemInstance.transform.position = transform.position + (transform.forward * 1.5f) + new Vector3(0, 1, 0);
+
+        StartCoroutine(ActivateParticleSystemWithDelay(clipLength));
+    }
+
     IEnumerator AttackPlayer()
     {
         isAttacking = true;
 
         if (swings < 3)
         {
-            MeleeAttack();
+            // MeleeAttack();
+            ExplosiveAttack();
         }
         else
         {
@@ -161,10 +165,10 @@ public class Demon : MonoBehaviour
         Debug.Log("Explosion");
         swings = 0;
         animator.SetTrigger("isThrowing");
-        StartCoroutine(ActivateParticleSystemWithDelay());
 
         AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
         float clipLength = stateInfo.length;
+        CreateExplosion(clipLength);
 
         yarabScript.takeDamage((int)damageExplosive, "Demon", clipLength);
     }
@@ -231,15 +235,10 @@ public class Demon : MonoBehaviour
         }
     }
 
-    IEnumerator ActivateParticleSystemWithDelay()
+    IEnumerator ActivateParticleSystemWithDelay(float delay)
     {
-        yield return new WaitForSeconds(0.8f);
-        Quaternion rotation = Quaternion.Euler(90, 3, transform.rotation.eulerAngles.y);
-        particleSystemInstance.transform.rotation = rotation;
-        Vector3 spawnPosition = transform.position + transform.forward * 8;
-        particleSystemInstance.transform.position = spawnPosition;
-        particleSystemInstance.gameObject.SetActive(true);
+        particleSystemInstance.Stop();
+        yield return new WaitForSeconds(delay);
         particleSystemInstance.Play();
-        Debug.Log("Particle system activated at " + spawnPosition);
     }
 }
