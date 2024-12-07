@@ -82,6 +82,8 @@ public class Demon : MonoBehaviour
         }
 
         FaceMovementDirection();
+        // remove
+        if (hp < 40) print("Demon:" + hp);
     }
 
     void FaceMovementDirection()
@@ -159,7 +161,7 @@ public class Demon : MonoBehaviour
         yarabScript.takeDamage((int)damageExplosive, "Demon", clipLength);
     }
 
-    public void TakeDamage(float damage)
+    public void takeDamage(float damage)
     {
         hp -= damage;
         animator.SetTrigger("isTakingDamage");

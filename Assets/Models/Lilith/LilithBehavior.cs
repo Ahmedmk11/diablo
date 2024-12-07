@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditor.Animations;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class LilithBehavior : MonoBehaviour
 {
@@ -15,6 +16,10 @@ public class LilithBehavior : MonoBehaviour
 
     private Animator animator; // Reference to Animator component
     private GameObject[] activeMinions; // Array to track currently summoned minions
+
+    public AnimatorController minionController;
+    public GameObject player;
+
 
     private void Start()
     {
@@ -87,6 +92,24 @@ public class LilithBehavior : MonoBehaviour
             Vector3 spawnPosition = new Vector3(randomX, 4.5f, randomZ);
 
             GameObject newMinion = Instantiate(minionPrefab, spawnPosition, Quaternion.identity);
+
+            newMinion.AddComponent<BoxCollider>();
+            NavMeshAgent navMeshAgent = newMinion.AddComponent<NavMeshAgent>();
+            navMeshAgent.speed = 0.5f;
+            navMeshAgent.angularSpeed = 10f;
+            navMeshAgent.obstacleAvoidanceType = ObstacleAvoidanceType.HighQualityObstacleAvoidance;
+
+            Minion minionScript = newMinion.AddComponent<Minion>();
+            minionScript.followingPlayer = true;
+            minionScript.minionController = minionController;
+            minionScript.player = player.gameObject;
+
+
+            Animator minionAnimator = newMinion.GetComponent<Animator>();
+            minionAnimator.runtimeAnimatorController = minionController;
+            minionAnimator.applyRootMotion = false;
+
+
             newMinion.SetActive(false); // Initially disable
             activeMinions[i] = newMinion;
         }

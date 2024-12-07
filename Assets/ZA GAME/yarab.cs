@@ -25,6 +25,7 @@ public class yarab : MonoBehaviour
     public AnimatorController rogueAnimator;
     public AnimatorController lilithAnimatorPhase1;
     public AnimatorController lilithAnimatorPhase2;
+    public AnimatorController minionAnimator;
 
 
     public Movement movement;
@@ -93,15 +94,17 @@ public class yarab : MonoBehaviour
         animator.applyRootMotion = false;
         minimapCamera.AddComponent<CameraFollow>();
         minimapCamera.GetComponent<CameraFollow>().target = marker.transform;
-        GetComponent<CreateCamp>().player = currentCharacter.transform;
         currentCharacter.tag = "Player";
 
+        print(level);
         if (level == 1)
         {
             // add minions / demons
-        } 
+            GetComponent<CreateCamp>().player = currentCharacter.transform;
+        }
         else if (level == 2)
         {
+            print("level 2");
             currentBoss = Instantiate(lilith, new Vector3(-36.8f, 4.02f, 37.6f), Quaternion.identity);
             currentBoss.AddComponent<BoxCollider>();
             // raise and stretch the box collider
@@ -113,6 +116,8 @@ public class yarab : MonoBehaviour
             currentBoss.GetComponent<LilithBehavior>().animatorController = lilithAnimatorPhase1;
             currentBoss.GetComponent<LilithBehavior>().minionPrefab = minion;
             currentBoss.GetComponent<LilithBehavior>().cameraForYarab = camera;
+            currentBoss.GetComponent<LilithBehavior>().player = currentCharacter;
+            currentBoss.GetComponent<LilithBehavior>().minionController = minionAnimator;
             currentBoss.GetComponent<Animator>().applyRootMotion = false;
         }
 
