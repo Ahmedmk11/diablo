@@ -130,6 +130,7 @@ public class CreateCamp : MonoBehaviour
             demonScript.player = player.gameObject;
             demonScript.yarabScript = yarabScript;
             demonScript.particleSystem = particleSystem;
+            demonScript.demonName = "Demon" + i;
 
             Animator animator = agent.GetComponent<Animator>();
             animator.runtimeAnimatorController = demonController;

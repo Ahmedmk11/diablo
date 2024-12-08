@@ -157,6 +157,7 @@ public class Minion : MonoBehaviour
         yarabScript.gainXP((int)xp);
 
         campManager.UnregisterMinion(this);
+        agent.ResetPath();
 
         AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
         float clipLength = stateInfo.length;
@@ -166,20 +167,7 @@ public class Minion : MonoBehaviour
 
     IEnumerator FlashThenHide(float clipLength)
     {
-        yield return new WaitForSeconds(clipLength);
-        
-        Renderer renderer = GetComponent<Renderer>();
-        if (renderer != null)
-        {
-            for (int i = 0; i < 10; i++)
-            {
-                renderer.enabled = false;
-                yield return new WaitForSeconds(0.75f);
-                renderer.enabled = true;
-                yield return new WaitForSeconds(0.75f);
-            }
-        }
-
+        yield return new WaitForSeconds(3 * clipLength);
         gameObject.SetActive(false);
     }
 }

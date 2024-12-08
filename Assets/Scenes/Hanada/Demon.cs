@@ -29,6 +29,7 @@ public class Demon : MonoBehaviour
     public GameObject particleSystem;
     private ParticleSystem particleSystemInstance;
     private bool isStunned = false;
+    public string demonName;
 
     private void Start()
     {
@@ -209,6 +210,9 @@ public class Demon : MonoBehaviour
 
         campManager.UnregisterDemon(this);
 
+        patrolling = false;
+        agent.ResetPath();
+
         AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
         float clipLength = stateInfo.length;
 
@@ -219,7 +223,7 @@ public class Demon : MonoBehaviour
     {
         while (true)
         {
-            if (patrolling && !isStunned && hp > 0)
+            if (patrolling && !isStunned && !followingPlayer && !isAttacking && hp > 0)
             {
                 yield return new WaitForSeconds(waitTime);
 
@@ -227,7 +231,7 @@ public class Demon : MonoBehaviour
                 float actualPatrolDistance = halfPatrol ? patrolDistance / 2 : patrolDistance;
                 halfPatrol = false;
 
-                if (agent.tag.Contains('0'))
+                if (demonName == "Demon0")
                 {
                     z = direction ? transform.position.z + actualPatrolDistance : transform.position.z - actualPatrolDistance;
                 }
@@ -259,20 +263,7 @@ public class Demon : MonoBehaviour
 
     IEnumerator FlashThenHide(float clipLength)
     {
-        yield return new WaitForSeconds(clipLength);
-
-        Renderer renderer = GetComponent<Renderer>();
-        if (renderer != null)
-        {
-            for (int i = 0; i < 10; i++)
-            {
-                renderer.enabled = false;
-                yield return new WaitForSeconds(0.75f);
-                renderer.enabled = true;
-                yield return new WaitForSeconds(0.75f);
-            }
-        }
-
+        yield return new WaitForSeconds(3 * clipLength);
         gameObject.SetActive(false);
     }
 

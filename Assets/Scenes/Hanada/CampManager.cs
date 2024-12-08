@@ -34,7 +34,7 @@ public class CampManager : MonoBehaviour
     {
         float distanceToCenter = Vector3.Distance(player.position, centerPoint);
 
-        if (!isPlayerInsideCampRadius && distanceToCenter <= campRadius)
+        if (demons[0].yarabScript.health > 0 && !isPlayerInsideCampRadius && distanceToCenter <= campRadius)
         {
             Debug.Log("Player is in camp radius");
             isPlayerInsideCampRadius = true;
