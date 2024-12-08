@@ -58,6 +58,8 @@ public class yarab : MonoBehaviour
     public int xp = 0;
     public int characterLevel = 1;
     public int abilityPoints = 0;
+    private int potions = 0;
+    private int runes = 0;
 
     // Start is called before the first frame update
     void Start()
@@ -126,6 +128,8 @@ public class yarab : MonoBehaviour
         gameObject.GetComponent<CameraFollow>().target = currentCharacter.transform;
 
         currentCharacter.AddComponent<BoxCollider>();
+        currentCharacter.GetComponent<BoxCollider>().center = new Vector3(0, 2, 0);
+        currentCharacter.GetComponent<BoxCollider>().size = new Vector3(1, 2.5f, 1);
         currentCharacter.AddComponent<NavMeshAgent>();
         currentCharacter.AddComponent(movement.GetComponent<Movement>().GetType());
         currentCharacter.GetComponent<Movement>().camera = camera;
@@ -135,7 +139,7 @@ public class yarab : MonoBehaviour
         minimapCamera.GetComponent<CameraFollow>().target = marker.transform;
         currentCharacter.tag = "Player";
 
-        print(level);
+        //print(level);
         if (level == 1)
         {
             // add minions / demons
@@ -237,5 +241,17 @@ public class yarab : MonoBehaviour
             return this.xp;
         }
         return 0;
+    }
+
+    public int IncreasePotions()
+    {
+        this.potions += 1;
+        return this.potions;
+    }
+
+    public int IncreaseRunes()
+    {
+        this.runes += 1;
+        return this.runes;
     }
 }

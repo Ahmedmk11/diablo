@@ -28,6 +28,8 @@ public class Demon : MonoBehaviour
     private bool isAttacking = false;
     public GameObject particleSystem;
     private ParticleSystem particleSystemInstance;
+    private bool isStunned = false;
+    public string demonName;
 
     private void Start()
     {
@@ -120,18 +122,35 @@ public class Demon : MonoBehaviour
         StartCoroutine(ActivateParticleSystemWithDelay(clipLength));
     }
 
+    public void Stun()
+    {
+        isStunned = true;
+        agent.isStopped = true;
+        animator.SetTrigger("isStunned");
+        StartCoroutine(Unstun());
+    }
+
+    IEnumerator Unstun()
+    {
+        yield return new WaitForSeconds(5f);
+        isStunned = false;
+        agent.isStopped = false;
+    }
+
     IEnumerator AttackPlayer()
     {
         isAttacking = true;
 
-        if (swings < 3)
+        if (!isStunned)
         {
-            // MeleeAttack();
-            ExplosiveAttack();
-        }
-        else
-        {
-            ExplosiveAttack();
+            if (swings < 3)
+            {
+                MeleeAttack();
+            }
+            else
+            {
+                ExplosiveAttack();
+            }
         }
 
         swings++;
@@ -190,14 +209,21 @@ public class Demon : MonoBehaviour
         yarabScript.gainXP((int)xp);
 
         campManager.UnregisterDemon(this);
-        // Destroy(gameObject, 2f);
+
+        patrolling = false;
+        agent.ResetPath();
+
+        AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
+        float clipLength = stateInfo.length;
+
+        StartCoroutine(FlashThenHide(clipLength));
     }
 
     IEnumerator PatrolRandomly()
     {
         while (true)
         {
-            if (patrolling)
+            if (patrolling && !isStunned && !followingPlayer && !isAttacking && hp > 0)
             {
                 yield return new WaitForSeconds(waitTime);
 
@@ -205,7 +231,7 @@ public class Demon : MonoBehaviour
                 float actualPatrolDistance = halfPatrol ? patrolDistance / 2 : patrolDistance;
                 halfPatrol = false;
 
-                if (agent.tag.Contains('0'))
+                if (demonName == "Demon0")
                 {
                     z = direction ? transform.position.z + actualPatrolDistance : transform.position.z - actualPatrolDistance;
                 }
@@ -233,6 +259,12 @@ public class Demon : MonoBehaviour
                 yield return null;
             }
         }
+    }
+
+    IEnumerator FlashThenHide(float clipLength)
+    {
+        yield return new WaitForSeconds(3 * clipLength);
+        gameObject.SetActive(false);
     }
 
     IEnumerator ActivateParticleSystemWithDelay(float delay)
