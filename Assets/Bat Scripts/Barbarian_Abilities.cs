@@ -1,12 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.AI; // Required for NavMeshAgent
+using UnityEngine.AI;
 
 public class Barbarian_Abilities : MonoBehaviour
 {
-    public Camera camera; // Main Camera for raycasting
-
+    public Camera camera;
 
     private Animator animator;
     private Transform targetEnemy; // The currently selected enemy
@@ -18,12 +17,12 @@ public class Barbarian_Abilities : MonoBehaviour
     private bool canMoveAfterUltimate = true;  // Flag to check if normal movement can happen after ultimate ability
     private bool isSelectingUltimatePosition = false;  // Flag to track whether the player is selecting a position
 
-    public float attackRange = 2f; // Range within which the Basic Ability is triggered
-    public float moveSpeed = 5f; // Speed for moving towards the enemy
-    public float rotationSpeed = 10f; // Speed for rotating towards the enemy
+    public float attackRange = 2f;
+    public float moveSpeed = 5f;
+    public float rotationSpeed = 10f;
 
-    public GameObject shieldLight; // The Point Light (Shield)
-    public bool shieldActive = false; // Flag to indicate if the shield is active
+    public GameObject shieldLight; 
+    public bool shieldActive = false; 
    
     private NavMeshAgent agent; // NavMeshAgent for movement
 
@@ -36,31 +35,28 @@ public class Barbarian_Abilities : MonoBehaviour
     {
         { "Basic", 1f },
         { "Defensive", 10f },
-        { "Wildcard", 5f },
-        { "Ultimate", 10f }
+        { "Wildcard", 7f },
+        { "Ultimate", 15f }
     };
 
-    // Cooldown timers
     private Dictionary<string, float> abilityCooldownTimers = new Dictionary<string, float>
     {
-        { "Basic", 1f },
-        { "Defensive", 10f },
-        { "Wildcard", 5f },
-        { "Ultimate", 10f }
+        { "Basic", 0f },
+        { "Defensive", 0f },
+        { "Wildcard", 0f },
+        { "Ultimate", 0f }
     };
 
     private void Start()
     {
         animator = GetComponent<Animator>();
-        agent = GetComponent<NavMeshAgent>(); // Initialize NavMeshAgent
+        agent = GetComponent<NavMeshAgent>();
 
-        // Ensure shield light and glow effect are initially inactive
         if (shieldLight != null)
         {
             shieldLight.SetActive(false);
             shieldActive = false;
         }
-
     }
 
     private void Update()
@@ -207,12 +203,14 @@ public class Barbarian_Abilities : MonoBehaviour
 
         // Trigger the Basic Ability animation
         animator.SetTrigger("TriggerBasic");
-        StartCooldown("Basic"); // Start cooldown for the ability
 
         // wahwah
         findAndDamageEnemy(5, null);
 
-        yield return new WaitForSeconds(1f); // Wait for the cooldown duration
+        yield return new WaitForSeconds(1f); // Wait for the ability duration
+
+        // Start the cooldown only after the ability is done
+        StartCooldown("Basic");
 
         // Clear the target and allow movement again
         targetEnemy = null;
@@ -220,33 +218,30 @@ public class Barbarian_Abilities : MonoBehaviour
         agent.isStopped = false; // Re-enable movement
     }
 
-    private void TriggerDefensiveAbility()
+
+    private void TriggerDefensiveAbility(){
+    if (shieldLight != null)
     {
-        StartCooldown("Defensive");
-
-        if (shieldLight != null)
-        {
-            shieldLight.SetActive(true);
-            shieldActive = true;
-        }
-
-        animator.SetTrigger("TriggerDefensive");
-        Debug.Log("Defensive ability triggered.");
-
-        StartCoroutine(DisableShieldAfterDuration(3f));
+        shieldLight.SetActive(true);
+        shieldActive = true;
     }
+
+    animator.SetTrigger("TriggerDefensive");
+    Debug.Log("Defensive ability triggered.");
+
+    StartCoroutine(DisableShieldAfterDuration(3f));
+}
 
     private void TriggerWildcardAbility()
     {
-        StartCooldown("Wildcard");
         animator.SetTrigger("TriggerWildCard");
         Debug.Log("Wildcard ability triggered.");
         DamageWildCard();
+        StartCooldown("Wildcard");
     }
 
     private void DamageWildCard()
     {
-        // Define the radius for the ability (you can adjust this value)
         float damageRadius = 2f;
 
         // Find all colliders within the damage radius
@@ -268,7 +263,6 @@ public class Barbarian_Abilities : MonoBehaviour
         Ray ray = camera.ScreenPointToRay(Input.mousePosition);
         if (Physics.Raycast(ray, out RaycastHit hit))
         {
-            StartCooldown("Ultimate");
             ultimateTargetPosition = hit.point; // Set the target position
             Debug.Log($"Ultimate target position set to: {ultimateTargetPosition}");
 
@@ -282,8 +276,12 @@ public class Barbarian_Abilities : MonoBehaviour
             isSelectingUltimatePosition = false; // End the position selection state
             animator.SetTrigger("TriggerUltimate");  // Continue ultimate ability animation
             DamageUltimate();
+
+            // Start the cooldown only after the ultimate logic is complete
+            StartCooldown("Ultimate");
         }
     }
+
 
     private void DamageUltimate()
     {
@@ -363,9 +361,12 @@ public class Barbarian_Abilities : MonoBehaviour
         {
             shieldLight.SetActive(false);
             shieldActive = false;
-        } 
+        }
 
         Debug.Log("Shield Deactivated");
+
+        // Start the cooldown only after the ability finishes
+        StartCooldown("Defensive");
     }
 
     private void findAndDamageEnemy(int damage, Collider collider)
