@@ -28,6 +28,7 @@ TagManager:
   - FollowPlayerScript
   - Ground
   - Enemy
+  - rune
   layers:
   - Default
   - TransparentFX
