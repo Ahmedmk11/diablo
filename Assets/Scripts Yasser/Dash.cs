@@ -15,8 +15,10 @@ public class Dash : MonoBehaviour
     public Vector3 position;
 
     private bool isCooldown = false; // Cooldown flag
-    private float cooldownTime = 10f; // Cooldown duration
+    private float cooldownTime = 5f; // Cooldown duration
     private float dashDelay = 2.3f; // Delay before executing the dash
+
+    private bool isSelecting = false;
 
     void Start()
     {
@@ -26,7 +28,7 @@ public class Dash : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetMouseButtonDown(1)) // Right-click
+        if (Input.GetMouseButtonDown(1) && isSelecting) // Right-click
         {
             // Create a ray from the camera to the mouse position
             Ray ray = camera.ScreenPointToRay(Input.mousePosition);
@@ -42,14 +44,18 @@ public class Dash : MonoBehaviour
 
                 // Make the player look at the target position
                 agent.transform.LookAt(targetPosition);
+
+                isSelecting = false;
+                animator.SetTrigger("Dash");
+                StartCoroutine(ExecuteDashWithDelay(position));
+                StartCoroutine(Cooldown());
             }
         }
 
-        if (Input.GetKeyDown(KeyCode.D) && !isCooldown)
+        if (Input.GetKeyDown(KeyCode.Q) && !isCooldown)
         {
-            animator.SetTrigger("Dash");
-            StartCoroutine(ExecuteDashWithDelay(position));
-            StartCoroutine(Cooldown());
+            isSelecting = true;
+            
         }
     }
 

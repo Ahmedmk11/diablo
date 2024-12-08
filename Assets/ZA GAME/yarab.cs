@@ -20,6 +20,11 @@ public class yarab : MonoBehaviour
 
     public GameObject barbShield;
 
+    public GameObject arrow1;
+    public GameObject shower;
+    public GameObject smoke;
+    public GameObject spark;
+
     public AnimatorController barbAnimator;
     public AnimatorController sorcAnimator;
     public AnimatorController rogueAnimator;
@@ -43,8 +48,18 @@ public class yarab : MonoBehaviour
     public LilithBehavior LilithPhase1;
     public lilithphase2testingscript Lilithphase2;
 
+    public PlayerAnimationTrigger playerAnimationTrigger;
+    public ArrowShower arrowShower;
+    public Bomb bomb;
+    public Dash dash;
+
+    public int maxHealth = 100;
     public int health = 100;
-    private int xp = 0;
+    public int xp = 0;
+    public int characterLevel = 1;
+    public int abilityPoints = 0;
+    private int potions = 0;
+    private int runes = 0;
 
     // Start is called before the first frame update
     void Start()
@@ -83,10 +98,38 @@ public class yarab : MonoBehaviour
             currentCharacterName = "Rogue";
             currentCharacter = Instantiate(rogue, initVector, Quaternion.identity);
             currentCharacter.GetComponent<Animator>().runtimeAnimatorController = rogueAnimator;
+            currentCharacter.AddComponent<PlayerAnimationTrigger>();
+            currentCharacter.GetComponent<PlayerAnimationTrigger>().camera = camera;
+            currentCharacter.GetComponent<PlayerAnimationTrigger>().arrowPrefab = arrow1;
+            currentCharacter.GetComponent<PlayerAnimationTrigger>().arrowSpawnPoint = currentCharacter.transform.GetChild(4).transform;
+            currentCharacter.GetComponent<PlayerAnimationTrigger>().launchForce = 17;
+            currentCharacter.GetComponent<PlayerAnimationTrigger>().arrowLifetime = 5;
+
+            currentCharacter.AddComponent<ArrowShower>();
+            currentCharacter.GetComponent<ArrowShower>().arrowPrefab = shower;
+            currentCharacter.GetComponent<ArrowShower>().camera = camera;
+            currentCharacter.GetComponent<ArrowShower>().launchForce = 20;
+            currentCharacter.GetComponent<ArrowShower>().arrowLifetime = 5;
+            currentCharacter.GetComponent<ArrowShower>().detectionRadius = 2;
+
+
+            currentCharacter.AddComponent<Bomb>();
+            currentCharacter.GetComponent<Bomb>().arrowPrefab = smoke;
+            currentCharacter.GetComponent<Bomb>().camera = camera;
+            currentCharacter.GetComponent<Bomb>().arrowSpawnPoint = currentCharacter.transform.GetChild(1).transform;
+            currentCharacter.GetComponent<Bomb>().smoke = spark;
+            currentCharacter.GetComponent<Bomb>().launchForce = 7;
+            currentCharacter.GetComponent<Bomb>().arrowLifetime = 5;
+            currentCharacter.GetComponent<Bomb>().detectionRadius = 5;
+
+            currentCharacter.AddComponent<Dash>();
+            currentCharacter.GetComponent<Dash>().camera = camera;
         }
         gameObject.GetComponent<CameraFollow>().target = currentCharacter.transform;
 
         currentCharacter.AddComponent<BoxCollider>();
+        currentCharacter.GetComponent<BoxCollider>().center = new Vector3(0, 2, 0);
+        currentCharacter.GetComponent<BoxCollider>().size = new Vector3(1, 2.5f, 1);
         currentCharacter.AddComponent<NavMeshAgent>();
         currentCharacter.AddComponent(movement.GetComponent<Movement>().GetType());
         currentCharacter.GetComponent<Movement>().camera = camera;
@@ -96,7 +139,7 @@ public class yarab : MonoBehaviour
         minimapCamera.GetComponent<CameraFollow>().target = marker.transform;
         currentCharacter.tag = "Player";
 
-        print(level);
+        //print(level);
         if (level == 1)
         {
             // add minions / demons
@@ -121,7 +164,6 @@ public class yarab : MonoBehaviour
             currentBoss.GetComponent<Animator>().applyRootMotion = false;
         }
 
-
     }
 
     // Update is called once per frame
@@ -136,8 +178,20 @@ public class yarab : MonoBehaviour
             currentBoss.transform.LookAt(currentCharacter.transform);
         }
 
-        Debug.Log("Player xp: " + xp);
-
+        if (characterLevel < 4)
+        {
+            if (xp >= 100 * characterLevel)
+            {
+                xp -= (100 * characterLevel);
+                characterLevel++;
+                maxHealth = characterLevel * 100;
+                health = maxHealth;
+                abilityPoints++;
+            }
+        }
+        if (Input.GetKeyDown(KeyCode.H)){
+            abilityPoints++;
+        }
     }
 
     public void takeDamage(int damage, string attacker = "Enemy", float clipLength = 0)
@@ -181,7 +235,23 @@ public class yarab : MonoBehaviour
 
     public int gainXP(int xp)
     {
-        this.xp += xp;
-        return this.xp;
+        if (characterLevel < 4)
+        {
+            this.xp += xp;
+            return this.xp;
+        }
+        return 0;
+    }
+
+    public int IncreasePotions()
+    {
+        this.potions += 1;
+        return this.potions;
+    }
+
+    public int IncreaseRunes()
+    {
+        this.runes += 1;
+        return this.runes;
     }
 }

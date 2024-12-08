@@ -21,6 +21,10 @@ public class CreateCamp : MonoBehaviour
     private yarab yarabScript;
     public GameObject particleSystem;
 
+    public GameObject runePrefab;
+    public GameObject mainCamera;
+
+
     private void Start()
     {
         yarabScript = GetComponent<yarab>();
@@ -39,9 +43,12 @@ public class CreateCamp : MonoBehaviour
                 campManagerInstance.centerPoint = campPosition;
                 campManagerInstance.playerHealth = yarabScript.health;
                 campManagerInstance.name = "Camp" + campPositions.IndexOf(campPosition);
+                campManagerInstance.runePrefab = runePrefab;
+                campManagerInstance.mainCamera = mainCamera;
 
 
-                SpawnMinionsAndDemons(campManagerInstance, campPosition);
+
+    SpawnMinionsAndDemons(campManagerInstance, campPosition);
             }
 
             firstTime = false;
@@ -123,6 +130,7 @@ public class CreateCamp : MonoBehaviour
             demonScript.player = player.gameObject;
             demonScript.yarabScript = yarabScript;
             demonScript.particleSystem = particleSystem;
+            demonScript.demonName = "Demon" + i;
 
             Animator animator = agent.GetComponent<Animator>();
             animator.runtimeAnimatorController = demonController;

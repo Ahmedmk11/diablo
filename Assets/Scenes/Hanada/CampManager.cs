@@ -6,7 +6,7 @@ public class CampManager : MonoBehaviour
 {
     public Transform player;
     private int maxDemonsAlerted = 1;
-    private int maxMinionsAlerted = 1;
+    private int maxMinionsAlerted = 5;
     public Vector3 centerPoint;
     public float campRadius;
     private List<Minion> minions = new List<Minion>();
@@ -19,6 +19,11 @@ public class CampManager : MonoBehaviour
     private System.Random random = new System.Random();
     private bool playerDied = false;
     public int playerHealth;
+    public string name;
+
+    public GameObject runePrefab;
+    public GameObject mainCamera;
+
     private void Start()
     {
         float initialDistanceToCenter = Vector3.Distance(player.position, centerPoint);
@@ -29,7 +34,7 @@ public class CampManager : MonoBehaviour
     {
         float distanceToCenter = Vector3.Distance(player.position, centerPoint);
 
-        if (!isPlayerInsideCampRadius && distanceToCenter <= campRadius)
+        if (demons[0].yarabScript.health > 0 && !isPlayerInsideCampRadius && distanceToCenter <= campRadius)
         {
             Debug.Log("Player is in camp radius");
             isPlayerInsideCampRadius = true;
@@ -81,8 +86,11 @@ public class CampManager : MonoBehaviour
                 alertedMinions.Remove(minion);
             }
 
-            if (alertedMinions.Count < maxMinionsAlerted)
+            float distanceToCenter = Vector3.Distance(player.position, centerPoint);
+
+            if (alertedMinions.Count < maxMinionsAlerted && !isPlayerInsideCampRadius && distanceToCenter <= campRadius)
             {
+                isPlayerInsideCampRadius = true;
                 var outermostMinions = minions
                     .OrderBy(minion => Vector3.Distance(minion.transform.position, player.transform.position))
                     .ToList();
@@ -99,9 +107,12 @@ public class CampManager : MonoBehaviour
             }
         }
 
-        if (IsCampGenocided())
+        if (IsCampDead())
         {
-            Debug.Log("What have I done?");
+            print("Camp is dead");
+            GameObject rune = Instantiate(runePrefab, 
+                new Vector3(centerPoint.x, 6.2f, centerPoint.z), Quaternion.identity);
+            rune.AddComponent<CollectableRune>();
         }
     }
 
@@ -118,8 +129,11 @@ public class CampManager : MonoBehaviour
             alertedDemons.Remove(demon);
         }
 
-        if (alertedDemons.Count < maxDemonsAlerted)
+        float distanceToCenter = Vector3.Distance(player.position, centerPoint);
+
+        if (alertedDemons.Count < maxDemonsAlerted && !isPlayerInsideCampRadius && distanceToCenter <= campRadius)
         {
+            isPlayerInsideCampRadius = true;
             foreach (Demon newDemon in demons)
             {
                 if (!alertedDemons.Contains(newDemon))
@@ -131,15 +145,19 @@ public class CampManager : MonoBehaviour
             }
         }
 
-        if (IsCampGenocided())
+        if (IsCampDead())
         {
-            Debug.Log("What have I done?");
+            print("Camp is dead");
+            GameObject rune = Instantiate(runePrefab,
+                new Vector3(centerPoint.x, 6.2f, centerPoint.z), Quaternion.identity);
+            rune.AddComponent<CollectableRune>();
         }
     }
 
-    private bool IsCampGenocided()
+    private bool IsCampDead()
     {
         return demons.Count == 0 && minions.Count == 0;
+        // return true;
     }
 
     private void AlertNearbyEntities()
@@ -157,24 +175,25 @@ public class CampManager : MonoBehaviour
                 alertedDemons.Add(demon);
                 demon.agent.ResetPath();
                 demon.StartFollowingPlayer(player.gameObject);
+                demon.patrolling = false;
             }
         }
         
-        // var outermostMinions = minions
-        //     .OrderBy(minion => Vector3.Distance(minion.transform.position, player.transform.position))
-        //     .ToList();
+        var outermostMinions = minions
+            .OrderBy(minion => Vector3.Distance(minion.transform.position, player.transform.position))
+            .ToList();
 
-        // foreach (Minion minion in outermostMinions)
-        // {
-        //     if (alertedMinions.Count >= maxMinionsAlerted)
-        //         break;
+        foreach (Minion minion in outermostMinions)
+        {
+            if (alertedMinions.Count >= maxMinionsAlerted)
+                break;
 
-        //     if (!alertedMinions.Contains(minion))
-        //     {
-        //         alertedMinions.Add(minion);
-        //         minion.StartFollowingPlayer(player.gameObject);
-        //     }
-        // }
+            if (!alertedMinions.Contains(minion))
+            {
+                alertedMinions.Add(minion);
+                minion.StartFollowingPlayer(player.gameObject);
+            }
+        }
     }
 
     private void ResetNearbyEntities()
@@ -187,6 +206,7 @@ public class CampManager : MonoBehaviour
             demon.agent.SetDestination(demonPositions[demon]);
             Debug.Log("after: Resetting demon path to initial");
             demon.StopFollowingPlayer();
+            demon.patrolling = true;
         }
 
         foreach (Minion minion in alertedMinions)
@@ -200,5 +220,84 @@ public class CampManager : MonoBehaviour
 
         alertedDemons.Clear();
         alertedMinions.Clear();
+    }
+}
+
+public class CollectableRune : MonoBehaviour
+{
+    private CampManager campInstance;
+    public void OnTriggerEnter(Collider other)
+    {
+        // Only collect if active and player touches it
+        if (other.CompareTag("Player"))
+        {
+            print("Player collected rune");
+
+            Transform yarabTransform = campInstance.mainCamera.transform.Find("Yarab");
+            if (yarabTransform != null)
+            {
+                yarab myInstance = yarabTransform.GetComponent<yarab>();
+                if (myInstance != null)
+                {
+                    myInstance.IncreaseRunes();
+                }
+            }
+
+            // Destroy the potion object
+            Destroy(gameObject);
+        }
+    }
+
+    void Start()
+    {
+        // Ensure the potion has a trigger collider
+        Collider collider = GetComponent<Collider>();
+        if (collider == null)
+        {
+            collider = gameObject.AddComponent<BoxCollider>();
+        }
+        collider.isTrigger = true;
+
+        campInstance = FindObjectOfType<CampManager>();
+
+        Rigidbody rb = GetComponent<Rigidbody>();
+        if (rb == null)
+        {
+            rb = gameObject.AddComponent<Rigidbody>();
+            rb.isKinematic = true; // Make it kinematic if you don't want it to be affected by physics
+        }
+
+        // Add a rotation animation to the rune
+        gameObject.AddComponent<RotationAnimation>();
+    }
+}
+
+public class RotationAnimation : MonoBehaviour
+{
+    public float rotationSpeed = 50f;
+    public float floatHeight = 0.5f;
+    public float floatSpeed = 2f;
+
+    private Vector3 startPosition;
+    private float randomOffset;
+
+    void Start()
+    {
+        startPosition = transform.position;
+        randomOffset = Random.Range(0f, 2f * Mathf.PI);
+    }
+
+    void Update()
+    {
+        // Continuous rotation
+        transform.Rotate(Vector3.up, rotationSpeed * Time.deltaTime);
+
+        // Floating up and down
+        float newY = startPosition.y + Mathf.Sin((Time.time * floatSpeed) + randomOffset) * floatHeight;
+        transform.position = new Vector3(
+            transform.position.x,
+            newY,
+            transform.position.z
+        );
     }
 }

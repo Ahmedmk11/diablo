@@ -22,6 +22,9 @@ public class ArrowShower : MonoBehaviour
     public LayerMask enemyLayer; // Assign the enemy layer in the Inspector
     public float detectionRadius = 2f; // Radius to detect enemies around the arrow
 
+    private bool isSelecting = false;
+
+
     void Start()
     {
         animator = GetComponent<Animator>();
@@ -30,7 +33,7 @@ public class ArrowShower : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetMouseButtonDown(1)) // Right-click
+        if (isSelecting && Input.GetMouseButtonDown(1)) // Right-click
         {
             // Create a ray from the camera to the mouse position
             Ray ray = camera.ScreenPointToRay(Input.mousePosition);
@@ -46,14 +49,17 @@ public class ArrowShower : MonoBehaviour
 
                 // Make the player look at the target position
                 agent.transform.LookAt(targetPosition);
+                isSelecting = false;
+                animator.SetTrigger("ArrowShower");
+                ShootShower(position);
+                StartCoroutine(Cooldown());
             }
         }
 
-        if (Input.GetKeyDown(KeyCode.S) && !isCooldown)
+        if (Input.GetKeyDown(KeyCode.E) && !isCooldown)
         {
-            animator.SetTrigger("ArrowShower");
-            ShootShower(position);
-            StartCoroutine(Cooldown());
+            isSelecting = true;
+
         }
     }
 
@@ -82,6 +88,8 @@ public class ArrowShower : MonoBehaviour
 
             foreach (Collider collider in hitColliders)
             {
+                // Damage the enemy
+                findAndDamageEnemy(10, collider);
                 Debug.Log($"Arrow hit an enemy: {collider.gameObject.name}");
 
                 // Perform any action on collision, e.g., destroy the enemy
@@ -107,5 +115,32 @@ public class ArrowShower : MonoBehaviour
 
         // Reset cooldown flag
         isCooldown = false;
+    }
+
+    private void findAndDamageEnemy(int damage, Collider collider)
+    {
+        LilithBehavior lilith = collider.GetComponent<LilithBehavior>();
+        lilithphase2testingscript lilith2 = collider.GetComponent<lilithphase2testingscript>();
+        Minion minion = collider.GetComponent<Minion>();
+        Demon demon = collider.GetComponent<Demon>();
+
+        if (lilith != null)
+        {
+            if (damage == 100) damage = 20;
+            lilith.takeDamage(damage);
+        }
+        else if (lilith2 != null)
+        {
+            if (damage == 100) damage = 20;
+            lilith2.takeDamage(damage);
+        }
+        else if (minion != null)
+        {
+            minion.takeDamage(damage);
+        }
+        else if (demon != null)
+        {
+            demon.takeDamage(damage);
+        }
     }
 }

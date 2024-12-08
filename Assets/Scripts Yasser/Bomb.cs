@@ -15,7 +15,7 @@ public class Bomb : MonoBehaviour
     public GameObject smoke;
 
     private bool isCooldown = false; // Cooldown flag
-    private float cooldownTime = 5f; // Cooldown duration
+    private float cooldownTime = 15f; // Cooldown duration
     public float launchForce = 7f; // Initial force applied to the arrow
     public float arrowLifetime = 9f;
 
@@ -30,7 +30,7 @@ public class Bomb : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.B) && !isCooldown)
+        if (Input.GetKeyDown(KeyCode.W) && !isCooldown)
         {
             animator.SetTrigger("Bomb");
             ShootBomb();
@@ -44,9 +44,9 @@ public class Bomb : MonoBehaviour
         Vector3 adjustedPosition = new Vector3(
             arrowSpawnPoint.position.x,
             arrowSpawnPoint.position.y,
-            arrowSpawnPoint.position.z + 10f
+            arrowSpawnPoint.position.z
         );
-        Vector3 spawnPosition = arrowSpawnPoint.position + arrowSpawnPoint.forward * 10f;
+        Vector3 spawnPosition = arrowSpawnPoint.position;
         Quaternion spawnRotation = Quaternion.LookRotation(arrowSpawnPoint.forward);
 
         // Instantiate the arrow
@@ -61,10 +61,14 @@ public class Bomb : MonoBehaviour
         }
 
         // Detect enemies in range of the smoke
-        Collider[] nearbyEnemies = Physics.OverlapSphere(smokeP.transform.position, detectionRadius, enemyLayer);
+        Collider[] nearbyEnemies = Physics.OverlapSphere(smokeP.transform.position, detectionRadius);
         foreach (Collider enemy in nearbyEnemies)
         {
-            Debug.Log($"Enemy detected: {enemy.name}");
+            if (enemy.CompareTag("Enemy"))
+            {
+                findAndStunEnemy(enemy);
+                Debug.Log($"Enemy detected: {enemy.name}");
+            }
         }
 
         // Destroy the arrow and smoke after a set lifetime
@@ -82,5 +86,30 @@ public class Bomb : MonoBehaviour
 
         // Reset cooldown flag
         isCooldown = false;
+    }
+
+    private void findAndStunEnemy(Collider collider)
+    {
+        LilithBehavior lilith = collider.GetComponent<LilithBehavior>();
+        lilithphase2testingscript lilith2 = collider.GetComponent<lilithphase2testingscript>();
+        Minion minion = collider.GetComponent<Minion>();
+        Demon demon = collider.GetComponent<Demon>();
+
+        if (lilith != null)
+        {
+            //lilith.takeStun();
+        }
+        else if (lilith2 != null)
+        {
+            //lilith2.takeStun();
+        }
+        else if (minion != null)
+        {
+            minion.Stun();
+        }
+        else if (demon != null)
+        {
+            demon.Stun();
+        }
     }
 }

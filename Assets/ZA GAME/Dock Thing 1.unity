@@ -1935,7 +1935,7 @@ MonoBehaviour:
   m_text: 0
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: e09ab73943a8cde4b9ba8f15eef8e3dd, type: 2}
-  m_sharedMaterial: {fileID: -8713023216623554993, guid: e09ab73943a8cde4b9ba8f15eef8e3dd, type: 2}
+  m_sharedMaterial: {fileID: -6441575792989454237, guid: e09ab73943a8cde4b9ba8f15eef8e3dd, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -7627,7 +7627,7 @@ MonoBehaviour:
   m_text: 'Potions:'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: e09ab73943a8cde4b9ba8f15eef8e3dd, type: 2}
-  m_sharedMaterial: {fileID: -8713023216623554993, guid: e09ab73943a8cde4b9ba8f15eef8e3dd, type: 2}
+  m_sharedMaterial: {fileID: -6441575792989454237, guid: e09ab73943a8cde4b9ba8f15eef8e3dd, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -7889,7 +7889,7 @@ MonoBehaviour:
   m_text: 100
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: e09ab73943a8cde4b9ba8f15eef8e3dd, type: 2}
-  m_sharedMaterial: {fileID: -8713023216623554993, guid: e09ab73943a8cde4b9ba8f15eef8e3dd, type: 2}
+  m_sharedMaterial: {fileID: -6441575792989454237, guid: e09ab73943a8cde4b9ba8f15eef8e3dd, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -9159,7 +9159,7 @@ MonoBehaviour:
   m_text: Locked
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: e09ab73943a8cde4b9ba8f15eef8e3dd, type: 2}
-  m_sharedMaterial: {fileID: -8713023216623554993, guid: e09ab73943a8cde4b9ba8f15eef8e3dd, type: 2}
+  m_sharedMaterial: {fileID: -6441575792989454237, guid: e09ab73943a8cde4b9ba8f15eef8e3dd, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -14509,7 +14509,7 @@ MonoBehaviour:
   m_text: 0
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: e09ab73943a8cde4b9ba8f15eef8e3dd, type: 2}
-  m_sharedMaterial: {fileID: -8713023216623554993, guid: e09ab73943a8cde4b9ba8f15eef8e3dd, type: 2}
+  m_sharedMaterial: {fileID: -6441575792989454237, guid: e09ab73943a8cde4b9ba8f15eef8e3dd, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -16637,9 +16637,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 0}
-  positionOffset: {x: 0, y: 10, z: -8}
+  positionOffset: {x: 5, y: 8, z: -5}
   smoothSpeed: 5
-  rotationX: 60
+  rotationX: 45
+  rotationY: -45
 --- !u!81 &798920628
 AudioListener:
   m_ObjectHideFlags: 0
@@ -16681,19 +16682,30 @@ MonoBehaviour:
   lilith: {fileID: 0}
   minion: {fileID: 0}
   barbShield: {fileID: 458831941}
+  arrow1: {fileID: 1566359048267273319, guid: 215c729eb6cf80c4c8a8ad9eed918f7b, type: 3}
+  shower: {fileID: 6240992605899186232, guid: 759bb212fcb79224ea53e36b8e6fc3bc, type: 3}
+  smoke: {fileID: 2522079221440020892, guid: fea3ce10f04060240be32c1d98584399, type: 3}
+  spark: {fileID: 2523170635868714095, guid: f063682089c3a6343a01ffe730347ead, type: 3}
   barbAnimator: {fileID: 9100000, guid: 6edcf24ee02c1694b93cf6ab2d09b458, type: 2}
   sorcAnimator: {fileID: 0}
   rogueAnimator: {fileID: 9100000, guid: ecc6a213e1bd1f643966c41028308be1, type: 2}
   lilithAnimatorPhase1: {fileID: 0}
   lilithAnimatorPhase2: {fileID: 0}
+  minionAnimator: {fileID: 0}
   movement: {fileID: 1858325853}
   camera: {fileID: 798920626}
   minimapCamera: {fileID: 1376979708}
   marker: {fileID: 933550043}
   currentCharacter: {fileID: 0}
+  animator: {fileID: 0}
   Barbarian_Abilities: {fileID: 1858325855}
   LilithPhase1: {fileID: 0}
   Lilithphase2: {fileID: 0}
+  playerAnimationTrigger: {fileID: 1858325856}
+  arrowShower: {fileID: 1858325857}
+  bomb: {fileID: 1858325858}
+  dash: {fileID: 1858325859}
+  health: 100
 --- !u!114 &798920631
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16716,6 +16728,9 @@ MonoBehaviour:
   - {x: 2, y: 5, z: 49.8}
   - {x: 53.18, y: 5, z: 43.18}
   campManagerPrefab: {fileID: 3363401093037399405, guid: 7b4bfb8a165b442b496ad7d237195fc3, type: 3}
+  particleSystem: {fileID: 4799787391677844021, guid: 749f0fd9bc2624a77b08b1b87ee345ff, type: 3}
+  runePrefab: {fileID: 137892, guid: d5caf732deebe4d4cbf9b994f45b28ce, type: 3}
+  mainCamera: {fileID: 798920625}
 --- !u!1001 &802682352
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -18671,13 +18686,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_AgentTypeID: 0
-  m_CollectObjects: 0
+  m_CollectObjects: 2
   m_Size: {x: 10, y: 10, z: 10}
   m_Center: {x: 0, y: 2, z: 0}
   m_LayerMask:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_UseGeometry: 0
+  m_UseGeometry: 1
   m_DefaultArea: 0
   m_GenerateLinks: 0
   m_IgnoreNavMeshAgent: 1
@@ -20473,7 +20488,7 @@ MonoBehaviour:
   m_text: 'Ability Points:'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: e09ab73943a8cde4b9ba8f15eef8e3dd, type: 2}
-  m_sharedMaterial: {fileID: -8713023216623554993, guid: e09ab73943a8cde4b9ba8f15eef8e3dd, type: 2}
+  m_sharedMaterial: {fileID: -6441575792989454237, guid: e09ab73943a8cde4b9ba8f15eef8e3dd, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -23008,7 +23023,7 @@ MonoBehaviour:
   m_text: Locked
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: e09ab73943a8cde4b9ba8f15eef8e3dd, type: 2}
-  m_sharedMaterial: {fileID: -8713023216623554993, guid: e09ab73943a8cde4b9ba8f15eef8e3dd, type: 2}
+  m_sharedMaterial: {fileID: -6441575792989454237, guid: e09ab73943a8cde4b9ba8f15eef8e3dd, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -30104,7 +30119,7 @@ MonoBehaviour:
   m_text: 'Runes:'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: e09ab73943a8cde4b9ba8f15eef8e3dd, type: 2}
-  m_sharedMaterial: {fileID: -8713023216623554993, guid: e09ab73943a8cde4b9ba8f15eef8e3dd, type: 2}
+  m_sharedMaterial: {fileID: -6441575792989454237, guid: e09ab73943a8cde4b9ba8f15eef8e3dd, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -30627,7 +30642,7 @@ MonoBehaviour:
   m_text: 0
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: e09ab73943a8cde4b9ba8f15eef8e3dd, type: 2}
-  m_sharedMaterial: {fileID: -8713023216623554993, guid: e09ab73943a8cde4b9ba8f15eef8e3dd, type: 2}
+  m_sharedMaterial: {fileID: -6441575792989454237, guid: e09ab73943a8cde4b9ba8f15eef8e3dd, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -30871,7 +30886,7 @@ MonoBehaviour:
   m_text: 0/100
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: e09ab73943a8cde4b9ba8f15eef8e3dd, type: 2}
-  m_sharedMaterial: {fileID: -8713023216623554993, guid: e09ab73943a8cde4b9ba8f15eef8e3dd, type: 2}
+  m_sharedMaterial: {fileID: -6441575792989454237, guid: e09ab73943a8cde4b9ba8f15eef8e3dd, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -34717,7 +34732,7 @@ MonoBehaviour:
   m_text: Lvl.
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: e09ab73943a8cde4b9ba8f15eef8e3dd, type: 2}
-  m_sharedMaterial: {fileID: -8713023216623554993, guid: e09ab73943a8cde4b9ba8f15eef8e3dd, type: 2}
+  m_sharedMaterial: {fileID: -6441575792989454237, guid: e09ab73943a8cde4b9ba8f15eef8e3dd, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -36899,7 +36914,7 @@ MonoBehaviour:
   m_text: Locked
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: e09ab73943a8cde4b9ba8f15eef8e3dd, type: 2}
-  m_sharedMaterial: {fileID: -8713023216623554993, guid: e09ab73943a8cde4b9ba8f15eef8e3dd, type: 2}
+  m_sharedMaterial: {fileID: -6441575792989454237, guid: e09ab73943a8cde4b9ba8f15eef8e3dd, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -40315,6 +40330,11 @@ GameObject:
   - component: {fileID: 1858325854}
   - component: {fileID: 1858325853}
   - component: {fileID: 1858325855}
+  - component: {fileID: 1858325859}
+  - component: {fileID: 1858325858}
+  - component: {fileID: 1858325857}
+  - component: {fileID: 1858325856}
+  - component: {fileID: 1858325860}
   m_Layer: 0
   m_Name: GameObject
   m_TagString: Untagged
@@ -40369,6 +40389,101 @@ MonoBehaviour:
   rotationSpeed: 10
   shieldLight: {fileID: 0}
   shieldActive: 0
+--- !u!114 &1858325856
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1858325852}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 14be761508eefda4493bb314f88cf55c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  arrowPrefab: {fileID: 0}
+  camera: {fileID: 0}
+  arrowSpawnPoint: {fileID: 0}
+  selectedEnemy: {fileID: 0}
+  launchForce: 20
+  arrowLifetime: 5
+--- !u!114 &1858325857
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1858325852}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f7d1b1d7ab338e643b7e971e2afc0f4b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  arrowPrefab: {fileID: 0}
+  camera: {fileID: 0}
+  arrowSpawnPoint: {fileID: 0}
+  selectedEnemy: {fileID: 0}
+  position: {x: 0, y: 0, z: 0}
+  launchForce: 20
+  arrowLifetime: 5
+  enemyLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  detectionRadius: 2
+--- !u!114 &1858325858
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1858325852}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 13a777aa5e343f54dab3a850b9ea1864, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  arrowPrefab: {fileID: 0}
+  camera: {fileID: 0}
+  arrowSpawnPoint: {fileID: 0}
+  position: {x: 0, y: 0, z: 0}
+  smoke: {fileID: 0}
+  launchForce: 7
+  arrowLifetime: 9
+  detectionRadius: 5
+  enemyLayer:
+    serializedVersion: 2
+    m_Bits: 0
+--- !u!114 &1858325859
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1858325852}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e5ea0328a95d63049ac5bed88a170803, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  camera: {fileID: 0}
+  position: {x: 0, y: 0, z: 0}
+--- !u!114 &1858325860
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1858325852}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee6acd22232d17e44b4122129df7a09e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  potionPrefab: {fileID: 135030, guid: 11e345dd2aa3679448ca006a78ab45b2, type: 3}
+  numberOfPotions: 10
+  minDistanceBetweenPotions: 10
+  searchRadius: 100
+  mainCamera: {fileID: 798920625}
 --- !u!1001 &1863533081
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -43555,7 +43670,7 @@ MonoBehaviour:
   m_text: 1
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: e09ab73943a8cde4b9ba8f15eef8e3dd, type: 2}
-  m_sharedMaterial: {fileID: -8713023216623554993, guid: e09ab73943a8cde4b9ba8f15eef8e3dd, type: 2}
+  m_sharedMaterial: {fileID: -6441575792989454237, guid: e09ab73943a8cde4b9ba8f15eef8e3dd, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -46879,13 +46994,13 @@ SceneRoots:
   - {fileID: 52880495}
   - {fileID: 1376979706}
   - {fileID: 933550044}
-  - {fileID: 849963532}
   - {fileID: 1749145728}
   - {fileID: 630013423}
   - {fileID: 1314249476}
   - {fileID: 1326328953}
   - {fileID: 1205412115}
   - {fileID: 1799658112}
+  - {fileID: 849963532}
   - {fileID: 666235957}
   - {fileID: 2058950781}
   - {fileID: 1858325854}
