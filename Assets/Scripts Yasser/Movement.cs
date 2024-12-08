@@ -24,7 +24,7 @@ public class Movement : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0) )
         {
-            print("mouse down");
+            //print("mouse down");
             Ray ray = camera.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(ray, out hit) && !UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject())
             {

@@ -53,8 +53,14 @@ public class yarab : MonoBehaviour
     public Bomb bomb;
     public Dash dash;
 
+    public int maxHealth = 100;
     public int health = 100;
-    private int xp = 0;
+    public int xp = 0;
+    public int characterLevel = 1;
+    public int abilityPoints = 0;
+    private int potions = 0;
+    private int runes = 0;
+    private bool invincible = false;
 
     // Start is called before the first frame update
     void Start()
@@ -62,7 +68,7 @@ public class yarab : MonoBehaviour
         // TEMP
         level = 1;
         // ha5od variable men character selection screen 1: barb 2: sorc 3: rogue
-        int character = 3;
+        int character = 1;
         // TEMP
 
         //Vector3 initVector = level == 1 ? new Vector3(-3.41f, 5, -25.5f) : new Vector3(50, 50, 50);
@@ -123,6 +129,8 @@ public class yarab : MonoBehaviour
         gameObject.GetComponent<CameraFollow>().target = currentCharacter.transform;
 
         currentCharacter.AddComponent<BoxCollider>();
+        currentCharacter.GetComponent<BoxCollider>().center = new Vector3(0, 2, 0);
+        currentCharacter.GetComponent<BoxCollider>().size = new Vector3(1, 2.5f, 1);
         currentCharacter.AddComponent<NavMeshAgent>();
         currentCharacter.AddComponent(movement.GetComponent<Movement>().GetType());
         currentCharacter.GetComponent<Movement>().camera = camera;
@@ -132,7 +140,7 @@ public class yarab : MonoBehaviour
         minimapCamera.GetComponent<CameraFollow>().target = marker.transform;
         currentCharacter.tag = "Player";
 
-        print(level);
+        //print(level);
         if (level == 1)
         {
             // add minions / demons
@@ -157,7 +165,6 @@ public class yarab : MonoBehaviour
             currentBoss.GetComponent<Animator>().applyRootMotion = false;
         }
 
-
     }
 
     // Update is called once per frame
@@ -172,12 +179,92 @@ public class yarab : MonoBehaviour
             currentBoss.transform.LookAt(currentCharacter.transform);
         }
 
-        Debug.Log("Player xp: " + xp);
+        if (characterLevel < 4)
+        {
+            if (xp >= 100 * characterLevel)
+            {
+                xp -= (100 * characterLevel);
+                characterLevel++;
+                maxHealth = characterLevel * 100;
+                health = maxHealth;
+                abilityPoints++;
+            }
+        }
 
+        if (Input.GetKeyDown(KeyCode.F))
+        {
+            if (potions > 0 && health < maxHealth)
+            {
+                animator.SetTrigger("heal");
+                StartCoroutine(WaitForAnimationToHeal(0.5f));
+            }
+        }
+
+
+
+        // cheats
+        if (Input.GetKeyDown(KeyCode.H))
+        {
+            health += 20;
+            if (health > maxHealth)
+            {
+                health = maxHealth;
+            }
+        }
+        if (Input.GetKeyDown(KeyCode.D))
+        {
+            health -= 20;
+            if (health <= 0 && !isDead)
+            {
+                health = 0;
+                isDead = true;
+                StartCoroutine(WaitForAnimationToDie(0));
+
+            }
+        }
+        if (Input.GetKeyDown(KeyCode.I))
+        {
+            invincible = !invincible;
+            print("invincible: " + invincible);
+        }
+        if (Input.GetKeyDown(KeyCode.A))
+        {
+            abilityPoints++;
+        }
+        if (Input.GetKeyDown(KeyCode.X))
+        {
+            xp += 100;
+        }
+        if (Input.GetKeyDown(KeyCode.M))
+        {
+            if (Time.timeScale == 1)
+            {
+                Time.timeScale = 0.5f;
+            }
+            else
+            {
+                Time.timeScale = 1;
+            }
+        }
+    }
+
+    private IEnumerator WaitForAnimationToHeal(float v)
+    {
+        yield return new WaitForSeconds(v);
+        potions--;
+        health += maxHealth / 2;
+        if (health > maxHealth)
+        {
+            health = maxHealth;
+        }
     }
 
     public void takeDamage(int damage, string attacker = "Enemy", float clipLength = 0)
     {
+        if (invincible)
+        {
+            return;
+        }
         if (currentCharacterName == "Barbarian")
         {
             if (currentCharacter.GetComponent<Barbarian_Abilities>().shieldActive == true) 
@@ -217,7 +304,33 @@ public class yarab : MonoBehaviour
 
     public int gainXP(int xp)
     {
-        this.xp += xp;
-        return this.xp;
+        if (characterLevel < 4)
+        {
+            this.xp += xp;
+            return this.xp;
+        }
+        return 0;
+    }
+
+    public int getPotions()
+    {
+        return this.potions;
+    }
+
+    public int getRunes()
+    {
+        return this.runes;
+    }
+
+    public int IncreasePotions()
+    {
+        this.potions += 1;
+        return this.potions;
+    }
+
+    public int IncreaseRunes()
+    {
+        this.runes += 1;
+        return this.runes;
     }
 }

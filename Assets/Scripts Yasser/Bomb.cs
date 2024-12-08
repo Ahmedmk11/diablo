@@ -61,12 +61,14 @@ public class Bomb : MonoBehaviour
         }
 
         // Detect enemies in range of the smoke
-        Collider[] nearbyEnemies = Physics.OverlapSphere(smokeP.transform.position, detectionRadius, enemyLayer);
+        Collider[] nearbyEnemies = Physics.OverlapSphere(smokeP.transform.position, detectionRadius);
         foreach (Collider enemy in nearbyEnemies)
         {
-            // Stun the enemy
-            findAndStunEnemy(enemy);
-            Debug.Log($"Enemy detected: {enemy.name}");
+            if (enemy.CompareTag("Enemy"))
+            {
+                findAndStunEnemy(enemy);
+                Debug.Log($"Enemy detected: {enemy.name}");
+            }
         }
 
         // Destroy the arrow and smoke after a set lifetime
@@ -103,11 +105,11 @@ public class Bomb : MonoBehaviour
         }
         else if (minion != null)
         {
-            //minion.takeStun();
+            minion.Stun();
         }
         else if (demon != null)
         {
-            //demon.takeStun();
+            demon.Stun();
         }
     }
 }

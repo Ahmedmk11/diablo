@@ -21,6 +21,10 @@ public class CreateCamp : MonoBehaviour
     private yarab yarabScript;
     public GameObject particleSystem;
 
+    public GameObject runePrefab;
+    public GameObject mainCamera;
+
+
     private void Start()
     {
         yarabScript = GetComponent<yarab>();
@@ -39,9 +43,12 @@ public class CreateCamp : MonoBehaviour
                 campManagerInstance.centerPoint = campPosition;
                 campManagerInstance.playerHealth = yarabScript.health;
                 campManagerInstance.name = "Camp" + campPositions.IndexOf(campPosition);
+                campManagerInstance.runePrefab = runePrefab;
+                campManagerInstance.mainCamera = mainCamera;
 
 
-                SpawnMinionsAndDemons(campManagerInstance, campPosition);
+
+    SpawnMinionsAndDemons(campManagerInstance, campPosition);
             }
 
             firstTime = false;
@@ -74,6 +81,8 @@ public class CreateCamp : MonoBehaviour
                 GameObject agent = Instantiate(minionPrefab, agentPosition, Quaternion.identity);
                 
                 agent.AddComponent<BoxCollider>();
+                agent.GetComponent<BoxCollider>().center = new Vector3(0f, 0.9f, 0f);
+                agent.GetComponent<BoxCollider>().size = new Vector3(1f, 1.7f, 1f);
                 NavMeshAgent navMeshAgent = agent.AddComponent<NavMeshAgent>();
                 navMeshAgent.speed = 0.5f;
                 navMeshAgent.angularSpeed = 10f;
@@ -109,7 +118,9 @@ public class CreateCamp : MonoBehaviour
             Vector3 agentPosition = new Vector3(x, centerPoint.y, z);
 
             GameObject agent = Instantiate(demonPrefab, agentPosition, Quaternion.identity);
-                            agent.AddComponent<BoxCollider>();
+            agent.AddComponent<BoxCollider>();
+            agent.GetComponent<BoxCollider>().center = new Vector3(0f, 1f, 0f);
+            agent.GetComponent<BoxCollider>().size = new Vector3(1f, 2f, 1f);
 
             NavMeshAgent navMeshAgent = agent.AddComponent<NavMeshAgent>();
             navMeshAgent.speed = 0.5f;
@@ -123,6 +134,7 @@ public class CreateCamp : MonoBehaviour
             demonScript.player = player.gameObject;
             demonScript.yarabScript = yarabScript;
             demonScript.particleSystem = particleSystem;
+            demonScript.demonName = "Demon" + i;
 
             Animator animator = agent.GetComponent<Animator>();
             animator.runtimeAnimatorController = demonController;
