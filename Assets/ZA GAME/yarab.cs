@@ -50,7 +50,7 @@ public class yarab : MonoBehaviour
     void Start()
     {
         // TEMP
-        level = 1;
+        level = 2;
         // ha5od variable men character selection screen 1: barb 2: sorc 3: rogue
         int character = 1;
         // TEMP
