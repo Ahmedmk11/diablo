@@ -55,6 +55,8 @@ public class yarab : MonoBehaviour
 
     public int health = 100;
     private int xp = 0;
+    private int potions = 0;
+    private int runes = 0;
 
     // Start is called before the first frame update
     void Start()
@@ -62,7 +64,7 @@ public class yarab : MonoBehaviour
         // TEMP
         level = 1;
         // ha5od variable men character selection screen 1: barb 2: sorc 3: rogue
-        int character = 3;
+        int character = 1;
         // TEMP
 
         //Vector3 initVector = level == 1 ? new Vector3(-3.41f, 5, -25.5f) : new Vector3(50, 50, 50);
@@ -123,6 +125,8 @@ public class yarab : MonoBehaviour
         gameObject.GetComponent<CameraFollow>().target = currentCharacter.transform;
 
         currentCharacter.AddComponent<BoxCollider>();
+        currentCharacter.GetComponent<BoxCollider>().center = new Vector3(0, 2, 0);
+        currentCharacter.GetComponent<BoxCollider>().size = new Vector3(1, 2.5f, 1);
         currentCharacter.AddComponent<NavMeshAgent>();
         currentCharacter.AddComponent(movement.GetComponent<Movement>().GetType());
         currentCharacter.GetComponent<Movement>().camera = camera;
@@ -132,7 +136,7 @@ public class yarab : MonoBehaviour
         minimapCamera.GetComponent<CameraFollow>().target = marker.transform;
         currentCharacter.tag = "Player";
 
-        print(level);
+        //print(level);
         if (level == 1)
         {
             // add minions / demons
@@ -172,7 +176,7 @@ public class yarab : MonoBehaviour
             currentBoss.transform.LookAt(currentCharacter.transform);
         }
 
-        Debug.Log("Player xp: " + xp);
+        //Debug.Log("Player xp: " + xp);
 
     }
 
@@ -219,5 +223,17 @@ public class yarab : MonoBehaviour
     {
         this.xp += xp;
         return this.xp;
+    }
+
+    public int IncreasePotions()
+    {
+        this.potions += 1;
+        return this.potions;
+    }
+
+    public int IncreaseRunes()
+    {
+        this.runes += 1;
+        return this.runes;
     }
 }
