@@ -6,7 +6,7 @@ public class CampManager : MonoBehaviour
 {
     public Transform player;
     private int maxDemonsAlerted = 1;
-    private int maxMinionsAlerted = 1;
+    private int maxMinionsAlerted = 5;
     public Vector3 centerPoint;
     public float campRadius;
     private List<Minion> minions = new List<Minion>();
@@ -81,8 +81,11 @@ public class CampManager : MonoBehaviour
                 alertedMinions.Remove(minion);
             }
 
-            if (alertedMinions.Count < maxMinionsAlerted)
+            float distanceToCenter = Vector3.Distance(player.position, centerPoint);
+
+            if (alertedMinions.Count < maxMinionsAlerted && !isPlayerInsideCampRadius && distanceToCenter <= campRadius)
             {
+                isPlayerInsideCampRadius = true;
                 var outermostMinions = minions
                     .OrderBy(minion => Vector3.Distance(minion.transform.position, player.transform.position))
                     .ToList();
@@ -118,8 +121,11 @@ public class CampManager : MonoBehaviour
             alertedDemons.Remove(demon);
         }
 
-        if (alertedDemons.Count < maxDemonsAlerted)
+        float distanceToCenter = Vector3.Distance(player.position, centerPoint);
+
+        if (alertedDemons.Count < maxDemonsAlerted && !isPlayerInsideCampRadius && distanceToCenter <= campRadius)
         {
+            isPlayerInsideCampRadius = true;
             foreach (Demon newDemon in demons)
             {
                 if (!alertedDemons.Contains(newDemon))
@@ -157,24 +163,25 @@ public class CampManager : MonoBehaviour
                 alertedDemons.Add(demon);
                 demon.agent.ResetPath();
                 demon.StartFollowingPlayer(player.gameObject);
+                demon.patrolling = false;
             }
         }
         
-        // var outermostMinions = minions
-        //     .OrderBy(minion => Vector3.Distance(minion.transform.position, player.transform.position))
-        //     .ToList();
+        var outermostMinions = minions
+            .OrderBy(minion => Vector3.Distance(minion.transform.position, player.transform.position))
+            .ToList();
 
-        // foreach (Minion minion in outermostMinions)
-        // {
-        //     if (alertedMinions.Count >= maxMinionsAlerted)
-        //         break;
+        foreach (Minion minion in outermostMinions)
+        {
+            if (alertedMinions.Count >= maxMinionsAlerted)
+                break;
 
-        //     if (!alertedMinions.Contains(minion))
-        //     {
-        //         alertedMinions.Add(minion);
-        //         minion.StartFollowingPlayer(player.gameObject);
-        //     }
-        // }
+            if (!alertedMinions.Contains(minion))
+            {
+                alertedMinions.Add(minion);
+                minion.StartFollowingPlayer(player.gameObject);
+            }
+        }
     }
 
     private void ResetNearbyEntities()
@@ -187,6 +194,7 @@ public class CampManager : MonoBehaviour
             demon.agent.SetDestination(demonPositions[demon]);
             Debug.Log("after: Resetting demon path to initial");
             demon.StopFollowingPlayer();
+            demon.patrolling = true;
         }
 
         foreach (Minion minion in alertedMinions)

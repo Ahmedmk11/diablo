@@ -28,6 +28,7 @@ public class Demon : MonoBehaviour
     private bool isAttacking = false;
     public GameObject particleSystem;
     private ParticleSystem particleSystemInstance;
+    private bool isStunned = false;
 
     private void Start()
     {
@@ -120,18 +121,35 @@ public class Demon : MonoBehaviour
         StartCoroutine(ActivateParticleSystemWithDelay(clipLength));
     }
 
+    public void Stun()
+    {
+        isStunned = true;
+        agent.isStopped = true;
+        animator.SetTrigger("isStunned");
+        StartCoroutine(Unstun());
+    }
+
+    IEnumerator Unstun()
+    {
+        yield return new WaitForSeconds(5f);
+        isStunned = false;
+        agent.isStopped = false;
+    }
+
     IEnumerator AttackPlayer()
     {
         isAttacking = true;
 
-        if (swings < 3)
+        if (!isStunned)
         {
-            // MeleeAttack();
-            ExplosiveAttack();
-        }
-        else
-        {
-            ExplosiveAttack();
+            if (swings < 3)
+            {
+                MeleeAttack();
+            }
+            else
+            {
+                ExplosiveAttack();
+            }
         }
 
         swings++;
@@ -190,14 +208,18 @@ public class Demon : MonoBehaviour
         yarabScript.gainXP((int)xp);
 
         campManager.UnregisterDemon(this);
-        // Destroy(gameObject, 2f);
+
+        AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
+        float clipLength = stateInfo.length;
+
+        StartCoroutine(FlashThenHide(clipLength));
     }
 
     IEnumerator PatrolRandomly()
     {
         while (true)
         {
-            if (patrolling)
+            if (patrolling && !isStunned && hp > 0)
             {
                 yield return new WaitForSeconds(waitTime);
 
@@ -233,6 +255,25 @@ public class Demon : MonoBehaviour
                 yield return null;
             }
         }
+    }
+
+    IEnumerator FlashThenHide(float clipLength)
+    {
+        yield return new WaitForSeconds(clipLength);
+
+        Renderer renderer = GetComponent<Renderer>();
+        if (renderer != null)
+        {
+            for (int i = 0; i < 10; i++)
+            {
+                renderer.enabled = false;
+                yield return new WaitForSeconds(0.75f);
+                renderer.enabled = true;
+                yield return new WaitForSeconds(0.75f);
+            }
+        }
+
+        gameObject.SetActive(false);
     }
 
     IEnumerator ActivateParticleSystemWithDelay(float delay)

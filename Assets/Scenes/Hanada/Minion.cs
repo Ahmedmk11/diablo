@@ -20,6 +20,7 @@ public class Minion : MonoBehaviour
     private float currentStoppingDistance;
     public yarab yarabScript;
     private bool isAttacking = false;
+    private bool isStunned = false;
 
     private void Start()
     {
@@ -82,6 +83,21 @@ public class Minion : MonoBehaviour
         }
     }
 
+    public void Stun()
+    {
+        isStunned = true;
+        agent.isStopped = true;
+        animator.SetTrigger("isStunned");
+        StartCoroutine(Unstun());
+    }
+
+    IEnumerator Unstun()
+    {
+        yield return new WaitForSeconds(5f);
+        isStunned = false;
+        agent.isStopped = false;
+    }
+
     public void StartFollowingPlayer(GameObject player)
     {
         followingPlayer = true;
@@ -115,9 +131,12 @@ public class Minion : MonoBehaviour
     {
         isAttacking = true;
         
-        Punch();
+        if (!isStunned)
+        {
+            Punch();
+        }
 
-        yield return new WaitForSeconds(1.5f); 
+        yield return new WaitForSeconds(5f); 
         isAttacking = false;
     }
 
@@ -139,6 +158,28 @@ public class Minion : MonoBehaviour
 
         campManager.UnregisterMinion(this);
 
-        // Destroy(gameObject, 2f);
+        AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
+        float clipLength = stateInfo.length;
+
+        StartCoroutine(FlashThenHide(clipLength));
+    }
+
+    IEnumerator FlashThenHide(float clipLength)
+    {
+        yield return new WaitForSeconds(clipLength);
+        
+        Renderer renderer = GetComponent<Renderer>();
+        if (renderer != null)
+        {
+            for (int i = 0; i < 10; i++)
+            {
+                renderer.enabled = false;
+                yield return new WaitForSeconds(0.75f);
+                renderer.enabled = true;
+                yield return new WaitForSeconds(0.75f);
+            }
+        }
+
+        gameObject.SetActive(false);
     }
 }
