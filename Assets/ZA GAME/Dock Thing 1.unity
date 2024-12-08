@@ -16729,7 +16729,7 @@ MonoBehaviour:
   - {x: 53.18, y: 5, z: 43.18}
   campManagerPrefab: {fileID: 3363401093037399405, guid: 7b4bfb8a165b442b496ad7d237195fc3, type: 3}
   particleSystem: {fileID: 4799787391677844021, guid: 749f0fd9bc2624a77b08b1b87ee345ff, type: 3}
-  runePrefab: {fileID: 100000, guid: 0a387457f10d99c4a92a27301f1b1766, type: 3}
+  runePrefab: {fileID: 137892, guid: d5caf732deebe4d4cbf9b994f45b28ce, type: 3}
   mainCamera: {fileID: 798920625}
 --- !u!1001 &802682352
 PrefabInstance:
