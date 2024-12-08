@@ -53,8 +53,11 @@ public class yarab : MonoBehaviour
     public Bomb bomb;
     public Dash dash;
 
+    public int maxHealth = 100;
     public int health = 100;
-    private int xp = 0;
+    public int xp = 0;
+    public int characterLevel = 1;
+    public int abilityPoints = 0;
 
     // Start is called before the first frame update
     void Start()
@@ -62,7 +65,7 @@ public class yarab : MonoBehaviour
         // TEMP
         level = 1;
         // ha5od variable men character selection screen 1: barb 2: sorc 3: rogue
-        int character = 3;
+        int character = 1;
         // TEMP
 
         //Vector3 initVector = level == 1 ? new Vector3(-3.41f, 5, -25.5f) : new Vector3(50, 50, 50);
@@ -157,7 +160,6 @@ public class yarab : MonoBehaviour
             currentBoss.GetComponent<Animator>().applyRootMotion = false;
         }
 
-
     }
 
     // Update is called once per frame
@@ -172,8 +174,20 @@ public class yarab : MonoBehaviour
             currentBoss.transform.LookAt(currentCharacter.transform);
         }
 
-        Debug.Log("Player xp: " + xp);
-
+        if (characterLevel < 4)
+        {
+            if (xp >= 100 * characterLevel)
+            {
+                xp -= (100 * characterLevel);
+                characterLevel++;
+                maxHealth = characterLevel * 100;
+                health = maxHealth;
+                abilityPoints++;
+            }
+        }
+        if (Input.GetKeyDown(KeyCode.H)){
+            abilityPoints++;
+        }
     }
 
     public void takeDamage(int damage, string attacker = "Enemy", float clipLength = 0)
@@ -217,7 +231,11 @@ public class yarab : MonoBehaviour
 
     public int gainXP(int xp)
     {
-        this.xp += xp;
-        return this.xp;
+        if (characterLevel < 4)
+        {
+            this.xp += xp;
+            return this.xp;
+        }
+        return 0;
     }
 }
