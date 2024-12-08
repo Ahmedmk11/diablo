@@ -111,7 +111,7 @@ public class CampManager : MonoBehaviour
         {
             print("Camp is dead");
             GameObject rune = Instantiate(runePrefab, 
-                new Vector3(centerPoint.x, 6.2f, centerPoint.z), Quaternion.identity);
+                new Vector3(centerPoint.x, 7.2f, centerPoint.z), Quaternion.identity);
             rune.AddComponent<CollectableRune>();
         }
     }
@@ -149,7 +149,7 @@ public class CampManager : MonoBehaviour
         {
             print("Camp is dead");
             GameObject rune = Instantiate(runePrefab,
-                new Vector3(centerPoint.x, 6.2f, centerPoint.z), Quaternion.identity);
+                new Vector3(centerPoint.x, 7.2f, centerPoint.z), Quaternion.identity);
             rune.AddComponent<CollectableRune>();
         }
     }
@@ -233,15 +233,7 @@ public class CollectableRune : MonoBehaviour
         {
             print("Player collected rune");
 
-            Transform yarabTransform = campInstance.mainCamera.transform.Find("Yarab");
-            if (yarabTransform != null)
-            {
-                yarab myInstance = yarabTransform.GetComponent<yarab>();
-                if (myInstance != null)
-                {
-                    myInstance.IncreaseRunes();
-                }
-            }
+            campInstance.mainCamera.GetComponent<yarab>().IncreaseRunes();
 
             // Destroy the potion object
             Destroy(gameObject);

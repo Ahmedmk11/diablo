@@ -81,6 +81,8 @@ public class CreateCamp : MonoBehaviour
                 GameObject agent = Instantiate(minionPrefab, agentPosition, Quaternion.identity);
                 
                 agent.AddComponent<BoxCollider>();
+                agent.GetComponent<BoxCollider>().center = new Vector3(0f, 0.9f, 0f);
+                agent.GetComponent<BoxCollider>().size = new Vector3(1f, 1.7f, 1f);
                 NavMeshAgent navMeshAgent = agent.AddComponent<NavMeshAgent>();
                 navMeshAgent.speed = 0.5f;
                 navMeshAgent.angularSpeed = 10f;
@@ -116,7 +118,9 @@ public class CreateCamp : MonoBehaviour
             Vector3 agentPosition = new Vector3(x, centerPoint.y, z);
 
             GameObject agent = Instantiate(demonPrefab, agentPosition, Quaternion.identity);
-                            agent.AddComponent<BoxCollider>();
+            agent.AddComponent<BoxCollider>();
+            agent.GetComponent<BoxCollider>().center = new Vector3(0f, 1f, 0f);
+            agent.GetComponent<BoxCollider>().size = new Vector3(1f, 2f, 1f);
 
             NavMeshAgent navMeshAgent = agent.AddComponent<NavMeshAgent>();
             navMeshAgent.speed = 0.5f;
