@@ -14,6 +14,8 @@ public class LilithBehavior : MonoBehaviour
 
     public int health = 50;
 
+    public bool firsttime = true;
+
     private Animator animator; // Reference to Animator component
     private GameObject[] activeMinions; // Array to track currently summoned minions
 
@@ -51,10 +53,21 @@ public class LilithBehavior : MonoBehaviour
             // Check if all minions are defeated
             if (AreAllMinionsDefeated())
             {
-                PerformSummon();
+                if (firsttime)
+                {
+                    firsttime = false;
+                    PerformSummon();
+                }
+                else
+                {
+                    yield return new WaitForSeconds(15.0f);
+                    PerformSummon();
+                }
+
             }
             else
             {
+                yield return new WaitForSeconds(10.0f);
                 PerformDivebomb();
             }
 
@@ -97,17 +110,19 @@ public class LilithBehavior : MonoBehaviour
             NavMeshAgent navMeshAgent = newMinion.AddComponent<NavMeshAgent>();
             navMeshAgent.speed = 0.5f;
             navMeshAgent.angularSpeed = 10f;
-            navMeshAgent.obstacleAvoidanceType = ObstacleAvoidanceType.HighQualityObstacleAvoidance;
+            navMeshAgent.stoppingDistance = 2.0f;
+            // navMeshAgent.obstacleAvoidanceType = ObstacleAvoidanceType.HighQualityObstacleAvoidance;
 
             Minion minionScript = newMinion.AddComponent<Minion>();
             minionScript.followingPlayer = true;
             minionScript.player = player.gameObject;
-
+            minionScript.yarabScript = cameraForYarab.GetComponent<yarab>();
 
             Animator minionAnimator = newMinion.GetComponent<Animator>();
             minionAnimator.runtimeAnimatorController = minionController;
             minionAnimator.applyRootMotion = false;
 
+            newMinion.tag = "Enemy";
 
             newMinion.SetActive(false); // Initially disable
             activeMinions[i] = newMinion;
@@ -134,6 +149,8 @@ public class LilithBehavior : MonoBehaviour
 
     private void PerformDivebomb()
     {
+
+        animator.SetTrigger("Dwarf Idle");
         Debug.Log("Lilith is performing Divebomb!");
         animator.SetTrigger("Divebomb");
         animator.SetBool("Summon", false);
@@ -151,7 +168,7 @@ public class LilithBehavior : MonoBehaviour
             if (collider.CompareTag("Player")) // Ensure to replace with the correct tag
             {
 
-              
+
 
                 yarab yarab = cameraForYarab.GetComponent<yarab>();
 
@@ -170,6 +187,7 @@ public class LilithBehavior : MonoBehaviour
 
     private bool AreAllMinionsDefeated()
     {
+
         foreach (GameObject minion in activeMinions)
         {
             if (minion != null) return false;
