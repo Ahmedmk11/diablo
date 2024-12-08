@@ -16705,6 +16705,9 @@ MonoBehaviour:
   xp: 0
   characterLevel: 1
   abilityPoints: 0
+  defensiveAbilityLocked: 1
+  wildacrdAbilityLocked: 1
+  ultimateAbilityLocked: 1
 --- !u!114 &798920631
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -28506,7 +28509,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b83426455e8c9b94390d1130f1d96bb9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  abilityPoints: {fileID: 700203311}
+  type: defensive
+  camera: {fileID: 798920626}
 --- !u!114 &1269525287
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -40223,7 +40227,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b83426455e8c9b94390d1130f1d96bb9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  abilityPoints: {fileID: 700203311}
+  type: ultimate
+  camera: {fileID: 798920626}
 --- !u!114 &1853542232
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -40388,6 +40393,9 @@ MonoBehaviour:
   rotationSpeed: 10
   shieldLight: {fileID: 0}
   shieldActive: 0
+  DefensiveAbilityLockedBarb: 1
+  WildcardAbilityLockedBarb: 1
+  UltimateAbilityLockedBarb: 1
 --- !u!114 &1858325856
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -42746,7 +42754,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b83426455e8c9b94390d1130f1d96bb9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  abilityPoints: {fileID: 700203311}
+  type: wild card
+  camera: {fileID: 798920626}
 --- !u!114 &1971862201
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -27,6 +27,10 @@ public class Barbarian_Abilities : MonoBehaviour
    
     private NavMeshAgent agent; // NavMeshAgent for movement
 
+    public bool DefensiveAbilityLockedBarb = true;
+    public bool WildcardAbilityLockedBarb = true;
+    public bool UltimateAbilityLockedBarb = true;
+
     // Cooldown durations for abilities
     private Dictionary<string, float> abilityCooldowns = new Dictionary<string, float>
     {
@@ -97,19 +101,19 @@ public class Barbarian_Abilities : MonoBehaviour
         }
 
         // Defensive Ability: Press W
-        if (Input.GetKeyDown(KeyCode.W) && !IsAbilityOnCooldown("Defensive"))
+        if (Input.GetKeyDown(KeyCode.W) && !IsAbilityOnCooldown("Defensive") && !DefensiveAbilityLockedBarb)
         {
             TriggerDefensiveAbility();
         }
 
         // Wildcard Ability: Press Q
-        if (Input.GetKeyDown(KeyCode.Q) && !IsAbilityOnCooldown("Wildcard"))
+        if (Input.GetKeyDown(KeyCode.Q) && !IsAbilityOnCooldown("Wildcard") && !WildcardAbilityLockedBarb)
         {
             TriggerWildcardAbility();
         }
 
         // Ultimate Ability: Press E
-        if (Input.GetKeyDown(KeyCode.E) && !IsAbilityOnCooldown("Ultimate") && !isUltimateActive)
+        if (Input.GetKeyDown(KeyCode.E) && !IsAbilityOnCooldown("Ultimate") && !isUltimateActive && !UltimateAbilityLockedBarb)
         {
             TriggerUltimateAbility(); // Set up to select position
         }
