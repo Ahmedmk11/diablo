@@ -5,8 +5,8 @@ using System.Linq;
 public class CampManager : MonoBehaviour
 {
     public Transform player;
-    private int maxDemonsAlerted = 0;
-    private int maxMinionsAlerted = 2;
+    private int maxDemonsAlerted = 2;
+    private int maxMinionsAlerted = 16;
     public Vector3 centerPoint;
     public float campRadius;
     private List<Minion> minions = new List<Minion>();
