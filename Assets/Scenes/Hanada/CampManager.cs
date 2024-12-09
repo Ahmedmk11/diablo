@@ -5,8 +5,8 @@ using System.Linq;
 public class CampManager : MonoBehaviour
 {
     public Transform player;
-    private int maxDemonsAlerted = 1;
-    private int maxMinionsAlerted = 5;
+    private int maxDemonsAlerted = 0;
+    private int maxMinionsAlerted = 2;
     public Vector3 centerPoint;
     public float campRadius;
     private List<Minion> minions = new List<Minion>();
@@ -88,9 +88,8 @@ public class CampManager : MonoBehaviour
 
             float distanceToCenter = Vector3.Distance(player.position, centerPoint);
 
-            if (alertedMinions.Count < maxMinionsAlerted && !isPlayerInsideCampRadius && distanceToCenter <= campRadius)
+            if (alertedMinions.Count < maxMinionsAlerted && distanceToCenter <= campRadius)
             {
-                isPlayerInsideCampRadius = true;
                 var outermostMinions = minions
                     .OrderBy(minion => Vector3.Distance(minion.transform.position, player.transform.position))
                     .ToList();
@@ -131,9 +130,8 @@ public class CampManager : MonoBehaviour
 
         float distanceToCenter = Vector3.Distance(player.position, centerPoint);
 
-        if (alertedDemons.Count < maxDemonsAlerted && !isPlayerInsideCampRadius && distanceToCenter <= campRadius)
+        if (alertedDemons.Count < maxDemonsAlerted && distanceToCenter <= campRadius)
         {
-            isPlayerInsideCampRadius = true;
             foreach (Demon newDemon in demons)
             {
                 if (!alertedDemons.Contains(newDemon))
