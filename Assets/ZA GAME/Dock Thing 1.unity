@@ -5749,11 +5749,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c5d5f1d29f2e94e45b0022124ff1f27f, type: 3}
---- !u!4 &301122053 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 400000, guid: 2b120c828398db5439578c6f50bef162, type: 3}
-  m_PrefabInstance: {fileID: 1936291057}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &308007785
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -16705,7 +16700,14 @@ MonoBehaviour:
   arrowShower: {fileID: 1858325857}
   bomb: {fileID: 1858325858}
   dash: {fileID: 1858325859}
+  maxHealth: 100
   health: 100
+  xp: 0
+  characterLevel: 1
+  abilityPoints: 0
+  defensiveAbilityLocked: 1
+  wildacrdAbilityLocked: 1
+  ultimateAbilityLocked: 1
 --- !u!114 &798920631
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -18250,7 +18252,6 @@ Transform:
   - {fileID: 50542169}
   - {fileID: 1440742621}
   - {fileID: 1005171403}
-  - {fileID: 301122053}
   - {fileID: 706501746}
   - {fileID: 1472039680}
   - {fileID: 753071851}
@@ -20715,6 +20716,7 @@ MonoBehaviour:
   potions: {fileID: 1363755321}
   abilityPoints: {fileID: 700203311}
   runes: {fileID: 84437589}
+  camera: {fileID: 798920625}
 --- !u!114 &930444871
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -28507,7 +28509,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b83426455e8c9b94390d1130f1d96bb9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  abilityPoints: {fileID: 700203311}
+  type: defensive
+  camera: {fileID: 798920626}
 --- !u!114 &1269525287
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -40224,7 +40227,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b83426455e8c9b94390d1130f1d96bb9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  abilityPoints: {fileID: 700203311}
+  type: ultimate
+  camera: {fileID: 798920626}
 --- !u!114 &1853542232
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -40389,6 +40393,9 @@ MonoBehaviour:
   rotationSpeed: 10
   shieldLight: {fileID: 0}
   shieldActive: 0
+  DefensiveAbilityLockedBarb: 1
+  WildcardAbilityLockedBarb: 1
+  UltimateAbilityLockedBarb: 1
 --- !u!114 &1858325856
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -42148,95 +42155,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 849963532}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1001 &1936291057
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 849963532}
-    m_Modifications:
-    - target: {fileID: 100000, guid: 2b120c828398db5439578c6f50bef162, type: 3}
-      propertyPath: m_Name
-      value: lamp_2
-      objectReference: {fileID: 0}
-    - target: {fileID: 100000, guid: 2b120c828398db5439578c6f50bef162, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 100006, guid: 2b120c828398db5439578c6f50bef162, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: 2b120c828398db5439578c6f50bef162, type: 3}
-      propertyPath: m_RootOrder
-      value: 65
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: 2b120c828398db5439578c6f50bef162, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 5.556
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: 2b120c828398db5439578c6f50bef162, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 7.283
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: 2b120c828398db5439578c6f50bef162, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 42.302
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: 2b120c828398db5439578c6f50bef162, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 0.92912614
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: 2b120c828398db5439578c6f50bef162, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: 2b120c828398db5439578c6f50bef162, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -0.36976284
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: 2b120c828398db5439578c6f50bef162, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 400004, guid: 2b120c828398db5439578c6f50bef162, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 14.586
-      objectReference: {fileID: 0}
-    - target: {fileID: 400004, guid: 2b120c828398db5439578c6f50bef162, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 12.645
-      objectReference: {fileID: 0}
-    - target: {fileID: 400004, guid: 2b120c828398db5439578c6f50bef162, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 0.5203621
-      objectReference: {fileID: 0}
-    - target: {fileID: 400004, guid: 2b120c828398db5439578c6f50bef162, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0.5203622
-      objectReference: {fileID: 0}
-    - target: {fileID: 400004, guid: 2b120c828398db5439578c6f50bef162, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -0.47877252
-      objectReference: {fileID: 0}
-    - target: {fileID: 400004, guid: 2b120c828398db5439578c6f50bef162, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0.47877282
-      objectReference: {fileID: 0}
-    - target: {fileID: 400004, guid: 2b120c828398db5439578c6f50bef162, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: -90
-      objectReference: {fileID: 0}
-    - target: {fileID: 400004, guid: 2b120c828398db5439578c6f50bef162, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: -85.233
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 2b120c828398db5439578c6f50bef162, type: 3}
 --- !u!1001 &1936463819
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -42836,7 +42754,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b83426455e8c9b94390d1130f1d96bb9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  abilityPoints: {fileID: 700203311}
+  type: wild card
+  camera: {fileID: 798920626}
 --- !u!114 &1971862201
 MonoBehaviour:
   m_ObjectHideFlags: 0

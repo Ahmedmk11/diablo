@@ -65,7 +65,7 @@ public class UIScript : MonoBehaviour
         if (type == "Potion")
         {
             text = potions.GetComponent<TMP_Text>();
-            // text.text = camera.GetComponent<yarab>().potions.ToString();
+            text.text = camera.GetComponent<yarab>().getPotions().ToString();
         }
         else if (type == "Ability Point")
         {
@@ -75,7 +75,7 @@ public class UIScript : MonoBehaviour
         else if (type == "Rune")
         {
             text = runes.GetComponent<TMP_Text>();
-            //text.text = camera.GetComponent<yarab>().runes.ToString();
+            text.text = camera.GetComponent<yarab>().getRunes().ToString();
         }
     }
 }

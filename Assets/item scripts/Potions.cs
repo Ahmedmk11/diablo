@@ -117,19 +117,14 @@ public class CollectablePotion : MonoBehaviour
             {
                 potionsInstance = FindObjectOfType<Potions>();
             }
-
-            Transform yarabTransform = potionsInstance.mainCamera.transform.Find("Yarab");
-            if (yarabTransform != null)
+            if (potionsInstance.mainCamera.GetComponent<yarab>().getPotions() < 3)
             {
-                yarab myInstance = yarabTransform.GetComponent<yarab>();
-                if (myInstance != null)
-                {
-                    myInstance.IncreasePotions();
-                }
-            }
+                potionsInstance.mainCamera.GetComponent<yarab>().IncreasePotions();
 
-            // Destroy the potion object
-            Destroy(gameObject);
+                // Destroy the potion object
+                Destroy(gameObject);
+            }
+            
         }
     }
 

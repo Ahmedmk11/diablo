@@ -71,6 +71,15 @@ public class Minion : MonoBehaviour
         FaceMovementDirection();
         // remove
         if (hp < 20) print("Minion:"+hp);
+
+        // if following player face player
+
+        if (followingPlayer)
+        {
+            Vector3 directionToFace = player.transform.position - transform.position;
+            Quaternion lookRotation = Quaternion.LookRotation(directionToFace);
+            transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * speed);
+        }
     }
 
     void FaceMovementDirection()

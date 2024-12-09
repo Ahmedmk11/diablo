@@ -60,6 +60,12 @@ public class yarab : MonoBehaviour
     public int abilityPoints = 0;
     private int potions = 0;
     private int runes = 0;
+    private bool invincible = false;
+
+    public bool defensiveAbilityLocked = true;
+    public bool wildacrdAbilityLocked = true;
+    public bool ultimateAbilityLocked = true;
+    private bool unlockAbilityCheat = false;
 
     // Start is called before the first frame update
     void Start()
@@ -67,7 +73,7 @@ public class yarab : MonoBehaviour
         // TEMP
         level = 2;
         // ha5od variable men character selection screen 1: barb 2: sorc 3: rogue
-        int character = 1;
+        int character = 3;
         // TEMP
 
         //Vector3 initVector = level == 1 ? new Vector3(-3.41f, 5, -25.5f) : new Vector3(50, 50, 50);
@@ -104,26 +110,6 @@ public class yarab : MonoBehaviour
             currentCharacter.GetComponent<PlayerAnimationTrigger>().arrowSpawnPoint = currentCharacter.transform.GetChild(4).transform;
             currentCharacter.GetComponent<PlayerAnimationTrigger>().launchForce = 17;
             currentCharacter.GetComponent<PlayerAnimationTrigger>().arrowLifetime = 5;
-
-            currentCharacter.AddComponent<ArrowShower>();
-            currentCharacter.GetComponent<ArrowShower>().arrowPrefab = shower;
-            currentCharacter.GetComponent<ArrowShower>().camera = camera;
-            currentCharacter.GetComponent<ArrowShower>().launchForce = 20;
-            currentCharacter.GetComponent<ArrowShower>().arrowLifetime = 5;
-            currentCharacter.GetComponent<ArrowShower>().detectionRadius = 2;
-
-
-            currentCharacter.AddComponent<Bomb>();
-            currentCharacter.GetComponent<Bomb>().arrowPrefab = smoke;
-            currentCharacter.GetComponent<Bomb>().camera = camera;
-            currentCharacter.GetComponent<Bomb>().arrowSpawnPoint = currentCharacter.transform.GetChild(1).transform;
-            currentCharacter.GetComponent<Bomb>().smoke = spark;
-            currentCharacter.GetComponent<Bomb>().launchForce = 7;
-            currentCharacter.GetComponent<Bomb>().arrowLifetime = 5;
-            currentCharacter.GetComponent<Bomb>().detectionRadius = 5;
-
-            currentCharacter.AddComponent<Dash>();
-            currentCharacter.GetComponent<Dash>().camera = camera;
         }
         gameObject.GetComponent<CameraFollow>().target = currentCharacter.transform;
 
@@ -189,13 +175,166 @@ public class yarab : MonoBehaviour
                 abilityPoints++;
             }
         }
-        if (Input.GetKeyDown(KeyCode.H)){
+
+        if (Input.GetKeyDown(KeyCode.F))
+        {
+            if (potions > 0 && health < maxHealth)
+            {
+                animator.SetTrigger("heal");
+                StartCoroutine(WaitForAnimationToHeal(0.5f));
+            }
+        }
+
+        // Add abilities for rogue
+        if (currentCharacterName == "Rogue")
+        {
+            if (!defensiveAbilityLocked)
+            {
+                if(!unlockAbilityCheat) abilityPoints--;
+                defensiveAbilityLocked = true;
+                currentCharacter.AddComponent<Bomb>();
+                currentCharacter.GetComponent<Bomb>().arrowPrefab = smoke;
+                currentCharacter.GetComponent<Bomb>().camera = camera;
+                currentCharacter.GetComponent<Bomb>().arrowSpawnPoint = currentCharacter.transform.GetChild(1).transform;
+                currentCharacter.GetComponent<Bomb>().smoke = spark;
+                currentCharacter.GetComponent<Bomb>().launchForce = 7;
+                currentCharacter.GetComponent<Bomb>().arrowLifetime = 5;
+                currentCharacter.GetComponent<Bomb>().detectionRadius = 5;
+            }
+            if (!wildacrdAbilityLocked)
+            {
+                if (!unlockAbilityCheat) abilityPoints--;
+                wildacrdAbilityLocked = true;
+                currentCharacter.AddComponent<Dash>();
+                currentCharacter.GetComponent<Dash>().camera = camera;
+            }
+            if (!ultimateAbilityLocked)
+            {
+                if (!unlockAbilityCheat) abilityPoints--;
+                ultimateAbilityLocked = true;
+                currentCharacter.AddComponent<ArrowShower>();
+                currentCharacter.GetComponent<ArrowShower>().arrowPrefab = shower;
+                currentCharacter.GetComponent<ArrowShower>().camera = camera;
+                currentCharacter.GetComponent<ArrowShower>().launchForce = 20;
+                currentCharacter.GetComponent<ArrowShower>().arrowLifetime = 5;
+                currentCharacter.GetComponent<ArrowShower>().detectionRadius = 2;
+            }
+        }
+        else if (currentCharacterName == "Barbarian")
+        {
+            if (!defensiveAbilityLocked)
+            {
+                if (!unlockAbilityCheat) abilityPoints--;
+                defensiveAbilityLocked = true;
+                currentCharacter.GetComponent<Barbarian_Abilities>().DefensiveAbilityLockedBarb = false;
+            }
+            if (!wildacrdAbilityLocked)
+            {
+                if (!unlockAbilityCheat) abilityPoints--;
+                wildacrdAbilityLocked = true;
+                currentCharacter.GetComponent<Barbarian_Abilities>().WildcardAbilityLockedBarb = false;
+            }
+            if (!ultimateAbilityLocked)
+            {
+                if (!unlockAbilityCheat) abilityPoints--;
+                wildacrdAbilityLocked = true;
+                currentCharacter.GetComponent<Barbarian_Abilities>().UltimateAbilityLockedBarb = false;
+            }
+        }
+        /*else if (currentCharacterName == "Sorceress")
+        {
+            if (abilityPoints > 0)
+            {
+                if (Input.GetKeyDown(KeyCode.Alpha1))
+                {
+                    if(!unlockAbilityCheat) abilityPoints--;
+                    // add ability
+                }
+                if (Input.GetKeyDown(KeyCode.Alpha2))
+                {
+                    abilityPoints--;
+                    // add ability
+                }
+                if (Input.GetKeyDown(KeyCode.Alpha3))
+                {
+                    abilityPoints--;
+                    // add ability
+                }
+            }
+        } */
+
+
+
+        // cheats
+        if (Input.GetKeyDown(KeyCode.H))
+        {
+            health += 20;
+            if (health > maxHealth)
+            {
+                health = maxHealth;
+            }
+        }
+        if (Input.GetKeyDown(KeyCode.D))
+        {
+            health -= 20;
+            if (health <= 0 && !isDead)
+            {
+                health = 0;
+                isDead = true;
+                StartCoroutine(WaitForAnimationToDie(0));
+
+            }
+        }
+        if (Input.GetKeyDown(KeyCode.I))
+        {
+            invincible = !invincible;
+            print("invincible: " + invincible);
+        }
+        if (Input.GetKeyDown(KeyCode.A))
+        {
             abilityPoints++;
+        }
+        if (Input.GetKeyDown(KeyCode.X))
+        {
+            xp += 100;
+        }
+        if (Input.GetKeyDown(KeyCode.M))
+        {
+            if (Time.timeScale == 1)
+            {
+                Time.timeScale = 0.5f;
+            }
+            else
+            {
+                Time.timeScale = 1;
+            }
+        }
+        if(Input.GetKeyDown(KeyCode.U))
+        {
+            defensiveAbilityLocked = false;
+            wildacrdAbilityLocked = false;
+            ultimateAbilityLocked = false;
+            unlockAbilityCheat = true;
+        }
+    }
+
+    private IEnumerator WaitForAnimationToHeal(float v)
+    {
+        yield return new WaitForSeconds(v);
+        potions--;
+        health += maxHealth / 2;
+        if (health > maxHealth)
+        {
+            health = maxHealth;
         }
     }
 
     public void takeDamage(int damage, string attacker = "Enemy", float clipLength = 0)
     {
+        if (invincible)
+        {
+            return;
+        }
         if (currentCharacterName == "Barbarian")
         {
             if (currentCharacter.GetComponent<Barbarian_Abilities>().shieldActive == true) 
@@ -241,6 +380,16 @@ public class yarab : MonoBehaviour
             return this.xp;
         }
         return 0;
+    }
+
+    public int getPotions()
+    {
+        return this.potions;
+    }
+
+    public int getRunes()
+    {
+        return this.runes;
     }
 
     public int IncreasePotions()
