@@ -400,7 +400,7 @@ GameObject:
   - component: {fileID: 19687639}
   - component: {fileID: 19687641}
   - component: {fileID: 19687640}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: ground_8 (34)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -695,7 +695,7 @@ GameObject:
   - component: {fileID: 53374754}
   - component: {fileID: 53374756}
   - component: {fileID: 53374755}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: arch_wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1104,7 +1104,7 @@ GameObject:
   - component: {fileID: 69568595}
   - component: {fileID: 69568597}
   - component: {fileID: 69568596}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: ground_8 (27)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6671,6 +6671,7 @@ GameObject:
   - component: {fileID: 150665588}
   - component: {fileID: 150665592}
   - component: {fileID: 150665593}
+  - component: {fileID: 150665594}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -6782,6 +6783,9 @@ MonoBehaviour:
   shower: {fileID: 6240992605899186232, guid: 759bb212fcb79224ea53e36b8e6fc3bc, type: 3}
   smoke: {fileID: 2522079221440020892, guid: fea3ce10f04060240be32c1d98584399, type: 3}
   spark: {fileID: 2523170635868714095, guid: f063682089c3a6343a01ffe730347ead, type: 3}
+  lilithShield: {fileID: 1503744549}
+  lilithAura: {fileID: 736364902}
+  bloodySpikes: {fileID: 298693270}
   barbAnimator: {fileID: 9100000, guid: 6edcf24ee02c1694b93cf6ab2d09b458, type: 2}
   sorcAnimator: {fileID: 0}
   rogueAnimator: {fileID: 9100000, guid: ecc6a213e1bd1f643966c41028308be1, type: 2}
@@ -6801,7 +6805,14 @@ MonoBehaviour:
   arrowShower: {fileID: 704810931}
   bomb: {fileID: 704810932}
   dash: {fileID: 704810933}
+  maxHealth: 100
   health: 100
+  xp: 0
+  characterLevel: 1
+  abilityPoints: 0
+  defensiveAbilityLocked: 1
+  wildacrdAbilityLocked: 1
+  ultimateAbilityLocked: 1
 --- !u!114 &150665593
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6815,9 +6826,27 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 0}
-  positionOffset: {x: 0, y: 10, z: -8}
+  positionOffset: {x: 7.5, y: 10, z: 0.5}
   smoothSpeed: 5
   rotationX: 60
+  rotationY: -90
+--- !u!114 &150665594
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 150665587}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee6acd22232d17e44b4122129df7a09e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  potionPrefab: {fileID: 135030, guid: 11e345dd2aa3679448ca006a78ab45b2, type: 3}
+  numberOfPotions: 10
+  minDistanceBetweenPotions: 10
+  searchRadius: 100
+  mainCamera: {fileID: 150665587}
 --- !u!1 &158229030
 GameObject:
   m_ObjectHideFlags: 0
@@ -6829,7 +6858,7 @@ GameObject:
   - component: {fileID: 158229031}
   - component: {fileID: 158229033}
   - component: {fileID: 158229032}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: wall1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7466,7 +7495,7 @@ GameObject:
   - component: {fileID: 200214370}
   - component: {fileID: 200214372}
   - component: {fileID: 200214371}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: fire_cup_2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8094,7 +8123,7 @@ GameObject:
   - component: {fileID: 224025708}
   - component: {fileID: 224025707}
   - component: {fileID: 224025709}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: stairs_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8306,7 +8335,7 @@ GameObject:
   - component: {fileID: 238153261}
   - component: {fileID: 238153260}
   - component: {fileID: 238153259}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: fire_cup_base
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -13968,7 +13997,7 @@ GameObject:
   - component: {fileID: 303655889}
   - component: {fileID: 303655891}
   - component: {fileID: 303655890}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: pylon_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -14448,7 +14477,7 @@ MonoBehaviour:
   m_text: 100
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: e09ab73943a8cde4b9ba8f15eef8e3dd, type: 2}
-  m_sharedMaterial: {fileID: -8713023216623554993, guid: e09ab73943a8cde4b9ba8f15eef8e3dd, type: 2}
+  m_sharedMaterial: {fileID: -6441575792989454237, guid: e09ab73943a8cde4b9ba8f15eef8e3dd, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -15182,7 +15211,7 @@ GameObject:
   - component: {fileID: 344563850}
   - component: {fileID: 344563852}
   - component: {fileID: 344563851}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: ground_8 (13)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -15265,7 +15294,7 @@ GameObject:
   - component: {fileID: 355541691}
   - component: {fileID: 355541693}
   - component: {fileID: 355541692}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: ground_8 (35)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -15423,7 +15452,7 @@ GameObject:
   - component: {fileID: 377665163}
   - component: {fileID: 377665165}
   - component: {fileID: 377665164}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: arch_wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -15506,7 +15535,7 @@ GameObject:
   - component: {fileID: 387422971}
   - component: {fileID: 387422973}
   - component: {fileID: 387422972}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: wall1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -15589,7 +15618,7 @@ GameObject:
   - component: {fileID: 390129945}
   - component: {fileID: 390129947}
   - component: {fileID: 390129946}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: ground_7 (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -15861,7 +15890,7 @@ GameObject:
   - component: {fileID: 410545900}
   - component: {fileID: 410545902}
   - component: {fileID: 410545901}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Cube_025
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -16099,7 +16128,7 @@ MonoBehaviour:
   m_text: Lvl.
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: e09ab73943a8cde4b9ba8f15eef8e3dd, type: 2}
-  m_sharedMaterial: {fileID: -8713023216623554993, guid: e09ab73943a8cde4b9ba8f15eef8e3dd, type: 2}
+  m_sharedMaterial: {fileID: -6441575792989454237, guid: e09ab73943a8cde4b9ba8f15eef8e3dd, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -16184,7 +16213,7 @@ GameObject:
   - component: {fileID: 431934564}
   - component: {fileID: 431934566}
   - component: {fileID: 431934565}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: ground_8 (31)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -17178,7 +17207,7 @@ MonoBehaviour:
   m_text: 'Ability Points:'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: e09ab73943a8cde4b9ba8f15eef8e3dd, type: 2}
-  m_sharedMaterial: {fileID: -8713023216623554993, guid: e09ab73943a8cde4b9ba8f15eef8e3dd, type: 2}
+  m_sharedMaterial: {fileID: -6441575792989454237, guid: e09ab73943a8cde4b9ba8f15eef8e3dd, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -17470,7 +17499,7 @@ MonoBehaviour:
   m_text: 1
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: e09ab73943a8cde4b9ba8f15eef8e3dd, type: 2}
-  m_sharedMaterial: {fileID: -8713023216623554993, guid: e09ab73943a8cde4b9ba8f15eef8e3dd, type: 2}
+  m_sharedMaterial: {fileID: -6441575792989454237, guid: e09ab73943a8cde4b9ba8f15eef8e3dd, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -17555,7 +17584,7 @@ GameObject:
   - component: {fileID: 591262576}
   - component: {fileID: 591262578}
   - component: {fileID: 591262577}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: ground_12 (28)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -18017,10 +18046,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b1d9d375498ecb64eabe967d3c5e7eb9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  health: 50
   halo: {fileID: 1503744549}
   aura: {fileID: 736364902}
   particleSystem: {fileID: 298693270}
   phase2controller: {fileID: 9100000, guid: ceb402c1632537445b49b4afa64ed02b, type: 2}
+  camera: {fileID: 150665590}
 --- !u!114 &607552197
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -18039,6 +18070,7 @@ MonoBehaviour:
   attackInterval: 5
   maxMinions: 3
   health: 50
+  firsttime: 1
   minionController: {fileID: 9100000, guid: b810b645bc0ce4c4ea06176edcb0a386, type: 2}
   player: {fileID: 0}
 --- !u!4 &607552198
@@ -18347,7 +18379,7 @@ GameObject:
   - component: {fileID: 645548323}
   - component: {fileID: 645548325}
   - component: {fileID: 645548324}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: ground_8 (12)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -23631,7 +23663,7 @@ GameObject:
   - component: {fileID: 686692743}
   - component: {fileID: 686692745}
   - component: {fileID: 686692744}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: ground_8 (25)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -23827,6 +23859,9 @@ MonoBehaviour:
   rotationSpeed: 10
   shieldLight: {fileID: 0}
   shieldActive: 0
+  DefensiveAbilityLockedBarb: 1
+  WildcardAbilityLockedBarb: 1
+  UltimateAbilityLockedBarb: 1
 --- !u!114 &704810928
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -23946,7 +23981,7 @@ GameObject:
   - component: {fileID: 709369739}
   - component: {fileID: 709369738}
   - component: {fileID: 709369740}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: stairs_1 (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -29930,7 +29965,7 @@ GameObject:
   - component: {fileID: 836567534}
   - component: {fileID: 836567536}
   - component: {fileID: 836567535}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: fire particle (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -35012,7 +35047,7 @@ GameObject:
   - component: {fileID: 868454829}
   - component: {fileID: 868454831}
   - component: {fileID: 868454830}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: wall1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -35095,7 +35130,7 @@ GameObject:
   - component: {fileID: 876062193}
   - component: {fileID: 876062195}
   - component: {fileID: 876062194}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: wall1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -35178,7 +35213,7 @@ GameObject:
   - component: {fileID: 896507555}
   - component: {fileID: 896507557}
   - component: {fileID: 896507556}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: ground_8 (20)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -35261,7 +35296,7 @@ GameObject:
   - component: {fileID: 906221231}
   - component: {fileID: 906221233}
   - component: {fileID: 906221232}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: ground_12 (30)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -35516,7 +35551,7 @@ GameObject:
   - component: {fileID: 946444167}
   - component: {fileID: 946444169}
   - component: {fileID: 946444168}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: pylon_1 (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -35599,7 +35634,7 @@ GameObject:
   - component: {fileID: 953294338}
   - component: {fileID: 953294340}
   - component: {fileID: 953294339}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: ground_8 (28)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -36048,7 +36083,7 @@ MonoBehaviour:
   m_Center: {x: 0, y: 2, z: 0}
   m_LayerMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 247
   m_UseGeometry: 0
   m_DefaultArea: 0
   m_GenerateLinks: 0
@@ -36071,7 +36106,7 @@ GameObject:
   m_Component:
   - component: {fileID: 963917857}
   - component: {fileID: 963917858}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: cup light (5)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -36426,7 +36461,7 @@ GameObject:
   - component: {fileID: 1047758813}
   - component: {fileID: 1047758815}
   - component: {fileID: 1047758814}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: pylon_1 (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -36886,7 +36921,7 @@ GameObject:
   - component: {fileID: 1160805665}
   - component: {fileID: 1160805667}
   - component: {fileID: 1160805666}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: ground_12 (23)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -36958,111 +36993,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1160805664}
   m_Mesh: {fileID: 4300190, guid: 4e15996ba1e2f4b4392985ef6ac6b27c, type: 3}
---- !u!1 &1162050409
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1162050413}
-  - component: {fileID: 1162050412}
-  - component: {fileID: 1162050411}
-  - component: {fileID: 1162050410}
-  m_Layer: 0
-  m_Name: Cube (1)
-  m_TagString: Enemy
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!65 &1162050410
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1162050409}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!23 &1162050411
-MeshRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1162050409}
-  m_Enabled: 1
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
-  m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 2
-  m_RayTraceProcedural: 0
-  m_RenderingLayerMask: 1
-  m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 3
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_AdditionalVertexStreams: {fileID: 0}
---- !u!33 &1162050412
-MeshFilter:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1162050409}
-  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!4 &1162050413
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1162050409}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -57.27, y: 4.518, z: 24.26}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1162694081
 GameObject:
   m_ObjectHideFlags: 0
@@ -37619,7 +37549,7 @@ MonoBehaviour:
   m_text: 0
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: e09ab73943a8cde4b9ba8f15eef8e3dd, type: 2}
-  m_sharedMaterial: {fileID: -8713023216623554993, guid: e09ab73943a8cde4b9ba8f15eef8e3dd, type: 2}
+  m_sharedMaterial: {fileID: -6441575792989454237, guid: e09ab73943a8cde4b9ba8f15eef8e3dd, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -38010,7 +37940,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1210204979}
   - component: {fileID: 1210204980}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: cup light
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -38534,7 +38464,7 @@ MonoBehaviour:
   m_text: 'Runes:'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: e09ab73943a8cde4b9ba8f15eef8e3dd, type: 2}
-  m_sharedMaterial: {fileID: -8713023216623554993, guid: e09ab73943a8cde4b9ba8f15eef8e3dd, type: 2}
+  m_sharedMaterial: {fileID: -6441575792989454237, guid: e09ab73943a8cde4b9ba8f15eef8e3dd, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -38619,7 +38549,7 @@ GameObject:
   - component: {fileID: 1239185882}
   - component: {fileID: 1239185884}
   - component: {fileID: 1239185883}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: ground_12
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -38751,7 +38681,7 @@ MonoBehaviour:
   m_text: 0/100
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: e09ab73943a8cde4b9ba8f15eef8e3dd, type: 2}
-  m_sharedMaterial: {fileID: -8713023216623554993, guid: e09ab73943a8cde4b9ba8f15eef8e3dd, type: 2}
+  m_sharedMaterial: {fileID: -6441575792989454237, guid: e09ab73943a8cde4b9ba8f15eef8e3dd, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -38885,7 +38815,7 @@ MonoBehaviour:
   m_text: 0
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: e09ab73943a8cde4b9ba8f15eef8e3dd, type: 2}
-  m_sharedMaterial: {fileID: -8713023216623554993, guid: e09ab73943a8cde4b9ba8f15eef8e3dd, type: 2}
+  m_sharedMaterial: {fileID: -6441575792989454237, guid: e09ab73943a8cde4b9ba8f15eef8e3dd, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -39166,7 +39096,7 @@ GameObject:
   - component: {fileID: 1295047354}
   - component: {fileID: 1295047356}
   - component: {fileID: 1295047355}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: ground_8 (37)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -39642,7 +39572,7 @@ GameObject:
   - component: {fileID: 1320236620}
   - component: {fileID: 1320236622}
   - component: {fileID: 1320236621}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: ground_12 (13)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -39725,7 +39655,7 @@ GameObject:
   - component: {fileID: 1334335263}
   - component: {fileID: 1334335265}
   - component: {fileID: 1334335264}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: ground_8 (29)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -39813,7 +39743,7 @@ GameObject:
   - component: {fileID: 1349370435}
   - component: {fileID: 1349370437}
   - component: {fileID: 1349370436}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: ground_8 (30)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -39896,7 +39826,7 @@ GameObject:
   - component: {fileID: 1351012084}
   - component: {fileID: 1351012086}
   - component: {fileID: 1351012085}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: arch_wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -40163,7 +40093,7 @@ GameObject:
   - component: {fileID: 1382791297}
   - component: {fileID: 1382791299}
   - component: {fileID: 1382791298}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: ground_8 (14)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -40246,7 +40176,7 @@ GameObject:
   - component: {fileID: 1387750920}
   - component: {fileID: 1387750922}
   - component: {fileID: 1387750921}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: pylon_1 (5)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -40386,7 +40316,7 @@ GameObject:
   - component: {fileID: 1393152061}
   - component: {fileID: 1393152063}
   - component: {fileID: 1393152062}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: wall1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -40575,7 +40505,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b83426455e8c9b94390d1130f1d96bb9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  abilityPoints: {fileID: 1189657585}
+  type: ultimate
+  camera: {fileID: 150665590}
 --- !u!114 &1398374589
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -40681,7 +40612,7 @@ GameObject:
   - component: {fileID: 1399039646}
   - component: {fileID: 1399039648}
   - component: {fileID: 1399039647}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: ground_8 (17)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -40976,7 +40907,7 @@ GameObject:
   - component: {fileID: 1407237919}
   - component: {fileID: 1407237921}
   - component: {fileID: 1407237920}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: fire_cup_2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -41060,7 +40991,7 @@ GameObject:
   - component: {fileID: 1414530831}
   - component: {fileID: 1414530833}
   - component: {fileID: 1414530832}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: pylon_1 (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -42013,7 +41944,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b83426455e8c9b94390d1130f1d96bb9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  abilityPoints: {fileID: 1189657585}
+  type: wild card
+  camera: {fileID: 150665590}
 --- !u!114 &1470109623
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -42349,7 +42281,7 @@ MonoBehaviour:
   m_text: Locked
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: e09ab73943a8cde4b9ba8f15eef8e3dd, type: 2}
-  m_sharedMaterial: {fileID: -8713023216623554993, guid: e09ab73943a8cde4b9ba8f15eef8e3dd, type: 2}
+  m_sharedMaterial: {fileID: -6441575792989454237, guid: e09ab73943a8cde4b9ba8f15eef8e3dd, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -42434,7 +42366,7 @@ GameObject:
   - component: {fileID: 1487034024}
   - component: {fileID: 1487034026}
   - component: {fileID: 1487034025}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: ground_8 (33)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -42566,7 +42498,7 @@ MonoBehaviour:
   m_text: Locked
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: e09ab73943a8cde4b9ba8f15eef8e3dd, type: 2}
-  m_sharedMaterial: {fileID: -8713023216623554993, guid: e09ab73943a8cde4b9ba8f15eef8e3dd, type: 2}
+  m_sharedMaterial: {fileID: -6441575792989454237, guid: e09ab73943a8cde4b9ba8f15eef8e3dd, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -42745,7 +42677,7 @@ GameObject:
   - component: {fileID: 1511498464}
   - component: {fileID: 1511498466}
   - component: {fileID: 1511498465}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: ground_8 (21)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -43146,7 +43078,7 @@ GameObject:
   - component: {fileID: 1560585247}
   - component: {fileID: 1560585249}
   - component: {fileID: 1560585248}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: pylon_1 (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -43547,7 +43479,7 @@ GameObject:
   - component: {fileID: 1579141048}
   - component: {fileID: 1579141050}
   - component: {fileID: 1579141049}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: ground_8 (19)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -43736,7 +43668,7 @@ GameObject:
   - component: {fileID: 1592759491}
   - component: {fileID: 1592759493}
   - component: {fileID: 1592759492}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: ground-1-3 (7)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -43868,7 +43800,7 @@ MonoBehaviour:
   m_text: 'Potions:'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: e09ab73943a8cde4b9ba8f15eef8e3dd, type: 2}
-  m_sharedMaterial: {fileID: -8713023216623554993, guid: e09ab73943a8cde4b9ba8f15eef8e3dd, type: 2}
+  m_sharedMaterial: {fileID: -6441575792989454237, guid: e09ab73943a8cde4b9ba8f15eef8e3dd, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -43953,7 +43885,7 @@ GameObject:
   - component: {fileID: 1613240748}
   - component: {fileID: 1613240750}
   - component: {fileID: 1613240749}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: ground_8 (24)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -44913,7 +44845,7 @@ GameObject:
   - component: {fileID: 1702166213}
   - component: {fileID: 1702166215}
   - component: {fileID: 1702166214}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: wall1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -45080,7 +45012,7 @@ GameObject:
   - component: {fileID: 1722624729}
   - component: {fileID: 1722624731}
   - component: {fileID: 1722624730}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: ground_8 (23)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -50546,7 +50478,7 @@ GameObject:
   - component: {fileID: 1814782222}
   - component: {fileID: 1814782224}
   - component: {fileID: 1814782223}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: ground_12 (29)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -50735,7 +50667,7 @@ GameObject:
   - component: {fileID: 1819401125}
   - component: {fileID: 1819401127}
   - component: {fileID: 1819401126}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: wall1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -51275,7 +51207,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b83426455e8c9b94390d1130f1d96bb9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  abilityPoints: {fileID: 1189657585}
+  type: defensive
+  camera: {fileID: 150665590}
 --- !u!114 &1863532730
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -51867,7 +51800,7 @@ GameObject:
   - component: {fileID: 1893803462}
   - component: {fileID: 1893803464}
   - component: {fileID: 1893803463}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: ground_12 (11)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -52246,7 +52179,7 @@ GameObject:
   - component: {fileID: 1926809304}
   - component: {fileID: 1926809306}
   - component: {fileID: 1926809305}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: ground_8 (16)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -52378,7 +52311,7 @@ MonoBehaviour:
   m_text: 0
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: e09ab73943a8cde4b9ba8f15eef8e3dd, type: 2}
-  m_sharedMaterial: {fileID: -8713023216623554993, guid: e09ab73943a8cde4b9ba8f15eef8e3dd, type: 2}
+  m_sharedMaterial: {fileID: -6441575792989454237, guid: e09ab73943a8cde4b9ba8f15eef8e3dd, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -52675,7 +52608,7 @@ GameObject:
   - component: {fileID: 1961947977}
   - component: {fileID: 1961947979}
   - component: {fileID: 1961947978}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: ground_12 (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -52833,7 +52766,7 @@ GameObject:
   - component: {fileID: 1985252645}
   - component: {fileID: 1985252647}
   - component: {fileID: 1985252646}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: fire particle (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -57677,7 +57610,7 @@ GameObject:
   - component: {fileID: 1987153688}
   - component: {fileID: 1987153690}
   - component: {fileID: 1987153689}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: ground-1-3 (6)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -58135,6 +58068,7 @@ MonoBehaviour:
   potions: {fileID: 1928729007}
   abilityPoints: {fileID: 1189657585}
   runes: {fileID: 1244334158}
+  camera: {fileID: 150665587}
 --- !u!114 &2017145157
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -58184,7 +58118,7 @@ GameObject:
   - component: {fileID: 2020075866}
   - component: {fileID: 2020075868}
   - component: {fileID: 2020075867}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: ground_8 (32)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -58372,7 +58306,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2040623643}
   - component: {fileID: 2040623644}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: cup light
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -58468,7 +58402,7 @@ GameObject:
   - component: {fileID: 2050767726}
   - component: {fileID: 2050767725}
   - component: {fileID: 2050767727}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: fire_cup_base
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -58573,7 +58507,7 @@ GameObject:
   - component: {fileID: 2056646726}
   - component: {fileID: 2056646728}
   - component: {fileID: 2056646727}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: ground_8 (26)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -58762,7 +58696,7 @@ GameObject:
   - component: {fileID: 2061207539}
   - component: {fileID: 2061207541}
   - component: {fileID: 2061207540}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: ground_12 (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -58920,7 +58854,7 @@ GameObject:
   - component: {fileID: 2077417031}
   - component: {fileID: 2077417033}
   - component: {fileID: 2077417032}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: ground_8 (22)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -59158,7 +59092,7 @@ MonoBehaviour:
   m_text: Locked
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: e09ab73943a8cde4b9ba8f15eef8e3dd, type: 2}
-  m_sharedMaterial: {fileID: -8713023216623554993, guid: e09ab73943a8cde4b9ba8f15eef8e3dd, type: 2}
+  m_sharedMaterial: {fileID: -6441575792989454237, guid: e09ab73943a8cde4b9ba8f15eef8e3dd, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -59243,7 +59177,7 @@ GameObject:
   - component: {fileID: 2100091327}
   - component: {fileID: 2100091329}
   - component: {fileID: 2100091328}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: ground_8 (18)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -59432,7 +59366,7 @@ GameObject:
   - component: {fileID: 2112567507}
   - component: {fileID: 2112567509}
   - component: {fileID: 2112567508}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: wall1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -59515,7 +59449,7 @@ GameObject:
   - component: {fileID: 2113377249}
   - component: {fileID: 2113377251}
   - component: {fileID: 2113377250}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: wall1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -64592,7 +64526,7 @@ GameObject:
   - component: {fileID: 2135209091}
   - component: {fileID: 2135209093}
   - component: {fileID: 2135209092}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: ground_8 (36)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -64676,7 +64610,7 @@ GameObject:
   - component: {fileID: 2143073058}
   - component: {fileID: 2143073057}
   - component: {fileID: 2143073059}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: stairs_1 (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -64783,7 +64717,6 @@ SceneRoots:
   - {fileID: 1270899418}
   - {fileID: 1686448325}
   - {fileID: 1739206729}
-  - {fileID: 1162050413}
   - {fileID: 607552198}
   - {fileID: 736364903}
   - {fileID: 1503744550}

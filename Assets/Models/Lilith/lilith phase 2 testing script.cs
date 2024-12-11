@@ -7,7 +7,7 @@ public class lilithphase2testingscript : MonoBehaviour
 {
 
     // lilith parameters
-    int health = 50;
+    public int health = 50;
     int shield = 50;
     bool hasShield = true;
     bool hasReflectiveAura = false;
@@ -21,6 +21,7 @@ public class lilithphase2testingscript : MonoBehaviour
 
     public GameObject particleSystem;
     public AnimatorController phase2controller;
+    public Camera camera;
 
 
 
@@ -29,6 +30,8 @@ public class lilithphase2testingscript : MonoBehaviour
 
     private bool isUpdateDelayed = true;
     private bool waitBetweenCycles = true;
+
+    private bool isStunned = false;
 
     // Start is called before the first frame update
     void Start()
@@ -59,11 +62,6 @@ public class lilithphase2testingscript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-/*        transform.LookAt(playerPos);
- *        
- *        
-*/
-
         if (isUpdateDelayed)
             return;
 
@@ -75,7 +73,7 @@ public class lilithphase2testingscript : MonoBehaviour
             halo.enabled = false;
         }
 
-        if(!hasReflectiveAura && waitBetweenCycles)
+        if(!hasReflectiveAura && waitBetweenCycles && !isStunned)
         {
             phase2Anim.SetTrigger("reflective aura");
             StartCoroutine(ActivateAuraWithDelay());
@@ -83,10 +81,10 @@ public class lilithphase2testingscript : MonoBehaviour
             StartCoroutine(timeToDeactivateAura());
         }
 
-        if (Input.GetKeyDown(KeyCode.S))
+        /*if (Input.GetKeyDown(KeyCode.S))
         {
             phase2Anim.SetTrigger("stun");
-        }
+        }*/
 
       /*  if (Input.GetKeyDown(KeyCode.B))
         {
@@ -110,15 +108,14 @@ public class lilithphase2testingscript : MonoBehaviour
 
     public void takeDamage(int damage)
     {
-        phase2Anim.SetTrigger("hitReaction");
-
         if (hasReflectiveAura)
         {
-             // playerPos.GetComponent<PlayerController>().takeDamage(damage + 15); ????????????????????
+            camera.GetComponent<yarab>().takeDamage(damage + 15);
         }
         else if (hasShield)
         {
-            if(damage > shield)
+            phase2Anim.SetTrigger("hitReaction");
+            if (damage > shield)
             {
                 int healthDamage = damage - shield;
                 health -= healthDamage;
@@ -151,6 +148,19 @@ public class lilithphase2testingscript : MonoBehaviour
         }
     }
 
+    public void takeStun()
+    {
+        phase2Anim.SetTrigger("stun");
+        isStunned = true;
+        StartCoroutine(timeToUnstun());
+    }
+
+    IEnumerator timeToUnstun()
+    {
+        yield return new WaitForSeconds(5f);
+        isStunned = false;
+    }
+
     IEnumerator ActivateParticleSystemWithDelay()
     {
         // Delay for a second
@@ -166,10 +176,9 @@ public class lilithphase2testingscript : MonoBehaviour
         Collider[] colliders = Physics.OverlapSphere(spawnPosition, 5f);
         foreach (Collider hit in colliders)
         {
-            if (hit.tag == "Player")
+            if (hit.CompareTag("Player"))
             {
-                // findPlayerAndDamage(10);
-                // hit.GetComponent<yarab>().takeDamagePlayer(10);
+                camera.GetComponent<yarab>().takeDamage(30);
                 Debug.Log($"Damaged enemy: {hit.name}");
             }
         }

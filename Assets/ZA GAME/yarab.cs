@@ -25,6 +25,10 @@ public class yarab : MonoBehaviour
     public GameObject smoke;
     public GameObject spark;
 
+    public Light lilithShield;
+    public Light lilithAura;
+    public GameObject bloodySpikes;
+
     public AnimatorController barbAnimator;
     public AnimatorController sorcAnimator;
     public AnimatorController rogueAnimator;
@@ -67,13 +71,16 @@ public class yarab : MonoBehaviour
     public bool ultimateAbilityLocked = true;
     private bool unlockAbilityCheat = false;
 
+    private bool enteredPhase2 = false;
+    private bool stopRotation = false;
+
     // Start is called before the first frame update
     void Start()
     {
         // TEMP
         level = 1;
         // ha5od variable men character selection screen 1: barb 2: sorc 3: rogue
-        int character = 3;
+        int character = 1;
         // TEMP
 
         //Vector3 initVector = level == 1 ? new Vector3(-3.41f, 5, -25.5f) : new Vector3(50, 50, 50);
@@ -125,10 +132,8 @@ public class yarab : MonoBehaviour
         minimapCamera.GetComponent<CameraFollow>().target = marker.transform;
         currentCharacter.tag = "Player";
 
-        //print(level);
         if (level == 1)
         {
-            // add minions / demons
             GetComponent<CreateCamp>().player = currentCharacter.transform;
         }
         else if (level == 2)
@@ -151,7 +156,7 @@ public class yarab : MonoBehaviour
         }
 
     }
-
+    // private bool on = true; // remove
     // Update is called once per frame
     void Update()
     {
@@ -159,9 +164,37 @@ public class yarab : MonoBehaviour
         marker.transform.position = new Vector3(currentCharacter.transform.position.x, 15, currentCharacter.transform.position.z - 5);
         marker.transform.rotation = Quaternion.Euler(90, currentCharacter.transform.rotation.eulerAngles.y, 0);
 
-        if (level == 2)
+        if(currentCharacter.transform.position.x >= 75 && currentCharacter.transform.position.x <= 80
+            && currentCharacter.transform.position.z >= 35 && currentCharacter.transform.position.z <= 40
+            && level == 1 && runes == 3
+          )
+        {
+            print("You passed level 1");
+            // go to boss level
+        }
+
+        if (level == 2 && !stopRotation)
         {
             currentBoss.transform.LookAt(currentCharacter.transform);
+        }
+
+        /*if(!enteredPhase2 && on) // remove
+        {
+            on = false;
+            StartCoroutine(testtest());
+        }*/
+
+        if (level == 2 && !enteredPhase2 && currentBoss.GetComponent<LilithBehavior>().health <= 0) //entering phase 2
+        {
+            stopRotation = true;
+            enteredPhase2 = true;
+            StartCoroutine(WaitForLilithToDie());
+        }
+
+        if(enteredPhase2 && currentBoss.GetComponent<lilithphase2testingscript>().health <= 0)
+        {
+            print("Lilith is dead");
+            // game over you won screen
         }
 
         if (characterLevel < 4)
@@ -237,7 +270,7 @@ public class yarab : MonoBehaviour
             if (!ultimateAbilityLocked)
             {
                 if (!unlockAbilityCheat) abilityPoints--;
-                wildacrdAbilityLocked = true;
+                ultimateAbilityLocked = true;
                 currentCharacter.GetComponent<Barbarian_Abilities>().UltimateAbilityLockedBarb = false;
             }
         }
@@ -316,6 +349,38 @@ public class yarab : MonoBehaviour
             ultimateAbilityLocked = false;
             unlockAbilityCheat = true;
         }
+        if (Input.GetKeyDown(KeyCode.R)) // remove
+        {
+            runes++;
+        }
+    }
+
+/*    private IEnumerator testtest() // remove
+    {
+        yield return new WaitForSeconds(10);
+        print("damaged liltih from yarab");
+        currentBoss.GetComponent<LilithBehavior>().takeDamage(50);
+    }*/
+
+    private IEnumerator WaitForLilithToDie()
+    {
+        yield return new WaitForSeconds(10);
+        StartCoroutine(StopRotation());
+        currentBoss.GetComponent<Animator>().runtimeAnimatorController = lilithAnimatorPhase2;
+        LilithBehavior lb = currentBoss.GetComponent<LilithBehavior>();
+        Destroy(lb);
+        currentBoss.AddComponent<lilithphase2testingscript>();
+        currentBoss.GetComponent<lilithphase2testingscript>().phase2controller = lilithAnimatorPhase2;
+        currentBoss.GetComponent<lilithphase2testingscript>().halo = lilithShield;
+        currentBoss.GetComponent<lilithphase2testingscript>().aura = lilithAura;
+        currentBoss.GetComponent<lilithphase2testingscript>().particleSystem = bloodySpikes;
+        currentBoss.GetComponent<lilithphase2testingscript>().camera = camera;
+    }
+
+    private IEnumerator StopRotation()
+    {
+        yield return new WaitForSeconds(5);
+        stopRotation = false;
     }
 
     private IEnumerator WaitForAnimationToHeal(float v)

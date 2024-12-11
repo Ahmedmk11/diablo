@@ -97,11 +97,11 @@ public class Bomb : MonoBehaviour
 
         if (lilith != null)
         {
-            //lilith.takeStun();
+            lilith.takeStun();
         }
         else if (lilith2 != null)
         {
-            //lilith2.takeStun();
+            lilith2.takeStun();
         }
         else if (minion != null)
         {

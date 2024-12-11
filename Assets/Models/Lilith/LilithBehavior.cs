@@ -22,6 +22,8 @@ public class LilithBehavior : MonoBehaviour
     public AnimatorController minionController;
     public GameObject player;
 
+    private bool isStunned = false;
+
 
     private void Start()
     {
@@ -50,28 +52,31 @@ public class LilithBehavior : MonoBehaviour
     {
         while (true)
         {
-            // Check if all minions are defeated
-            if (AreAllMinionsDefeated())
+            if (!isStunned)
             {
-                if (firsttime)
+                // Check if all minions are defeated
+                if (AreAllMinionsDefeated())
                 {
-                    firsttime = false;
-                    PerformSummon();
+                    if (firsttime)
+                    {
+                        firsttime = false;
+                        PerformSummon();
+                    }
+                    else
+                    {
+                        yield return new WaitForSeconds(15.0f);
+                        PerformSummon();
+                    }
+
                 }
                 else
                 {
-                    yield return new WaitForSeconds(15.0f);
-                    PerformSummon();
+                    yield return new WaitForSeconds(10.0f);
+                    PerformDivebomb();
                 }
 
+                yield return new WaitForSeconds(attackInterval);
             }
-            else
-            {
-                yield return new WaitForSeconds(10.0f);
-                PerformDivebomb();
-            }
-
-            yield return new WaitForSeconds(attackInterval);
         }
     }
 
@@ -88,6 +93,10 @@ public class LilithBehavior : MonoBehaviour
             // Play dying animation and disable behavior
             health -= damage;
             animator.SetTrigger("HitReaction");
+            if (health <= 0)
+            {
+                animator.SetTrigger("Dying");
+            }
 
         }
     }
@@ -193,5 +202,18 @@ public class LilithBehavior : MonoBehaviour
             if (minion != null) return false;
         }
         return true;
+    }
+
+    public void takeStun()
+    {
+        animator.SetTrigger("stun");
+        isStunned = true;
+        StartCoroutine(timeToUnstun());
+    }
+
+    IEnumerator timeToUnstun()
+    {
+        yield return new WaitForSeconds(5f);
+        isStunned = false;
     }
 }

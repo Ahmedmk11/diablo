@@ -30,13 +30,13 @@ public class Movement : MonoBehaviour
             {
 
                 agent.SetDestination(hit.point);
+                Vector3 direction = hit.point - transform.position;
 
+                Quaternion rotation = Quaternion.LookRotation(direction);
+                transform.rotation = Quaternion.Lerp(transform.rotation, rotation, 0.5f);
 
             }
-            Vector3 direction = hit.point - transform.position;
-
-            Quaternion rotation = Quaternion.LookRotation(direction);
-            transform.rotation = Quaternion.Lerp(transform.rotation, rotation, 0.5f);
+            
         }
         float speed = agent.velocity.magnitude; // Get the current speed of the player
         if (speed > 3)

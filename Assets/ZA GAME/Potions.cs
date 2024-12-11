@@ -7,7 +7,7 @@ public class Potions : MonoBehaviour
 {
     public GameObject potionPrefab;
     public int numberOfPotions = 10;
-    public float minDistanceBetweenPotions = 10f;
+    public float minDistanceBetweenPotions = 4f;
     public float searchRadius = 100f;
 
     public GameObject mainCamera;
