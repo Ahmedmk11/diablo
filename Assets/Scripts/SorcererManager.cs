@@ -17,15 +17,16 @@ public class SorcererManager : MonoBehaviour
 
 
     public GameObject clonePrefab; // Drag your clone prefab here
+    public GameObject cloneExplosionPrefab; // Assign the particle prefab in the inspector
     public float cloneLifetime = 5f; // Duration before the clone explodes
-    public float cloneExplosionRadius = 5f; // Radius of the explosion damage
+    public float cloneExplosionRadius = 2f; // Radius of the explosion damage
     public int cloneExplosionDamage = 20; // Damage dealt by the explosion
 
     public GameObject infernoPrefab; // Assign your ring of fire prefab here
     public float infernoDuration = 5f; // Duration the ring of fire lasts
     public int infernoInitialDamage = 10; // Damage dealt immediately upon creation
     public int infernoDamagePerSecond = 2; // Damage dealt per second
-    public float infernoRadius = 5f; // Radius of the inferno effect
+    public float infernoRadius = 3f; // Radius of the inferno effect
 
     public float fireballCooldown = 1f;
     public float teleportCooldown = 10f;
@@ -57,7 +58,7 @@ public class SorcererManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetMouseButtonDown(1)) // Right mouse button is button 1
+        if (Input.GetMouseButtonDown(1) & !isCastingClone & !isCastingInferno & !isTeleporting) // Right mouse button is button 1
         {
             Ray ray = camera.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
@@ -68,6 +69,12 @@ public class SorcererManager : MonoBehaviour
                 {
                     if (Time.time >= lastFireballTime + fireballCooldown)
                     {
+
+                        Vector3 directionToEnemy = (hit.collider.transform.position - transform.position).normalized;
+                        directionToEnemy.y = 0; 
+                        Quaternion lookRotation = Quaternion.LookRotation(directionToEnemy);
+                        transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, 1f); 
+
                         animator.SetTrigger("Cast fireball");
                         castFireBall(hit.collider.gameObject); // Pass the clicked enemy
                         lastFireballTime = Time.time; // Update last usage time
@@ -134,6 +141,12 @@ public class SorcererManager : MonoBehaviour
 
             if (Physics.Raycast(ray, out hit))
             {
+
+                Vector3 directionToEnemy = (hit.collider.transform.position - transform.position).normalized;
+                directionToEnemy.y = 0;
+                Quaternion lookRotation = Quaternion.LookRotation(directionToEnemy);
+                transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, 1f);
+
                 if (isCastingClone)
                 {
                     animator.SetTrigger("Cast Clone");
@@ -189,6 +202,10 @@ void castTeleport()
 
             if (Physics.Raycast(ray, out hit))
             {
+            Vector3 directionToEnemy = (hit.collider.transform.position - transform.position).normalized;
+            directionToEnemy.y = 0;
+            Quaternion lookRotation = Quaternion.LookRotation(directionToEnemy);
+            transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, 1f);
             // Check if the clicked position is walkable
             // Teleport the Sorcerer to the selected position
             StartCoroutine(TeleportWithDelay(hit.point, 2.05f)); // 0.5 seconds delay
@@ -210,8 +227,10 @@ void castTeleport()
     }
     void castInferno(Vector3 position)
     {
+
+        position.y = position.y+1.0f;
         // Instantiate the inferno at the selected position
-        GameObject inferno = Instantiate(infernoPrefab, new Vector3(position.x, position.y + 1, position.z), Quaternion.identity);
+        GameObject inferno = Instantiate(infernoPrefab, position, Quaternion.identity);
 
         // Start the damage over time coroutine
         StartCoroutine(HandleInfernoDamage(inferno, position));
@@ -237,7 +256,6 @@ void castTeleport()
         Destroy(inferno);
         Debug.Log("Inferno ended");
     }
-
     void DealDamageToEnemies(Vector3 position, float radius, int damage)
     {
         // Find all enemies within the radius
@@ -247,14 +265,20 @@ void castTeleport()
         {
             if (enemy.CompareTag("Enemy")) // Ensure only enemies are affected
             {
-                // Apply damage to the enemy (assuming enemies have a script with a TakeDamage method)
-                // enemy.GetComponent<EnemyHealth>()?.TakeDamage(damage);
-                findAndDamageEnemy(damage, enemy.transform);
-                Debug.Log($"Enemy {enemy.name} took {damage} damage");
+                // Calculate the distance between the enemy and the inferno's center
+                float distance = Vector3.Distance(enemy.transform.position, position);
+
+                // Only apply damage if the enemy is within the radius
+                if (distance <= radius)
+                {
+                    findAndDamageEnemy(damage, enemy.transform);
+                    Debug.Log($"Enemy {enemy.name} took {damage} damage");
+                }
             }
         }
     }
-    void castClone(Vector3 position)
+
+        void castClone(Vector3 position)
     {
         // Instantiate the clone at the selected position
         GameObject clone = Instantiate(clonePrefab, position, Quaternion.identity);
@@ -277,18 +301,34 @@ void castTeleport()
     {
         yield return new WaitForSeconds(cloneLifetime);
 
-        // Trigger the explosion effect (you can add a particle effect here)
+        // Trigger the explosion effect by instantiating the particle prefab
+
+        Vector3 explosionPosition = clone.transform.position + new Vector3(0, 1.0f, 0); // Adjust the y offset as needed
+
+
+        if (cloneExplosionPrefab != null) // Ensure the prefab is assigned
+        {
+            Instantiate(cloneExplosionPrefab, explosionPosition, Quaternion.identity);
+        }
+        else
+        {
+            Debug.LogWarning("No explosion prefab assigned!");
+        }
+
+        // Log and deal damage to nearby enemies
         Debug.Log("Clone exploded!");
 
-        // Deal damage to nearby enemies
         Collider[] hitEnemies = Physics.OverlapSphere(clone.transform.position, cloneExplosionRadius);
         foreach (Collider enemy in hitEnemies)
         {
             if (enemy.CompareTag("Enemy")) // Ensure only enemies are affected
             {
-                findAndDamageEnemy(cloneExplosionDamage, enemy.transform);
-                // Apply damage to the enemy (assuming enemies have a script with a TakeDamage method)
-               // enemy.GetComponent<EnemyHealth>()?.TakeDamage(cloneExplosionDamage);
+                float distanceToEnemy = Vector3.Distance(clone.transform.position, enemy.transform.position);
+                if (distanceToEnemy <= cloneExplosionRadius) // Check if within explosion radius
+                {
+                    findAndDamageEnemy(cloneExplosionDamage, enemy.transform);
+                    Debug.Log($"Enemy {enemy.name} took {cloneExplosionDamage} damage from clone explosion.");
+                }
             }
         }
 
@@ -296,6 +336,7 @@ void castTeleport()
         Destroy(clone);
         cloneActive = false;
     }
+
 
     private void findAndDamageEnemy(int damage, Transform target)
     {
