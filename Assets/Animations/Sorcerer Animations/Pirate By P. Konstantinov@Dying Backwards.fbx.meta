@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 9c2cd148a903df249ae5af19b17e6c9f
+guid: 803c134508982ba47be4704e663d08e4
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
@@ -15,13 +15,9 @@ ModelImporter:
     resampleCurves: 1
     optimizeGameObjects: 0
     removeConstantScaleCurves: 0
-    motionNodeName: 
+    motionNodeName: <Root Transform>
     rigImportErrors: 
-    rigImportWarnings: "Copied Avatar Rig Configuration mis-match. Bone length in
-      copied configuration does not match position in animation file:\n\t'mixamorig:LeftUpLeg'
-      : position error = 306.578033 mm\n\t'mixamorig:LeftLeg' : position error =
-      892.838562 mm\n\t'mixamorig:LeftFoot' : position error = 848.791748 mm\n\t'mixamorig:LeftToeBase'
-      : position error = 391.842133 mm\n"
+    rigImportWarnings: 
     animationImportErrors: 
     animationImportWarnings: "\nClip 'mixamo.com' has import animation warnings that
       might lower retargeting quality:\nNote: Activate translation DOF on avatar
@@ -38,36 +34,7 @@ ModelImporter:
     animationWrapMode: 0
     extraExposedTransformPaths: []
     extraUserProperties: []
-    clipAnimations:
-    - serializedVersion: 16
-      name: Dying
-      takeName: mixamo.com
-      internalID: -203655887218126122
-      firstFrame: 0
-      lastFrame: 138
-      wrapMode: 0
-      orientationOffsetY: 0
-      level: 0
-      cycleOffset: 0
-      loop: 0
-      hasAdditiveReferencePose: 0
-      loopTime: 0
-      loopBlend: 0
-      loopBlendOrientation: 0
-      loopBlendPositionY: 0
-      loopBlendPositionXZ: 0
-      keepOriginalOrientation: 0
-      keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 0
-      heightFromFeet: 0
-      mirror: 0
-      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
-      curves: []
-      events: []
-      transformMask: []
-      maskType: 3
-      maskSource: {instanceID: 0}
-      additiveReferencePoseFrame: 0
+    clipAnimations: []
     isReadable: 0
   meshes:
     lODScreenPercentages: []

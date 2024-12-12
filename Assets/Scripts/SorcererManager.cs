@@ -1,11 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Animations;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class SorcererManager : MonoBehaviour
 {
+    public Camera camera;
     public GameObject fireball;
-    public GameObject Enemy;
+    // public GameObject Enemy;
     private Animator animator;
 
     private bool isTeleporting = false;
@@ -34,6 +37,15 @@ public class SorcererManager : MonoBehaviour
     private float lastCloneTime = -Mathf.Infinity;
     private float lastInfernoTime = -Mathf.Infinity;
 
+    public bool DefensiveAbilityLockedSorc = true;
+    public bool WildcardAbilityLockedSorc = true;
+    public bool UltimateAbilityLockedSorc = true;
+
+    public bool cloneActive = false;
+    public Transform clonePosition;
+    public AnimatorController cloneAnimator;
+
+
 
 
     // Start is called before the first frame update
@@ -47,7 +59,7 @@ public class SorcererManager : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(1)) // Right mouse button is button 1
         {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            Ray ray = camera.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
 
             if (Physics.Raycast(ray, out hit))
@@ -73,7 +85,7 @@ public class SorcererManager : MonoBehaviour
         }
 
 
-        if (Input.GetKeyDown(KeyCode.W))
+        if (Input.GetKeyDown(KeyCode.W) && !DefensiveAbilityLockedSorc)
         {
             if (Time.time >= lastTeleportTime + teleportCooldown)
             {
@@ -87,7 +99,7 @@ public class SorcererManager : MonoBehaviour
             }
         }
 
-        if (Input.GetKeyDown(KeyCode.E))
+        if (Input.GetKeyDown(KeyCode.Q) && !WildcardAbilityLockedSorc)
         {
             if (Time.time >= lastCloneTime + cloneCooldown)
             {
@@ -101,7 +113,7 @@ public class SorcererManager : MonoBehaviour
         }
 
         // Inferno targeting mode activation
-        if (Input.GetKeyDown(KeyCode.R))
+        if (Input.GetKeyDown(KeyCode.E) && !UltimateAbilityLockedSorc)
         {
             if (Time.time >= lastInfernoTime + infernoCooldown)
             {
@@ -117,7 +129,7 @@ public class SorcererManager : MonoBehaviour
         // Handle left-click for Clone or Inferno placement
         if (Input.GetMouseButtonDown(1))
         {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            Ray ray = camera.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
 
             if (Physics.Raycast(ray, out hit))
@@ -172,7 +184,7 @@ public class SorcererManager : MonoBehaviour
 void castTeleport()
     {
             // Raycast to find the point clicked by the player
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            Ray ray = camera.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
 
             if (Physics.Raycast(ray, out hit))
@@ -193,6 +205,7 @@ void castTeleport()
 
         // Teleport the Sorcerer to the target position
         transform.position = targetPosition;
+        GetComponent<NavMeshAgent>().Warp(targetPosition);
         Debug.Log("Teleported to " + targetPosition);
     }
     void castInferno(Vector3 position)
@@ -236,6 +249,7 @@ void castTeleport()
             {
                 // Apply damage to the enemy (assuming enemies have a script with a TakeDamage method)
                 // enemy.GetComponent<EnemyHealth>()?.TakeDamage(damage);
+                findAndDamageEnemy(damage, enemy.transform);
                 Debug.Log($"Enemy {enemy.name} took {damage} damage");
             }
         }
@@ -244,6 +258,9 @@ void castTeleport()
     {
         // Instantiate the clone at the selected position
         GameObject clone = Instantiate(clonePrefab, position, Quaternion.identity);
+        clone.GetComponent<Animator>().runtimeAnimatorController = cloneAnimator;
+        cloneActive = true;
+        clonePosition = clone.transform;
 
         //Animator playerAnimator = GetComponent<Animator>(); // Get the player's animator
         //if (playerAnimator != null)
@@ -269,6 +286,7 @@ void castTeleport()
         {
             if (enemy.CompareTag("Enemy")) // Ensure only enemies are affected
             {
+                findAndDamageEnemy(cloneExplosionDamage, enemy.transform);
                 // Apply damage to the enemy (assuming enemies have a script with a TakeDamage method)
                // enemy.GetComponent<EnemyHealth>()?.TakeDamage(cloneExplosionDamage);
             }
@@ -276,5 +294,33 @@ void castTeleport()
 
         // Destroy the clone
         Destroy(clone);
+        cloneActive = false;
+    }
+
+    private void findAndDamageEnemy(int damage, Transform target)
+    {
+        LilithBehavior lilith = target.GetComponent<LilithBehavior>();
+        lilithphase2testingscript lilith2 = target.GetComponent<lilithphase2testingscript>();
+        Minion minion = target.GetComponent<Minion>();
+        Demon demon = target.GetComponent<Demon>();
+
+        if (lilith != null)
+        {
+            if (damage == 100) damage = 20;
+            lilith.takeDamage(damage);
+        }
+        else if (lilith2 != null)
+        {
+            if (damage == 100) damage = 20;
+            lilith2.takeDamage(damage);
+        }
+        else if (minion != null)
+        {
+            minion.takeDamage(damage);
+        }
+        else if (demon != null)
+        {
+            demon.takeDamage(damage);
+        }
     }
 }

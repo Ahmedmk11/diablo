@@ -16672,7 +16672,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   barb: {fileID: 919132149155446097, guid: b34e7ec31a57ed5419b96e4fecf76e19, type: 3}
-  sorc: {fileID: 0}
+  sorc: {fileID: 919132149155446097, guid: 01387240fe6a726439f7d962cba8b19e, type: 3}
   rogue: {fileID: 919132149155446097, guid: 1d2e3818c98bce3419de6adbb679f41c, type: 3}
   lilith: {fileID: 0}
   minion: {fileID: 0}
@@ -16681,8 +16681,11 @@ MonoBehaviour:
   shower: {fileID: 6240992605899186232, guid: 759bb212fcb79224ea53e36b8e6fc3bc, type: 3}
   smoke: {fileID: 2522079221440020892, guid: fea3ce10f04060240be32c1d98584399, type: 3}
   spark: {fileID: 2523170635868714095, guid: f063682089c3a6343a01ffe730347ead, type: 3}
+  lilithShield: {fileID: 0}
+  lilithAura: {fileID: 0}
+  bloodySpikes: {fileID: 0}
   barbAnimator: {fileID: 9100000, guid: 6edcf24ee02c1694b93cf6ab2d09b458, type: 2}
-  sorcAnimator: {fileID: 0}
+  sorcAnimator: {fileID: 9100000, guid: 267ef63eefb970f43b0721653a5c2215, type: 2}
   rogueAnimator: {fileID: 9100000, guid: ecc6a213e1bd1f643966c41028308be1, type: 2}
   lilithAnimatorPhase1: {fileID: 0}
   lilithAnimatorPhase2: {fileID: 0}
@@ -16696,6 +16699,11 @@ MonoBehaviour:
   Barbarian_Abilities: {fileID: 1858325855}
   LilithPhase1: {fileID: 0}
   Lilithphase2: {fileID: 0}
+  SorcererManager: {fileID: 1858325861}
+  fireball: {fileID: 9220849310273169300, guid: 0e7544bd6e7ec224aa525d0c0c17199b, type: 3}
+  clone: {fileID: 919132149155446097, guid: 01387240fe6a726439f7d962cba8b19e, type: 3}
+  inferno: {fileID: 165136, guid: ae91537edf47d13498977a9722e13875, type: 3}
+  cloneAnimator: {fileID: 9100000, guid: c5f4a584cf4c93341bf1cd8f17a56a53, type: 2}
   playerAnimationTrigger: {fileID: 1858325856}
   arrowShower: {fileID: 1858325857}
   bomb: {fileID: 1858325858}
@@ -40339,6 +40347,7 @@ GameObject:
   - component: {fileID: 1858325857}
   - component: {fileID: 1858325856}
   - component: {fileID: 1858325860}
+  - component: {fileID: 1858325861}
   m_Layer: 0
   m_Name: GameObject
   m_TagString: Untagged
@@ -40491,6 +40500,39 @@ MonoBehaviour:
   minDistanceBetweenPotions: 10
   searchRadius: 100
   mainCamera: {fileID: 798920625}
+--- !u!114 &1858325861
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1858325852}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a8cffc6caa7cb947a684c930a4f4c9f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  camera: {fileID: 0}
+  fireball: {fileID: 9220849310273169300, guid: 0e7544bd6e7ec224aa525d0c0c17199b, type: 3}
+  clonePrefab: {fileID: 919132149155446097, guid: 01387240fe6a726439f7d962cba8b19e, type: 3}
+  cloneLifetime: 5
+  cloneExplosionRadius: 5
+  cloneExplosionDamage: 20
+  infernoPrefab: {fileID: 165136, guid: ae91537edf47d13498977a9722e13875, type: 3}
+  infernoDuration: 5
+  infernoInitialDamage: 10
+  infernoDamagePerSecond: 2
+  infernoRadius: 5
+  fireballCooldown: 1
+  teleportCooldown: 10
+  cloneCooldown: 10
+  infernoCooldown: 15
+  DefensiveAbilityLockedSorc: 1
+  WildcardAbilityLockedSorc: 1
+  UltimateAbilityLockedSorc: 1
+  cloneActive: 0
+  clonePosition: {fileID: 0}
+  cloneAnimator: {fileID: 0}
 --- !u!1001 &1863533081
 PrefabInstance:
   m_ObjectHideFlags: 0

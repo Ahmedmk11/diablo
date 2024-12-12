@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using System.Collections.Generic;
 using static UnityEngine.GraphicsBuffer;
+using System.Collections;
 
 public class CreateCamp : MonoBehaviour
 {
@@ -24,10 +25,15 @@ public class CreateCamp : MonoBehaviour
     public GameObject runePrefab;
     public GameObject mainCamera;
 
+    private ArrayList demons;
+    private ArrayList minions;
+
 
     private void Start()
     {
         yarabScript = GetComponent<yarab>();
+        demons = new ArrayList();
+        minions = new ArrayList();
     }
 
     void LateUpdate()
@@ -101,6 +107,7 @@ public class CreateCamp : MonoBehaviour
                 agent.tag = "Enemy";
 
                 currentMinion++;
+                minions.Add(agent);
             }
         }
     }
@@ -141,6 +148,7 @@ public class CreateCamp : MonoBehaviour
             animator.applyRootMotion = false;
 
             agent.tag = "Enemy";
+            demons.Add(agent);
         }
     }
 
@@ -150,6 +158,24 @@ public class CreateCamp : MonoBehaviour
         foreach (Vector3 campPosition in campPositions)
         {
             Gizmos.DrawWireSphere(campPosition, demonsPatrolRadius);
+        }
+    }
+
+    public void changePlayerToFollow(Transform target)
+    {
+        if (demons != null)
+        {
+            foreach (GameObject demon in demons)
+            {
+                demon.GetComponent<Demon>().player = target.gameObject;
+            }
+        }
+        if (minions != null)
+        {
+            foreach (GameObject minion in minions)
+            {
+                minion.GetComponent<Minion>().player = target.gameObject;
+            }
         }
     }
 }

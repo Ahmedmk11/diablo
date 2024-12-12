@@ -6774,7 +6774,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   barb: {fileID: 919132149155446097, guid: b34e7ec31a57ed5419b96e4fecf76e19, type: 3}
-  sorc: {fileID: 0}
+  sorc: {fileID: 919132149155446097, guid: 01387240fe6a726439f7d962cba8b19e, type: 3}
   rogue: {fileID: 919132149155446097, guid: 1d2e3818c98bce3419de6adbb679f41c, type: 3}
   lilith: {fileID: 919132149155446097, guid: 8b1a1ff4b6b68894f96e886d0f00e1f0, type: 3}
   minion: {fileID: 919132149155446097, guid: fb34bf0f01f461f4cbbcee38a18c2c78, type: 3}
@@ -6787,7 +6787,7 @@ MonoBehaviour:
   lilithAura: {fileID: 736364902}
   bloodySpikes: {fileID: 298693270}
   barbAnimator: {fileID: 9100000, guid: 6edcf24ee02c1694b93cf6ab2d09b458, type: 2}
-  sorcAnimator: {fileID: 0}
+  sorcAnimator: {fileID: 9100000, guid: 267ef63eefb970f43b0721653a5c2215, type: 2}
   rogueAnimator: {fileID: 9100000, guid: ecc6a213e1bd1f643966c41028308be1, type: 2}
   lilithAnimatorPhase1: {fileID: 9100000, guid: 3458a797f48994ea2ad283eeab8b8059, type: 2}
   lilithAnimatorPhase2: {fileID: 9100000, guid: ceb402c1632537445b49b4afa64ed02b, type: 2}
@@ -6801,6 +6801,11 @@ MonoBehaviour:
   Barbarian_Abilities: {fileID: 704810927}
   LilithPhase1: {fileID: 607552197}
   Lilithphase2: {fileID: 607552196}
+  SorcererManager: {fileID: 607552199}
+  fireball: {fileID: 9220849310273169300, guid: 0e7544bd6e7ec224aa525d0c0c17199b, type: 3}
+  clone: {fileID: 919132149155446097, guid: 01387240fe6a726439f7d962cba8b19e, type: 3}
+  inferno: {fileID: 165136, guid: ae91537edf47d13498977a9722e13875, type: 3}
+  cloneAnimator: {fileID: 9100000, guid: c5f4a584cf4c93341bf1cd8f17a56a53, type: 2}
   playerAnimationTrigger: {fileID: 704810930}
   arrowShower: {fileID: 704810931}
   bomb: {fileID: 704810932}
@@ -18027,6 +18032,7 @@ GameObject:
   - component: {fileID: 607552198}
   - component: {fileID: 607552197}
   - component: {fileID: 607552196}
+  - component: {fileID: 607552199}
   m_Layer: 0
   m_Name: scripts
   m_TagString: Untagged
@@ -18088,6 +18094,39 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &607552199
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 607552195}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a8cffc6caa7cb947a684c930a4f4c9f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  camera: {fileID: 0}
+  fireball: {fileID: 0}
+  clonePrefab: {fileID: 0}
+  cloneLifetime: 5
+  cloneExplosionRadius: 5
+  cloneExplosionDamage: 20
+  infernoPrefab: {fileID: 0}
+  infernoDuration: 5
+  infernoInitialDamage: 10
+  infernoDamagePerSecond: 2
+  infernoRadius: 5
+  fireballCooldown: 1
+  teleportCooldown: 10
+  cloneCooldown: 10
+  infernoCooldown: 15
+  DefensiveAbilityLockedSorc: 1
+  WildcardAbilityLockedSorc: 1
+  UltimateAbilityLockedSorc: 1
+  cloneActive: 0
+  clonePosition: {fileID: 0}
+  cloneAnimator: {fileID: 0}
 --- !u!1 &610969004
 GameObject:
   m_ObjectHideFlags: 0

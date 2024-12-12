@@ -8,7 +8,7 @@ using UnityEngine.AI;
 
 public class yarab : MonoBehaviour
 {
-    private int level;
+    public int level;
     private bool isDead = false;
 
 
@@ -51,6 +51,12 @@ public class yarab : MonoBehaviour
     public Barbarian_Abilities Barbarian_Abilities;
     public LilithBehavior LilithPhase1;
     public lilithphase2testingscript Lilithphase2;
+    public SorcererManager SorcererManager;
+
+    public GameObject fireball;
+    public GameObject clone;
+    public GameObject inferno;
+    public AnimatorController cloneAnimator;
 
     public PlayerAnimationTrigger playerAnimationTrigger;
     public ArrowShower arrowShower;
@@ -78,9 +84,9 @@ public class yarab : MonoBehaviour
     void Start()
     {
         // TEMP
-        level = 1;
+        level = 2;
         // ha5od variable men character selection screen 1: barb 2: sorc 3: rogue
-        int character = 1;
+        int character = 2;
         // TEMP
 
         //Vector3 initVector = level == 1 ? new Vector3(-3.41f, 5, -25.5f) : new Vector3(50, 50, 50);
@@ -105,6 +111,12 @@ public class yarab : MonoBehaviour
             currentCharacterName = "Sorceress";
             currentCharacter = Instantiate(sorc, initVector, Quaternion.identity);
             currentCharacter.GetComponent<Animator>().runtimeAnimatorController = sorcAnimator;
+            currentCharacter.AddComponent<SorcererManager>();
+            currentCharacter.GetComponent<SorcererManager>().camera = camera;
+            currentCharacter.GetComponent<SorcererManager>().fireball = fireball;
+            currentCharacter.GetComponent<SorcererManager>().clonePrefab = clone;
+            currentCharacter.GetComponent<SorcererManager>().infernoPrefab = inferno;
+            currentCharacter.GetComponent<SorcererManager>().cloneAnimator = cloneAnimator;
         }
         else if (character == 3)
         {
@@ -178,11 +190,28 @@ public class yarab : MonoBehaviour
             currentBoss.transform.LookAt(currentCharacter.transform);
         }
 
-        /*if(!enteredPhase2 && on) // remove
+        if(currentCharacterName == "Sorceress" && !currentCharacter.GetComponent<SorcererManager>().WildcardAbilityLockedSorc && level == 1)
         {
-            on = false;
-            StartCoroutine(testtest());
-        }*/
+            if(currentCharacter.GetComponent<SorcererManager>().cloneActive)
+            {
+                GetComponent<CreateCamp>().changePlayerToFollow(currentCharacter.GetComponent<SorcererManager>().clonePosition);
+            }
+            else
+            {
+                GetComponent<CreateCamp>().changePlayerToFollow(currentCharacter.transform);
+            }
+        }
+        if(currentCharacterName == "Sorceress" && !currentCharacter.GetComponent<SorcererManager>().WildcardAbilityLockedSorc && level == 2 && !enteredPhase2)
+        {
+            if (currentCharacter.GetComponent<SorcererManager>().cloneActive)
+            {
+                currentBoss.GetComponent<LilithBehavior>().changePlayerToFollow(currentCharacter.GetComponent<SorcererManager>().clonePosition);
+            }
+            else
+            {
+                currentBoss.GetComponent<LilithBehavior>().changePlayerToFollow(currentCharacter.transform);
+            }
+        }
 
         if (level == 2 && !enteredPhase2 && currentBoss.GetComponent<LilithBehavior>().health <= 0) //entering phase 2
         {
@@ -274,30 +303,28 @@ public class yarab : MonoBehaviour
                 currentCharacter.GetComponent<Barbarian_Abilities>().UltimateAbilityLockedBarb = false;
             }
         }
-        /*else if (currentCharacterName == "Sorceress")
+        else if(currentCharacterName == "Sorceress")
         {
-            if (abilityPoints > 0)
+            if (!defensiveAbilityLocked)
             {
-                if (Input.GetKeyDown(KeyCode.Alpha1))
-                {
-                    if(!unlockAbilityCheat) abilityPoints--;
-                    // add ability
-                }
-                if (Input.GetKeyDown(KeyCode.Alpha2))
-                {
-                    abilityPoints--;
-                    // add ability
-                }
-                if (Input.GetKeyDown(KeyCode.Alpha3))
-                {
-                    abilityPoints--;
-                    // add ability
-                }
+                if (!unlockAbilityCheat) abilityPoints--;
+                defensiveAbilityLocked = true;
+                currentCharacter.GetComponent<SorcererManager>().DefensiveAbilityLockedSorc = false;
             }
-        } */
-
-
-
+            if (!wildacrdAbilityLocked)
+            {
+                if (!unlockAbilityCheat) abilityPoints--;
+                wildacrdAbilityLocked = true;
+                currentCharacter.GetComponent<SorcererManager>().WildcardAbilityLockedSorc = false;
+            }
+            if (!ultimateAbilityLocked)
+            {
+                if (!unlockAbilityCheat) abilityPoints--;
+                ultimateAbilityLocked = true;
+                currentCharacter.GetComponent<SorcererManager>().UltimateAbilityLockedSorc = false;
+            }
+        }
+    
         // cheats
         if (Input.GetKeyDown(KeyCode.H))
         {
@@ -403,6 +430,11 @@ public class yarab : MonoBehaviour
         if (currentCharacterName == "Barbarian")
         {
             if (currentCharacter.GetComponent<Barbarian_Abilities>().shieldActive == true) 
+                return;
+        }
+        if(currentCharacterName == "Sorceress")
+        {
+            if (currentCharacter.GetComponent<SorcererManager>().cloneActive == true)
                 return;
         }
         

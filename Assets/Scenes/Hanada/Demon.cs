@@ -86,8 +86,6 @@ public class Demon : MonoBehaviour
         }
 
         FaceMovementDirection();
-        // remove
-        if (hp < 40) print("Demon:" + hp);
 
         if (followingPlayer)
         {

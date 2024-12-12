@@ -5,8 +5,8 @@ using System.Linq;
 public class CampManager : MonoBehaviour
 {
     public Transform player;
-    private int maxDemonsAlerted = 2;
-    private int maxMinionsAlerted = 16;
+    private int maxDemonsAlerted = 1;
+    private int maxMinionsAlerted = 5;
     public Vector3 centerPoint;
     public float campRadius;
     private List<Minion> minions = new List<Minion>();
@@ -34,26 +34,33 @@ public class CampManager : MonoBehaviour
     {
         float distanceToCenter = Vector3.Distance(player.position, centerPoint);
 
-        if (demons[0].yarabScript.health > 0 && !isPlayerInsideCampRadius && distanceToCenter <= campRadius)
+        if (demons.Count != 0)
         {
-            Debug.Log("Player is in camp radius");
-            isPlayerInsideCampRadius = true;
-            AlertNearbyEntities();
+            if (demons[0].yarabScript.health > 0 && !isPlayerInsideCampRadius && distanceToCenter <= campRadius)
+            {
+                Debug.Log("Player is in camp radius");
+                isPlayerInsideCampRadius = true;
+                AlertNearbyEntities();
+            }
+            else if (isPlayerInsideCampRadius && distanceToCenter > campRadius)
+            {
+                Debug.Log("Player out of camp radius");
+                isPlayerInsideCampRadius = false;
+                ResetNearbyEntities();
+            }
         }
-        else if (isPlayerInsideCampRadius && distanceToCenter > campRadius)
+        
+        if(demons.Count != 0)
         {
-            Debug.Log("Player out of camp radius");
-            isPlayerInsideCampRadius = false;
-            ResetNearbyEntities();
+            if (!playerDied && demons[0].yarabScript.health <= 0)
+            // if (!playerDied && playerHealth <= 0)
+            {
+                playerDied = true;
+                ResetNearbyEntities();
+                Debug.Log("Player died (testing reset)");
+            }
         }
-
-        if (!playerDied && demons[0].yarabScript.health <= 0)
-        // if (!playerDied && playerHealth <= 0)
-        {
-            playerDied = true;
-            ResetNearbyEntities();
-            Debug.Log("Player died (testing reset)");
-        }
+        
     }
 
     public void RegisterMinion(Minion minion)

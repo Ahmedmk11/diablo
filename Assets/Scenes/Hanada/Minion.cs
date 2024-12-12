@@ -69,8 +69,6 @@ public class Minion : MonoBehaviour
         }
 
         FaceMovementDirection();
-        // remove
-        if (hp < 20) print("Minion:"+hp);
 
         // if following player face player
 
@@ -165,7 +163,10 @@ public class Minion : MonoBehaviour
         animator.SetTrigger("isDying");
         yarabScript.gainXP((int)xp);
 
-        campManager.UnregisterMinion(this);
+        if (yarabScript.level != 2)
+        {
+            campManager.UnregisterMinion(this);
+        }
         agent.ResetPath();
 
         AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);

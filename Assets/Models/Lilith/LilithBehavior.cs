@@ -216,4 +216,12 @@ public class LilithBehavior : MonoBehaviour
         yield return new WaitForSeconds(5f);
         isStunned = false;
     }
+
+    public void changePlayerToFollow(Transform target)
+    {
+        foreach (GameObject minion in activeMinions)
+        {
+            minion.GetComponent<Minion>().player = target.gameObject;
+        }
+    }
 }
