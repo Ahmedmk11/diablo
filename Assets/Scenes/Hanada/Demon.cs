@@ -98,6 +98,12 @@ public class Demon : MonoBehaviour
             Quaternion lookRotation = Quaternion.LookRotation(directionToFace);
             transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * patrolSpeed);
         }
+        
+        if (hp <= 0)
+        {
+            agent.ResetPath();
+            StopFollowingPlayer();
+        }
     }
 
     void FaceMovementDirection()

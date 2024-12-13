@@ -104,9 +104,9 @@ public class yarab : MonoBehaviour
             level = 1;
         }
         // ha5od variable men character selection screen 1: barb 2: sorc 3: rogue
-        //int character = 2;
 
         int character = CharacterSelection.count;
+        // character = 3;
         // TEMP
 
         //Vector3 initVector = level == 1 ? new Vector3(-3.41f, 5, -25.5f) : new Vector3(50, 50, 50);

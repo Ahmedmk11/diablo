@@ -82,6 +82,12 @@ public class Minion : MonoBehaviour
             Quaternion lookRotation = Quaternion.LookRotation(directionToFace);
             transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * speed);
         }
+
+        if (hp <= 0)
+        {
+            agent.ResetPath();
+            StopFollowingPlayer();
+        }
     }
 
     void FaceMovementDirection()
