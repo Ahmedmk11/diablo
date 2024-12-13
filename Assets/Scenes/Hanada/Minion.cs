@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using UnityEditor.Animations;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.UI;
 
 public class Minion : MonoBehaviour
 {
     public CampManager campManager;
     public Animator animator;
     public NavMeshAgent agent;
-    private float hp = 20;
+    public float hp = 20;
     private float xp = 10;
     private float damage = 5;
     private float speed = 2.5f;
@@ -40,6 +41,9 @@ public class Minion : MonoBehaviour
         {
             campManager.RegisterMinion(this);
         }
+
+        transform.GetChild(1).GetChild(3).GetChild(0).GetComponent<Slider>().value = 1;
+
     }
 
     private void Update()
@@ -155,6 +159,9 @@ public class Minion : MonoBehaviour
         {
             Die();
         }
+
+        transform.GetChild(1).GetChild(3).GetChild(0).GetComponent<Slider>().value = hp / 20f;
+
     }
 
     public void Die()

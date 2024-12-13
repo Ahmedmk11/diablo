@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEditor.Animations;
 using UnityEngine;
 using UnityEngine.AI;
@@ -78,6 +79,7 @@ public class SorcererManager : MonoBehaviour
                         animator.SetTrigger("Cast fireball");
                         castFireBall(hit.collider.gameObject); // Pass the clicked enemy
                         lastFireballTime = Time.time; // Update last usage time
+                        StartCoroutine(CooldownRoutine(GameObject.Find("Basic").GetComponent<UnityEngine.UI.Image>(), (int)fireballCooldown, "Basic"));
                     }
                     else
                     {
@@ -97,7 +99,6 @@ public class SorcererManager : MonoBehaviour
             if (Time.time >= lastTeleportTime + teleportCooldown)
             {
                 isTeleporting = true; // Enable teleport mode
-                lastTeleportTime = Time.time; // Update last usage time
                 Debug.Log("Select a teleport position");
             }
             else
@@ -153,6 +154,8 @@ public class SorcererManager : MonoBehaviour
                     castClone(hit.point); // Place clone at clicked position
                     isCastingClone = false; // Exit targeting mode
                     lastCloneTime = Time.time; // Update cooldown
+                    StartCoroutine(CooldownRoutine(GameObject.Find("Wildcard").GetComponent<UnityEngine.UI.Image>(), (int)cloneCooldown));
+
                 }
                 else if (isCastingInferno)
                 {
@@ -160,6 +163,7 @@ public class SorcererManager : MonoBehaviour
                     castInferno(hit.point); // Place inferno at clicked position
                     isCastingInferno = false; // Exit targeting mode
                     lastInfernoTime = Time.time; // Update cooldown
+                    StartCoroutine(CooldownRoutine(GameObject.Find("Ultimate").GetComponent<UnityEngine.UI.Image>(), (int)infernoCooldown));
                 }
             }
         }
@@ -168,6 +172,16 @@ public class SorcererManager : MonoBehaviour
         {
             animator.SetTrigger("Teleport");
             castTeleport();
+            lastTeleportTime = Time.time; // Update last usage time
+            StartCoroutine(CooldownRoutine(GameObject.Find("Defensive").GetComponent<UnityEngine.UI.Image>(), (int)teleportCooldown));
+        }
+
+        if (camera.GetComponent<yarab>().resetCooldowns)
+        {
+            lastCloneTime = -Mathf.Infinity;
+            lastInfernoTime = -Mathf.Infinity;
+            lastTeleportTime = -Mathf.Infinity;
+            lastFireballTime = -Mathf.Infinity;
         }
     }
 
@@ -363,5 +377,40 @@ void castTeleport()
         {
             demon.takeDamage(damage);
         }
+    }
+
+    private IEnumerator CooldownRoutine(UnityEngine.UI.Image img, int cooldown, string type = "")
+    {
+        // find tmp text with a specific name
+        GameObject gameObject;
+        if (type == "Basic") gameObject = img.transform.GetChild(2).gameObject;
+        else gameObject = img.transform.GetChild(3).gameObject;
+
+        TMP_Text timer = img.transform.Find("cooldown numerical").GetComponent<TMP_Text>();
+        gameObject.SetActive(true);
+
+        float decreasing = cooldown;
+        // Get the fill GameObject and set its fill amount to 0
+        Transform fill = img.transform.Find("Fill");
+        UnityEngine.UI.Image fillImage = fill.GetComponent<UnityEngine.UI.Image>();
+        fillImage.fillAmount = 0;
+
+        // Increment the fill amount over the cooldown period
+        float elapsed = 0;
+        while (elapsed < cooldown)
+        {
+            decreasing -= Time.deltaTime;
+            elapsed += Time.deltaTime;
+            timer.text = decreasing.ToString("F0");
+            fillImage.fillAmount = elapsed / cooldown;
+            if (camera.GetComponent<yarab>().resetCooldowns)
+            {
+                fillImage.fillAmount = 1;
+                camera.GetComponent<yarab>().resetCooldowns = false;
+                break;
+            }
+            yield return null;
+        }
+        gameObject.SetActive(false);
     }
 }

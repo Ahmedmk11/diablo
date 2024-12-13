@@ -23,6 +23,7 @@ public class LilithBehavior : MonoBehaviour
     public GameObject player;
 
     private bool isStunned = false;
+    private bool dead = false;
 
 
     private void Start()
@@ -52,7 +53,7 @@ public class LilithBehavior : MonoBehaviour
     {
         while (true)
         {
-            if (!isStunned)
+            if (!isStunned && !dead)
             {
                 // Check if all minions are defeated
                 if (AreAllMinionsDefeated())
@@ -87,15 +88,18 @@ public class LilithBehavior : MonoBehaviour
 
         // // Play hit reaction animation
         // animator.SetTrigger("HitReaction");
-
+        print("abouz mid");
         if (AreAllMinionsDefeated())
         {
             // Play dying animation and disable behavior
+            print("abouz gamed");
             health -= damage;
-            animator.SetTrigger("HitReaction");
+            animator.SetTrigger("Hit reaction");
             if (health <= 0)
             {
                 animator.SetTrigger("Dying");
+                // Disable the script to prevent further attacks
+                dead = true;
             }
 
         }
@@ -103,42 +107,47 @@ public class LilithBehavior : MonoBehaviour
 
     private void PerformSummon()
     {
-        Debug.Log("Lilith is summoning!");
-        animator.SetBool("Summon", true);
-
-        // Spawn minions at random positions
-        for (int i = 0; i < maxMinions; i++)
+        if (!dead)
         {
-            float randomX = Random.Range(-57f, 10f);
-            float randomZ = Random.Range(45f, 32f);
-            Vector3 spawnPosition = new Vector3(randomX, 4.5f, randomZ);
+            Debug.Log("Lilith is summoning!");
+            animator.SetBool("Summon", true);
 
-            GameObject newMinion = Instantiate(minionPrefab, spawnPosition, Quaternion.identity);
+            // Spawn minions at random positions
+            for (int i = 0; i < maxMinions; i++)
+            {
+                float randomX = Random.Range(-57f, 10f);
+                float randomZ = Random.Range(45f, 32f);
+                Vector3 spawnPosition = new Vector3(randomX, 4.5f, randomZ);
 
-            newMinion.AddComponent<BoxCollider>();
-            NavMeshAgent navMeshAgent = newMinion.AddComponent<NavMeshAgent>();
-            navMeshAgent.speed = 0.5f;
-            navMeshAgent.angularSpeed = 10f;
-            navMeshAgent.stoppingDistance = 2.0f;
-            // navMeshAgent.obstacleAvoidanceType = ObstacleAvoidanceType.HighQualityObstacleAvoidance;
+                GameObject newMinion = Instantiate(minionPrefab, spawnPosition, Quaternion.identity);
 
-            Minion minionScript = newMinion.AddComponent<Minion>();
-            minionScript.followingPlayer = true;
-            minionScript.player = player.gameObject;
-            minionScript.yarabScript = cameraForYarab.GetComponent<yarab>();
+                newMinion.AddComponent<BoxCollider>();
+                newMinion.GetComponent<BoxCollider>().center = new Vector3(0, 1f, 0);
+                newMinion.GetComponent<BoxCollider>().size = new Vector3(1, 2, 1);
+                NavMeshAgent navMeshAgent = newMinion.AddComponent<NavMeshAgent>();
+                navMeshAgent.speed = 0.5f;
+                navMeshAgent.angularSpeed = 10f;
+                navMeshAgent.stoppingDistance = 2.0f;
+                // navMeshAgent.obstacleAvoidanceType = ObstacleAvoidanceType.HighQualityObstacleAvoidance;
 
-            Animator minionAnimator = newMinion.GetComponent<Animator>();
-            minionAnimator.runtimeAnimatorController = minionController;
-            minionAnimator.applyRootMotion = false;
+                Minion minionScript = newMinion.AddComponent<Minion>();
+                minionScript.followingPlayer = true;
+                minionScript.player = player.gameObject;
+                minionScript.yarabScript = cameraForYarab.GetComponent<yarab>();
 
-            newMinion.tag = "Enemy";
+                Animator minionAnimator = newMinion.GetComponent<Animator>();
+                minionAnimator.runtimeAnimatorController = minionController;
+                minionAnimator.applyRootMotion = false;
 
-            newMinion.SetActive(false); // Initially disable
-            activeMinions[i] = newMinion;
+                newMinion.tag = "Enemy";
+
+                newMinion.SetActive(false); // Initially disable
+                activeMinions[i] = newMinion;
+            }
+
+            // Enable minions after the summoning animation
+            StartCoroutine(EnableMinionsAfterSummon());
         }
-
-        // Enable minions after the summoning animation
-        StartCoroutine(EnableMinionsAfterSummon());
     }
 
     private IEnumerator EnableMinionsAfterSummon()
@@ -159,47 +168,51 @@ public class LilithBehavior : MonoBehaviour
     private void PerformDivebomb()
     {
 
-        animator.SetTrigger("Dwarf Idle");
-        Debug.Log("Lilith is performing Divebomb!");
-        animator.SetTrigger("Divebomb");
-        animator.SetBool("Summon", false);
-
-        // Define the radius of effect and get the position for the sphere
-        float radius = 5f; // Adjust radius as needed
-        Vector3 explosionPosition = transform.position; // Assuming the divebomb's impact point is Lilith's position
-
-        // Detect all colliders within the radius
-        Collider[] hitColliders = Physics.OverlapSphere(explosionPosition, radius);
-
-        // Iterate through colliders and apply damage to enemies
-        foreach (Collider collider in hitColliders)
+        if (!dead)
         {
-            if (collider.CompareTag("Player")) // Ensure to replace with the correct tag
+            animator.SetTrigger("Dwarf Idle");
+            Debug.Log("Lilith is performing Divebomb!");
+            animator.SetTrigger("Divebomb");
+            animator.SetBool("Summon", false);
+
+            // Define the radius of effect and get the position for the sphere
+            float radius = 5f; // Adjust radius as needed
+            Vector3 explosionPosition = transform.position; // Assuming the divebomb's impact point is Lilith's position
+
+            // Detect all colliders within the radius
+            Collider[] hitColliders = Physics.OverlapSphere(explosionPosition, radius);
+
+            // Iterate through colliders and apply damage to enemies
+            foreach (Collider collider in hitColliders)
             {
+                if (collider.CompareTag("Player")) // Ensure to replace with the correct tag
+                {
 
 
 
-                yarab yarab = cameraForYarab.GetComponent<yarab>();
+                    yarab yarab = cameraForYarab.GetComponent<yarab>();
 
-                yarab.takeDamage(20); // Adjust damage value as needed
-                Debug.Log($"Damaging {collider.name}");
+                    yarab.takeDamage(20); // Adjust damage value as needed
+                    Debug.Log($"Damaging {collider.name}");
+                }
             }
-        }
 
-        // Optional: Visualize the explosion area for debugging
-        Debug.DrawLine(transform.position, transform.position + Vector3.up * 0.1f, Color.red, 1.0f);
-        Debug.DrawLine(transform.position + Vector3.right * radius, transform.position - Vector3.right * radius, Color.red, 1.0f);
-        Debug.DrawLine(transform.position + Vector3.forward * radius, transform.position - Vector3.forward * radius, Color.red, 1.0f);
+            // Optional: Visualize the explosion area for debugging
+            Debug.DrawLine(transform.position, transform.position + Vector3.up * 0.1f, Color.red, 1.0f);
+            Debug.DrawLine(transform.position + Vector3.right * radius, transform.position - Vector3.right * radius, Color.red, 1.0f);
+            Debug.DrawLine(transform.position + Vector3.forward * radius, transform.position - Vector3.forward * radius, Color.red, 1.0f);
+        }
     }
 
 
 
     private bool AreAllMinionsDefeated()
     {
-
+        print("wahwah mid");
+        if(activeMinions == null) return true;
         foreach (GameObject minion in activeMinions)
         {
-            if (minion != null) return false;
+            if (minion != null && minion.GetComponent<Minion>().hp > 0) return false;
         }
         return true;
     }

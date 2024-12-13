@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -35,8 +36,8 @@ public class Barbarian_Abilities : MonoBehaviour
     {
         { "Basic", 1f },
         { "Defensive", 10f },
-        { "Wildcard", 7f },
-        { "Ultimate", 15f }
+        { "Wildcard", 5f },
+        { "Ultimate", 10f }
     };
 
     private Dictionary<string, float> abilityCooldownTimers = new Dictionary<string, float>
@@ -78,6 +79,14 @@ public class Barbarian_Abilities : MonoBehaviour
         else if (canMoveAfterUltimate)
         {
             agent.isStopped = false;  // Allow normal movement after the ultimate is complete
+        }
+        if(camera.GetComponent<yarab>().resetCooldowns)
+        {
+            abilityCooldownTimers["Basic"] = 0;
+            abilityCooldownTimers["Defensive"] = 0;
+            abilityCooldownTimers["Wildcard"] = 0;
+            abilityCooldownTimers["Ultimate"] = 0;
+            // camera.GetComponent<yarab>().resetCooldowns = false;
         }
     }
 
@@ -326,6 +335,30 @@ public class Barbarian_Abilities : MonoBehaviour
 
     private void StartCooldown(string abilityName)
     {
+        switch(abilityName)
+        {
+            case "Basic":
+                StartCoroutine(startStartingTheCooldown("Basic", 0, abilityName));
+                break;
+            case "Defensive":
+                StartCoroutine(startStartingTheCooldown("Defensive", 0, abilityName));
+                break;
+            case "Wildcard":
+                StartCoroutine(startStartingTheCooldown("Wildcard", 2, abilityName));
+                break;
+            case "Ultimate":
+                StartCoroutine(startStartingTheCooldown("Ultimate", 5, abilityName));
+                break;
+        }
+        
+    }
+
+    private IEnumerator startStartingTheCooldown(string type, int time, string abilityName)
+    {
+        yield return new WaitForSeconds(time);
+        if (type == "Basic") StartCoroutine(CooldownRoutine(GameObject.Find(type).GetComponent<UnityEngine.UI.Image>(), (int)abilityCooldowns[type], type));
+        else
+        StartCoroutine(CooldownRoutine(GameObject.Find(type).GetComponent<UnityEngine.UI.Image>(), (int)abilityCooldowns[type]));
         if (abilityCooldownTimers.ContainsKey(abilityName))
         {
             abilityCooldownTimers[abilityName] = abilityCooldowns[abilityName];
@@ -396,5 +429,40 @@ public class Barbarian_Abilities : MonoBehaviour
         {
             demon.takeDamage(damage);
         }
+    }
+
+    private IEnumerator CooldownRoutine(UnityEngine.UI.Image img, int cooldown, string type = "")
+    {
+        // find tmp text with a specific name
+        GameObject gameObject;
+        if (type == "Basic") gameObject = img.transform.GetChild(2).gameObject;
+        else gameObject = img.transform.GetChild(3).gameObject;
+
+        TMP_Text timer = img.transform.Find("cooldown numerical").GetComponent<TMP_Text>();
+        gameObject.SetActive(true);
+
+        float decreasing = cooldown;
+        // Get the fill GameObject and set its fill amount to 0
+        Transform fill = img.transform.Find("Fill");
+        UnityEngine.UI.Image fillImage = fill.GetComponent<UnityEngine.UI.Image>();
+        fillImage.fillAmount = 0;
+
+        // Increment the fill amount over the cooldown period
+        float elapsed = 0;
+        while (elapsed < cooldown)
+        {
+            decreasing -= Time.deltaTime;
+            elapsed += Time.deltaTime;
+            timer.text = decreasing.ToString("F0");
+            fillImage.fillAmount = elapsed / cooldown;
+            if (camera.GetComponent<yarab>().resetCooldowns)
+            {
+                fillImage.fillAmount = 1;
+                camera.GetComponent<yarab>().resetCooldowns = false;
+                break;
+            }
+            yield return null;
+        }
+        gameObject.SetActive(false);
     }
 }

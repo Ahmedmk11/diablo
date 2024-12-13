@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.UI;
 
 public class Demon : MonoBehaviour
 {
@@ -48,6 +49,10 @@ public class Demon : MonoBehaviour
         }
 
         campManager.RegisterDemon(this);
+
+        transform.GetChild(8).GetChild(5).GetComponent<Canvas>().worldCamera = yarabScript.camera;
+
+        transform.GetChild(8).GetChild(5).GetChild(0).GetComponent<Slider>().value = 1;
 
         StartCoroutine(PatrolRandomly());
     }
@@ -205,6 +210,9 @@ public class Demon : MonoBehaviour
         {
             Die();
         }
+
+        transform.GetChild(8).GetChild(5).GetChild(0).GetComponent<Slider>().value = hp / 40f;
+
     }
 
     public void Die()

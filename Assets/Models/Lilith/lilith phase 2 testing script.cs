@@ -8,7 +8,7 @@ public class lilithphase2testingscript : MonoBehaviour
 
     // lilith parameters
     public int health = 50;
-    int shield = 50;
+    public int shield = 50;
     bool hasShield = true;
     bool hasReflectiveAura = false;
 
