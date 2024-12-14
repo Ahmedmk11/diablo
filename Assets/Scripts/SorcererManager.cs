@@ -47,9 +47,6 @@ public class SorcererManager : MonoBehaviour
     public Transform clonePosition;
     public AnimatorController cloneAnimator;
 
-
-
-
     // Start is called before the first frame update
     void Start()
     {

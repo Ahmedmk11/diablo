@@ -680,9 +680,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a8cffc6caa7cb947a684c930a4f4c9f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  camera: {fileID: 698607777}
   fireball: {fileID: 9220849310273169300, guid: 0e7544bd6e7ec224aa525d0c0c17199b, type: 3}
-  Enemy: {fileID: 1475548974}
   clonePrefab: {fileID: 919132149155446097, guid: 01387240fe6a726439f7d962cba8b19e, type: 3}
+  cloneExplosionPrefab: {fileID: 196738, guid: d58b2e279376a814faf2e5a6ff13a127, type: 3}
   cloneLifetime: 5
   cloneExplosionRadius: 5
   cloneExplosionDamage: 20
@@ -695,6 +696,12 @@ MonoBehaviour:
   teleportCooldown: 10
   cloneCooldown: 10
   infernoCooldown: 15
+  DefensiveAbilityLockedSorc: 1
+  WildcardAbilityLockedSorc: 1
+  UltimateAbilityLockedSorc: 1
+  cloneActive: 0
+  clonePosition: {fileID: 0}
+  cloneAnimator: {fileID: 9100000, guid: 169f54d31045543459aa292c73bf2324, type: 2}
 --- !u!114 &1693619064
 MonoBehaviour:
   m_ObjectHideFlags: 0
