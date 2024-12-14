@@ -1711,6 +1711,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2026862024}
   - component: {fileID: 2026862023}
+  - component: {fileID: 2026862025}
   m_Layer: 0
   m_Name: Directional Light
   m_TagString: Untagged
@@ -1795,6 +1796,20 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+--- !u!114 &2026862025
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2026862022}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7224e1311bba89c469263522d775c63f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  volumeSlider: {fileID: 0}
+  sfxSlider: {fileID: 0}
 --- !u!1 &2122062065
 GameObject:
   m_ObjectHideFlags: 0
@@ -1882,6 +1897,7 @@ GameObject:
   - component: {fileID: 2141681989}
   - component: {fileID: 2141681988}
   - component: {fileID: 2141681991}
+  - component: {fileID: 2141681992}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -1978,6 +1994,20 @@ MonoBehaviour:
   back: {fileID: 1713453744}
   sound: {fileID: 1672348286}
   effect: {fileID: 1812646607}
+--- !u!114 &2141681992
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2141681987}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7224e1311bba89c469263522d775c63f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  volumeSlider: {fileID: 1672348286}
+  sfxSlider: {fileID: 1812646607}
 --- !u!1 &2142434100
 GameObject:
   m_ObjectHideFlags: 0

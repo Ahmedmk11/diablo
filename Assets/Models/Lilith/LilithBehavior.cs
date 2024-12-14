@@ -51,32 +51,35 @@ public class LilithBehavior : MonoBehaviour
 
     private IEnumerator Phase1AttackLoop()
     {
-        while (true)
-        {
-            if (!isStunned && !dead)
+        if (!cameraForYarab.GetComponent<yarab>().enteredPhase2ForUI)
+        { 
+            while (true)
             {
-                // Check if all minions are defeated
-                if (AreAllMinionsDefeated())
+                if (!isStunned && !dead)
                 {
-                    if (firsttime)
+                    // Check if all minions are defeated
+                    if (AreAllMinionsDefeated())
                     {
-                        firsttime = false;
-                        PerformSummon();
+                        if (firsttime)
+                        {
+                            firsttime = false;
+                            PerformSummon();
+                        }
+                        else
+                        {
+                            yield return new WaitForSeconds(15.0f);
+                            PerformSummon();
+                        }
+
                     }
                     else
                     {
-                        yield return new WaitForSeconds(15.0f);
-                        PerformSummon();
+                        yield return new WaitForSeconds(10.0f);
+                        PerformDivebomb();
                     }
 
+                    yield return new WaitForSeconds(attackInterval);
                 }
-                else
-                {
-                    yield return new WaitForSeconds(10.0f);
-                    PerformDivebomb();
-                }
-
-                yield return new WaitForSeconds(attackInterval);
             }
         }
     }

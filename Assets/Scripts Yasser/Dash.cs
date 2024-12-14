@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -71,6 +72,7 @@ public class Dash : MonoBehaviour
     void DashAb(Vector3 position)
     {
         agent.transform.position = position;
+        agent.SetDestination(position);
     }
 
     IEnumerator Cooldown()
@@ -78,10 +80,48 @@ public class Dash : MonoBehaviour
         // Set cooldown flag
         isCooldown = true;
 
+        StartCoroutine(CooldownRoutine(GameObject.Find("Wildcard").GetComponent<UnityEngine.UI.Image>(), (int)cooldownTime));
+
+
         // Wait for the cooldown time
         yield return new WaitForSeconds(cooldownTime);
 
         // Reset cooldown flag
         isCooldown = false;
+    }
+
+    private IEnumerator CooldownRoutine(UnityEngine.UI.Image img, int cooldown, string type = "")
+    {
+        // find tmp text with a specific name
+        GameObject gameObject;
+        if (type == "Basic") gameObject = img.transform.GetChild(2).gameObject;
+        else gameObject = img.transform.GetChild(3).gameObject;
+
+        TMP_Text timer = img.transform.Find("cooldown numerical").GetComponent<TMP_Text>();
+        gameObject.SetActive(true);
+
+        float decreasing = cooldown;
+        // Get the fill GameObject and set its fill amount to 0
+        Transform fill = img.transform.Find("Fill");
+        UnityEngine.UI.Image fillImage = fill.GetComponent<UnityEngine.UI.Image>();
+        fillImage.fillAmount = 0;
+
+        // Increment the fill amount over the cooldown period
+        float elapsed = 0;
+        while (elapsed < cooldown)
+        {
+            decreasing -= Time.deltaTime;
+            elapsed += Time.deltaTime;
+            timer.text = decreasing.ToString("F0");
+            fillImage.fillAmount = elapsed / cooldown;
+            if (camera.GetComponent<yarab>().resetCooldowns)
+            {
+                fillImage.fillAmount = 1;
+                camera.GetComponent<yarab>().resetCooldowns = false;
+                break;
+            }
+            yield return null;
+        }
+        gameObject.SetActive(false);
     }
 }

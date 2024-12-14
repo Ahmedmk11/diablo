@@ -24,6 +24,8 @@ public class yarab : MonoBehaviour
     public GameObject arrow1;
     public GameObject shower;
     public GameObject smoke;
+    
+    public GameObject smokeEffect;
     public GameObject spark;
 
     public Light lilithShield;
@@ -337,6 +339,8 @@ public class yarab : MonoBehaviour
                 currentCharacter.GetComponent<ArrowShower>().launchForce = 20;
                 currentCharacter.GetComponent<ArrowShower>().arrowLifetime = 5;
                 currentCharacter.GetComponent<ArrowShower>().detectionRadius = 2;
+               // currentCharacter.GetComponent<ArrowShower>().showerEffect= smokeEffect;
+
             }
         }
         else if (currentCharacterName == "Barbarian")
@@ -456,11 +460,9 @@ public class yarab : MonoBehaviour
 
     private IEnumerator WaitForLilithToDie()
     {
-        yield return new WaitForSeconds(10);
+        print("Crash");
         StartCoroutine(StopRotation());
         currentBoss.GetComponent<Animator>().runtimeAnimatorController = lilithAnimatorPhase2;
-        LilithBehavior lb = currentBoss.GetComponent<LilithBehavior>();
-        Destroy(lb);
         currentBoss.AddComponent<lilithphase2testingscript>();
         currentBoss.GetComponent<lilithphase2testingscript>().phase2controller = lilithAnimatorPhase2;
         currentBoss.GetComponent<lilithphase2testingscript>().halo = lilithShield;
@@ -468,6 +470,8 @@ public class yarab : MonoBehaviour
         currentBoss.GetComponent<lilithphase2testingscript>().particleSystem = bloodySpikes;
         currentBoss.GetComponent<lilithphase2testingscript>().camera = camera;
         enteredPhase2ForUI = true;
+        yield return new WaitForSeconds(10);
+
     }
 
     private IEnumerator StopRotation()

@@ -611,7 +611,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 5256fb2283deff24980d0571980d39c0, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 2d662fb5b615e1e4cbe54a8f4c7bd299, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -763,6 +763,68 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1151176881}
   m_CullTransparentMesh: 1
+--- !u!1 &1178207121
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1178207124}
+  - component: {fileID: 1178207122}
+  m_Layer: 0
+  m_Name: music
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1178207122
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1178207121}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2df746910636bc64e89398f83cc7243c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mainMenuMusic: {fileID: 8300000, guid: 3ed355a0d2537224589153c0fa73ceb2, type: 3}
+  bosslevelMusic: {fileID: 8300000, guid: 0ad4a1f341eb97b4fb4b03e1d0782ad8, type: 3}
+  baselevelMusic: {fileID: 8300000, guid: b7055a019b6d74b4e8bd29bcc98c3e9d, type: 3}
+  healingSFX: {fileID: 8300000, guid: 8823ca938ad304748a53aa8a1ce4b38f, type: 3}
+  abilitySFX: {fileID: 8300000, guid: 92199c463cfe5ff47994f810d8d05ae9, type: 3}
+  bossSpikesSFX: {fileID: 8300000, guid: e64e6f4571d05c549b3e092789e124a8, type: 3}
+  dashSFX: {fileID: 8300000, guid: 8c45ee06419548444b8cb4ec110d7dd6, type: 3}
+  enemyDeathSFX: {fileID: 8300000, guid: 75479b92686ff394187ba6ca9e0d67cb, type: 3}
+  playerHitSFX: {fileID: 8300000, guid: 9363bb8469296514a8b227b021a2dee5, type: 3}
+  playerDeathSFX: {fileID: 8300000, guid: df26f217c2d0c8b4da01075f060a8ca0, type: 3}
+  bossDeathSFX: {fileID: 8300000, guid: 1829fdd287ae1d742908a695dfd6bd3f, type: 3}
+  bossAuraSFX: {fileID: 8300000, guid: 144e6751503069747af69a7526cd88b4, type: 3}
+  explosionSFX: {fileID: 8300000, guid: 6326eb4a2033f6d449da404205b80641, type: 3}
+  fireballSFX: {fileID: 8300000, guid: bfbd036945cfb4b438dd72cfce35a1d1, type: 3}
+  itemPickupSFX: {fileID: 8300000, guid: 88396ebd3df2d054e86f84feb27bab63, type: 3}
+  summonSFX: {fileID: 8300000, guid: 742015c81bbb3234baa055dbd8a51124, type: 3}
+  bossHitSFX: {fileID: 8300000, guid: 3bb578927bc50c2419ce72d958120180, type: 3}
+  arrowHitSFX: {fileID: 8300000, guid: 503409141ce613546ac2bde27a9aed4a, type: 3}
+--- !u!4 &1178207124
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1178207121}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -34.39831, y: 29.916344, z: 1.2504005}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1228123017
 GameObject:
   m_ObjectHideFlags: 0
@@ -1737,3 +1799,4 @@ SceneRoots:
   - {fileID: 1917034376}
   - {fileID: 930984920}
   - {fileID: 1466583044}
+  - {fileID: 1178207124}

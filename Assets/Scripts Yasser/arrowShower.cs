@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -12,7 +13,9 @@ public class ArrowShower : MonoBehaviour
     private NavMeshAgent agent;
     public Transform arrowSpawnPoint; // Assign the transform from where the arrow is spawned
     public GameObject selectedEnemy;
+    public GameObject showerEffect;
     public Vector3 position;
+    public PlayerAnimationTrigger arrow;
 
     private bool isCooldown = false; // Cooldown flag
     private float cooldownTime = 10f; // Cooldown duration
@@ -20,7 +23,7 @@ public class ArrowShower : MonoBehaviour
     public float launchForce = 20f; // Initial force applied to the arrow
     public float arrowLifetime = 5f;
     public LayerMask enemyLayer; // Assign the enemy layer in the Inspector
-    public float detectionRadius = 2f; // Radius to detect enemies around the arrow
+    public float detectionRadius = 6f; // Radius to detect enemies around the arrow
 
     private bool isSelecting = false;
 
@@ -29,6 +32,7 @@ public class ArrowShower : MonoBehaviour
     {
         animator = GetComponent<Animator>();
         agent = GetComponent<NavMeshAgent>();
+        arrow = GetComponent<PlayerAnimationTrigger>();
     }
 
     void Update()
@@ -53,12 +57,14 @@ public class ArrowShower : MonoBehaviour
                 animator.SetTrigger("ArrowShower");
                 ShootShower(position);
                 StartCoroutine(Cooldown());
+                arrow.isShower = true;
             }
         }
 
         if (Input.GetKeyDown(KeyCode.E) && !isCooldown)
         {
             isSelecting = true;
+            arrow.isShower = false;
 
         }
     }
@@ -66,15 +72,20 @@ public class ArrowShower : MonoBehaviour
     void ShootShower(Vector3 rayhit)
     {
         rayhit.y += 10f;
+        Vector3 original = rayhit;
+        original.y -= 9f;
 
         // Instantiate the arrow
         GameObject arrow = Instantiate(arrowPrefab, rayhit, Quaternion.identity);
+       // GameObject effect = Instantiate(showerEffect, original, Quaternion.Euler(90f,0f,0f));
 
         // Check for collisions using OverlapSphere
         StartCoroutine(CheckCollision(arrow));
 
         // Destroy the arrow after its lifetime
         Destroy(arrow, arrowLifetime);
+        //Destroy(effect, 1.5f);
+        
     }
 
     IEnumerator CheckCollision(GameObject arrow)
@@ -84,21 +95,27 @@ public class ArrowShower : MonoBehaviour
         while (elapsedTime < arrowLifetime)
         {
             // Use Physics.OverlapSphere to check for enemies
-            Collider[] hitColliders = Physics.OverlapSphere(arrow.transform.position, detectionRadius, enemyLayer);
+            Collider[] hitColliders = Physics.OverlapSphere(arrow.transform.position, detectionRadius);
 
             foreach (Collider collider in hitColliders)
             {
-                // Damage the enemy
-                findAndDamageEnemy(10, collider);
-                Debug.Log($"Arrow hit an enemy: {collider.gameObject.name}");
+                if (collider.CompareTag("Enemy"))
+                {
+                    // Damage the enemy
+                    findAndDamageEnemy(10, collider);
+                    Debug.Log($"Arrow hit an enemy: {collider.gameObject.name}");
 
-                // Perform any action on collision, e.g., destroy the enemy
-                // Destroy(collider.gameObject);
+                    // Perform any action on collision, e.g., destroy the enemy
+                    // Destroy(collider.gameObject);
 
-                // Destroy the arrow
-                Destroy(arrow);
-                yield break;
+                    // Destroy the arrow
+                    
+                }
+               
+
+
             }
+            //Destroy(arrow);
 
             elapsedTime += Time.deltaTime;
             yield return null;
@@ -109,6 +126,8 @@ public class ArrowShower : MonoBehaviour
     {
         // Set cooldown flag
         isCooldown = true;
+
+        StartCoroutine(CooldownRoutine(GameObject.Find("Ultimate").GetComponent<UnityEngine.UI.Image>(), (int) cooldownTime));
 
         // Wait for the cooldown time
         yield return new WaitForSeconds(cooldownTime);
@@ -142,5 +161,40 @@ public class ArrowShower : MonoBehaviour
         {
             demon.takeDamage(damage);
         }
+    }
+
+    private IEnumerator CooldownRoutine(UnityEngine.UI.Image img, int cooldown, string type = "")
+    {
+        // find tmp text with a specific name
+        GameObject gameObject;
+        if (type == "Basic") gameObject = img.transform.GetChild(2).gameObject;
+        else gameObject = img.transform.GetChild(3).gameObject;
+
+        TMP_Text timer = img.transform.Find("cooldown numerical").GetComponent<TMP_Text>();
+        gameObject.SetActive(true);
+
+        float decreasing = cooldown;
+        // Get the fill GameObject and set its fill amount to 0
+        Transform fill = img.transform.Find("Fill");
+        UnityEngine.UI.Image fillImage = fill.GetComponent<UnityEngine.UI.Image>();
+        fillImage.fillAmount = 0;
+
+        // Increment the fill amount over the cooldown period
+        float elapsed = 0;
+        while (elapsed < cooldown)
+        {
+            decreasing -= Time.deltaTime;
+            elapsed += Time.deltaTime;
+            timer.text = decreasing.ToString("F0");
+            fillImage.fillAmount = elapsed / cooldown;
+            if (camera.GetComponent<yarab>().resetCooldowns)
+            {
+                fillImage.fillAmount = 1;
+                camera.GetComponent<yarab>().resetCooldowns = false;
+                break;
+            }
+            yield return null;
+        }
+        gameObject.SetActive(false);
     }
 }

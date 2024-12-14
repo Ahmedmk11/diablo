@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -13,6 +14,7 @@ public class Bomb : MonoBehaviour
     public Transform arrowSpawnPoint; // Assign the transform from where the arrow is spawned
     public Vector3 position;
     public GameObject smoke;
+    
 
     private bool isCooldown = false; // Cooldown flag
     private float cooldownTime = 15f; // Cooldown duration
@@ -33,7 +35,8 @@ public class Bomb : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.W) && !isCooldown)
         {
             animator.SetTrigger("Bomb");
-            ShootBomb();
+            StopAgentAtCurrentPosition();   
+            StartCoroutine(DelayedShootBomb());
             StartCoroutine(Cooldown());
         }
     }
@@ -50,15 +53,11 @@ public class Bomb : MonoBehaviour
         Quaternion spawnRotation = Quaternion.LookRotation(arrowSpawnPoint.forward);
 
         // Instantiate the arrow
-        GameObject arrow = Instantiate(arrowPrefab, adjustedPosition, adjustedRotation);
+        //GameObject arrow = Instantiate(arrowPrefab, adjustedPosition, adjustedRotation);
         GameObject smokeP = Instantiate(smoke, spawnPosition, spawnRotation);
 
         // Add initial force to the arrow for its trajectory
-        Rigidbody arrowRb = arrow.GetComponent<Rigidbody>();
-        if (arrowRb != null)
-        {
-            arrowRb.AddForce(arrowSpawnPoint.forward * launchForce, ForceMode.Impulse);
-        }
+       
 
         // Detect enemies in range of the smoke
         Collider[] nearbyEnemies = Physics.OverlapSphere(smokeP.transform.position, detectionRadius);
@@ -72,8 +71,22 @@ public class Bomb : MonoBehaviour
         }
 
         // Destroy the arrow and smoke after a set lifetime
-        Destroy(arrow, arrowLifetime);
-        Destroy(smokeP, arrowLifetime);
+        //Destroy(arrow, arrowLifetime);
+        Destroy(smokeP, 1f);
+    }
+    private void StopAgentAtCurrentPosition()
+    {
+        if (agent != null)
+        {
+            agent.isStopped = true; // Stop the agent
+            agent.ResetPath(); // Clear the current path to prevent further movement
+            Debug.Log("Agent stopped at its current position.");
+        }
+        else
+        {
+            Debug.LogWarning("NavMeshAgent is not initialized!");
+        }
+
     }
 
     IEnumerator Cooldown()
@@ -81,11 +94,18 @@ public class Bomb : MonoBehaviour
         // Set cooldown flag
         isCooldown = true;
 
+        StartCoroutine(CooldownRoutine(GameObject.Find("Defensive").GetComponent<UnityEngine.UI.Image>(), (int) cooldownTime));
+
         // Wait for the cooldown time
         yield return new WaitForSeconds(cooldownTime);
 
         // Reset cooldown flag
         isCooldown = false;
+    }
+    IEnumerator DelayedShootBomb()
+    {
+        yield return new WaitForSeconds(1f); // Delay for 2 seconds
+        ShootBomb(); // Call the original ShootBomb method
     }
 
     private void findAndStunEnemy(Collider collider)
@@ -111,5 +131,40 @@ public class Bomb : MonoBehaviour
         {
             demon.Stun();
         }
+    }
+
+    private IEnumerator CooldownRoutine(UnityEngine.UI.Image img, int cooldown, string type = "")
+    {
+        // find tmp text with a specific name
+        GameObject gameObject;
+        if (type == "Basic") gameObject = img.transform.GetChild(2).gameObject;
+        else gameObject = img.transform.GetChild(3).gameObject;
+
+        TMP_Text timer = img.transform.Find("cooldown numerical").GetComponent<TMP_Text>();
+        gameObject.SetActive(true);
+
+        float decreasing = cooldown;
+        // Get the fill GameObject and set its fill amount to 0
+        Transform fill = img.transform.Find("Fill");
+        UnityEngine.UI.Image fillImage = fill.GetComponent<UnityEngine.UI.Image>();
+        fillImage.fillAmount = 0;
+
+        // Increment the fill amount over the cooldown period
+        float elapsed = 0;
+        while (elapsed < cooldown)
+        {
+            decreasing -= Time.deltaTime;
+            elapsed += Time.deltaTime;
+            timer.text = decreasing.ToString("F0");
+            fillImage.fillAmount = elapsed / cooldown;
+            if (camera.GetComponent<yarab>().resetCooldowns)
+            {
+                fillImage.fillAmount = 1;
+                camera.GetComponent<yarab>().resetCooldowns = false;
+                break;
+            }
+            yield return null;
+        }
+        gameObject.SetActive(false);
     }
 }

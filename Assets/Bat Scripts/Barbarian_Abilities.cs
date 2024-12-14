@@ -344,7 +344,7 @@ public class Barbarian_Abilities : MonoBehaviour
                 StartCoroutine(startStartingTheCooldown("Defensive", 0, abilityName));
                 break;
             case "Wildcard":
-                StartCoroutine(startStartingTheCooldown("Wildcard", 2, abilityName));
+                StartCoroutine(startStartingTheCooldown("Wildcard", 0, abilityName));
                 break;
             case "Ultimate":
                 StartCoroutine(startStartingTheCooldown("Ultimate", 5, abilityName));
