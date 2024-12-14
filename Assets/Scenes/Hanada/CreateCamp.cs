@@ -25,6 +25,8 @@ public class CreateCamp : MonoBehaviour
     public GameObject runePrefab;
     public GameObject mainCamera;
 
+    public Camera minimapCamera;
+
     private ArrayList demons;
     private ArrayList minions;
 
@@ -51,6 +53,7 @@ public class CreateCamp : MonoBehaviour
                 campManagerInstance.name = "Camp" + campPositions.IndexOf(campPosition);
                 campManagerInstance.runePrefab = runePrefab;
                 campManagerInstance.mainCamera = mainCamera;
+                campManagerInstance.minimapCamera = minimapCamera;
 
 
 

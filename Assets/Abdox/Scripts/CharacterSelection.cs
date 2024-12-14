@@ -1,10 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class CharacterSelection : MonoBehaviour
 {
-    private int count=1;
+    public static int count=1;
+    public static int FromSelectLevel = 0;
     public GameObject barbarian;
     public GameObject sorcer;
 
@@ -18,6 +20,8 @@ public class CharacterSelection : MonoBehaviour
     public GameObject rogueAb;
     public GameObject archerAb;
 
+    [SerializeField] private Button Select;
+    [SerializeField] private Button back;
     
 
     
@@ -35,7 +39,22 @@ public class CharacterSelection : MonoBehaviour
          barbAb.SetActive(false);
         rogueAb.SetActive(false);
         archerAb.SetActive(false);
+
+        Select.onClick.AddListener(() => SelectClick());
+        back.onClick.AddListener(() => backClick());
         
+    }
+
+    private void SelectClick()
+    {
+        if (FromSelectLevel == 2) UnityEngine.SceneManagement.SceneManager.LoadScene("Demo Blue");
+        else UnityEngine.SceneManagement.SceneManager.LoadScene("Dock Thing 1");
+    }
+
+    private void backClick()
+    {
+        UnityEngine.SceneManagement.SceneManager.LoadScene("MainMenu");
+        count = 1;
     }
 
     // Update is called once per frame

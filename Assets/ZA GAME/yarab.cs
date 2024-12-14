@@ -5,6 +5,7 @@ using Unity.VisualScripting;
 using UnityEditor.Animations;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.SceneManagement;
 
 public class yarab : MonoBehaviour
 {
@@ -44,7 +45,7 @@ public class yarab : MonoBehaviour
 
     public GameObject currentCharacter;
     private string currentCharacterName;
-    private GameObject currentBoss;
+    public GameObject currentBoss;
 
     public Animator animator;
 
@@ -77,16 +78,35 @@ public class yarab : MonoBehaviour
     public bool ultimateAbilityLocked = true;
     private bool unlockAbilityCheat = false;
 
-    private bool enteredPhase2 = false;
+    public bool resetCooldowns = false;
+
+    public bool enteredPhase2 = false;
+    public bool enteredPhase2ForUI = false;
     private bool stopRotation = false;
+
+    public GameObject pauseCanvas;
+    GameObject canvasObject;
 
     // Start is called before the first frame update
     void Start()
     {
+        print("yarab start");
         // TEMP
-        level = 2;
+        string sceneName = SceneManager.GetActiveScene().name;
+
+        // Set the level based on the scene
+        if (sceneName == "Demo Blue")
+        {
+            level = 2;
+        }
+        else if (sceneName == "Dock Thing 1")
+        {
+            level = 1;
+        }
         // ha5od variable men character selection screen 1: barb 2: sorc 3: rogue
-        int character = 2;
+
+        int character = CharacterSelection.count;
+        // character = 3;
         // TEMP
 
         //Vector3 initVector = level == 1 ? new Vector3(-3.41f, 5, -25.5f) : new Vector3(50, 50, 50);
@@ -140,12 +160,15 @@ public class yarab : MonoBehaviour
         currentCharacter.GetComponent<Movement>().camera = camera;
         animator = currentCharacter.GetComponent<Animator>();
         animator.applyRootMotion = false;
-        minimapCamera.AddComponent<CameraFollow>();
-        minimapCamera.GetComponent<CameraFollow>().target = marker.transform;
         currentCharacter.tag = "Player";
 
         if (level == 1)
         {
+            minimapCamera.AddComponent<CameraFollow>();
+            minimapCamera.GetComponent<CameraFollow>().target = marker.transform;
+            minimapCamera.GetComponent<CameraFollow>().positionOffset = new Vector3(0, 10, -5);
+            minimapCamera.GetComponent<CameraFollow>().rotationY = 0;
+
             GetComponent<CreateCamp>().player = currentCharacter.transform;
         }
         else if (level == 2)
@@ -166,6 +189,22 @@ public class yarab : MonoBehaviour
             currentBoss.GetComponent<LilithBehavior>().minionController = minionAnimator;
             currentBoss.GetComponent<Animator>().applyRootMotion = false;
         }
+        canvasObject = GameObject.Find("Canvas");
+
+        if (level == 2 && PlayerPrefs.GetInt("level") != 69)
+        {
+            maxHealth = PlayerPrefs.GetInt("maxHealth");
+            health = PlayerPrefs.GetInt("health");
+            xp = PlayerPrefs.GetInt("xp");
+            characterLevel = PlayerPrefs.GetInt("characterLevel");
+            abilityPoints = PlayerPrefs.GetInt("abilityPoints");
+            potions = PlayerPrefs.GetInt("potions");
+            runes = PlayerPrefs.GetInt("runes");
+            defensiveAbilityLocked = PlayerPrefs.GetInt("defensiveAbilityLocked") == 1;
+            wildacrdAbilityLocked = PlayerPrefs.GetInt("wildacrdAbilityLocked") == 1;
+            ultimateAbilityLocked = PlayerPrefs.GetInt("ultimateAbilityLocked") == 1;
+            unlockAbilityCheat = PlayerPrefs.GetInt("unlockAbilityCheat") == 1;
+        }
 
     }
     // private bool on = true; // remove
@@ -173,16 +212,33 @@ public class yarab : MonoBehaviour
     void Update()
     {
         // make the marker follow the player and rotate with the player about y axis
-        marker.transform.position = new Vector3(currentCharacter.transform.position.x, 15, currentCharacter.transform.position.z - 5);
-        marker.transform.rotation = Quaternion.Euler(90, currentCharacter.transform.rotation.eulerAngles.y, 0);
+        if (level == 1)
+        {
+            marker.transform.position = new Vector3(currentCharacter.transform.position.x, 15, currentCharacter.transform.position.z - 5);
+            marker.transform.rotation = Quaternion.Euler(90, currentCharacter.transform.rotation.eulerAngles.y, 0);
+        }
+
 
         if(currentCharacter.transform.position.x >= 75 && currentCharacter.transform.position.x <= 80
             && currentCharacter.transform.position.z >= 35 && currentCharacter.transform.position.z <= 40
-            && level == 1 && runes == 3
+            && level == 1 && runes >= 3
           )
         {
             print("You passed level 1");
             // go to boss level
+            PlayerPrefs.SetInt("maxHealth", maxHealth);
+            PlayerPrefs.SetInt("health", health);
+            PlayerPrefs.SetInt("xp", xp);
+            PlayerPrefs.SetInt("characterLevel", characterLevel);
+            PlayerPrefs.SetInt("abilityPoints", abilityPoints);
+            PlayerPrefs.SetInt("potions", potions);
+            PlayerPrefs.SetInt("runes", runes - 3);
+            PlayerPrefs.SetInt("defensiveAbilityLocked", defensiveAbilityLocked ? 1 : 0);
+            PlayerPrefs.SetInt("wildacrdAbilityLocked", wildacrdAbilityLocked ? 1 : 0);
+            PlayerPrefs.SetInt("ultimateAbilityLocked", ultimateAbilityLocked ? 1 : 0);
+            PlayerPrefs.SetInt("unlockAbilityCheat", unlockAbilityCheat ? 1 : 0);
+
+            SceneManager.LoadScene("Demo Blue");
         }
 
         if (level == 2 && !stopRotation)
@@ -220,10 +276,11 @@ public class yarab : MonoBehaviour
             StartCoroutine(WaitForLilithToDie());
         }
 
-        if(enteredPhase2 && currentBoss.GetComponent<lilithphase2testingscript>().health <= 0)
+        if(enteredPhase2ForUI && currentBoss.GetComponent<lilithphase2testingscript>().health <= 0)
         {
             print("Lilith is dead");
             // game over you won screen
+            SceneManager.LoadScene("win screen");
         }
 
         if (characterLevel < 4)
@@ -341,7 +398,7 @@ public class yarab : MonoBehaviour
             {
                 health = 0;
                 isDead = true;
-                StartCoroutine(WaitForAnimationToDie(0));
+                StartCoroutine(WaitForAnimationToDie(5));
 
             }
         }
@@ -356,7 +413,7 @@ public class yarab : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.X))
         {
-            xp += 100;
+            gainXP(100);
         }
         if (Input.GetKeyDown(KeyCode.M))
         {
@@ -376,18 +433,26 @@ public class yarab : MonoBehaviour
             ultimateAbilityLocked = false;
             unlockAbilityCheat = true;
         }
+        if (Input.GetKeyDown(KeyCode.C))
+        {
+            resetCooldowns = true;
+        }
         if (Input.GetKeyDown(KeyCode.R)) // remove
         {
             runes++;
         }
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            pause();
+        }
     }
 
-/*    private IEnumerator testtest() // remove
+    public void pause()
     {
-        yield return new WaitForSeconds(10);
-        print("damaged liltih from yarab");
-        currentBoss.GetComponent<LilithBehavior>().takeDamage(50);
-    }*/
+        Time.timeScale = Time.timeScale == 0 ? 1 : 0;
+        pauseCanvas.active = !pauseCanvas.active;
+        canvasObject.active = !canvasObject.active;
+    }
 
     private IEnumerator WaitForLilithToDie()
     {
@@ -402,6 +467,7 @@ public class yarab : MonoBehaviour
         currentBoss.GetComponent<lilithphase2testingscript>().aura = lilithAura;
         currentBoss.GetComponent<lilithphase2testingscript>().particleSystem = bloodySpikes;
         currentBoss.GetComponent<lilithphase2testingscript>().camera = camera;
+        enteredPhase2ForUI = true;
     }
 
     private IEnumerator StopRotation()
@@ -439,11 +505,15 @@ public class yarab : MonoBehaviour
         }
         
         health -= damage;
+        if (health < 0)
+        {
+            health = 0;
+        }
 
         if (!isDead && health <= 0)
         {
             isDead = true;
-            StartCoroutine(WaitForAnimationToDie(clipLength)); 
+            StartCoroutine(WaitForAnimationToDie(5)); 
             Debug.Log("took damage from " + attacker + " and died");
         }
         else
@@ -455,8 +525,9 @@ public class yarab : MonoBehaviour
 
     private IEnumerator WaitForAnimationToDie(float clipLength)
     {
-        yield return new WaitForSeconds(clipLength);
         animator.SetTrigger("death");
+        yield return new WaitForSeconds(clipLength);
+        SceneManager.LoadScene("GameOver");
     }
 
     private IEnumerator WaitForAnimationToGetHit(float clipLength)

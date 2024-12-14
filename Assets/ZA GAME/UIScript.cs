@@ -15,6 +15,10 @@ public class UIScript : MonoBehaviour
     [SerializeField] private GameObject abilityPoints;
     [SerializeField] private GameObject runes;
     [SerializeField] private GameObject camera;
+
+    [SerializeField] private GameObject bossHealth;
+    [SerializeField] private GameObject bossShield;
+    private bool first = true;
     
     // Start is called before the first frame update
     void Start()
@@ -30,6 +34,10 @@ public class UIScript : MonoBehaviour
         IncreaseItemCount("Potion");
         IncreaseItemCount("Ability Point");
         IncreaseItemCount("Rune");
+        if(camera.GetComponent<yarab>().level == 2)
+        {
+            updateBossHealth();
+        }
     }
     void UpdateHealth()
     {
@@ -77,5 +85,37 @@ public class UIScript : MonoBehaviour
             text = runes.GetComponent<TMP_Text>();
             text.text = camera.GetComponent<yarab>().getRunes().ToString();
         }
+    }
+
+    void updateBossHealth()
+    {
+        if(!camera.GetComponent<yarab>().enteredPhase2ForUI)
+        {
+            Slider slider = bossHealth.GetComponent<Slider>();
+            TMP_Text text = bossHealth.transform.Find("HP Text").GetComponent<TMP_Text>();
+            int health = int.Parse(text.text);
+            slider.value = (float)((float)camera.GetComponent<yarab>().currentBoss.GetComponent<LilithBehavior>().health / 50f);
+            text.text = camera.GetComponent<yarab>().currentBoss.GetComponent<LilithBehavior>().health.ToString();
+        }
+        else
+        {
+            if (first)
+            {
+                first = false;
+                bossShield.SetActive(true);
+            }
+            Slider slider = bossHealth.GetComponent<Slider>();
+            TMP_Text text = bossHealth.transform.Find("HP Text").GetComponent<TMP_Text>();
+            slider.value = (float)((float)camera.GetComponent<yarab>().currentBoss.GetComponent<lilithphase2testingscript>().health / 50f);
+            text.text = camera.GetComponent<yarab>().currentBoss.GetComponent<lilithphase2testingscript>().health.ToString();
+
+            Slider slider2 = bossShield.GetComponent<Slider>();
+            slider2.value = (float)((float)camera.GetComponent<yarab>().currentBoss.GetComponent<lilithphase2testingscript>().shield / 50f);
+        }
+
+
+    
+        
+        
     }
 }

@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.UI;
 
 public class Demon : MonoBehaviour
 {
@@ -49,7 +50,14 @@ public class Demon : MonoBehaviour
 
         campManager.RegisterDemon(this);
 
+        transform.GetChild(8).GetChild(5).GetComponent<Canvas>().worldCamera = yarabScript.camera;
+
+        transform.GetChild(8).GetChild(5).GetChild(0).GetComponent<Slider>().value = 1;
+
         StartCoroutine(PatrolRandomly());
+
+        transform.GetChild(8).GetChild(6).GetComponent<Canvas>().worldCamera = campManager.minimapCamera.GetComponent<Camera>();
+
     }
 
     private void Update()
@@ -92,6 +100,12 @@ public class Demon : MonoBehaviour
             Vector3 directionToFace = player.transform.position - transform.position;
             Quaternion lookRotation = Quaternion.LookRotation(directionToFace);
             transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * patrolSpeed);
+        }
+        
+        if (hp <= 0)
+        {
+            agent.ResetPath();
+            StopFollowingPlayer();
         }
     }
 
@@ -205,6 +219,9 @@ public class Demon : MonoBehaviour
         {
             Die();
         }
+
+        transform.GetChild(8).GetChild(5).GetChild(0).GetComponent<Slider>().value = hp / 40f;
+
     }
 
     public void Die()

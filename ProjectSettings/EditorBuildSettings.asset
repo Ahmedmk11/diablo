@@ -4,5 +4,32 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Abdox/Screens/MainMenu.unity
+    guid: 8044f30dc0556445fa82f95c516c7123
+  - enabled: 1
+    path: Assets/Abdox/Screens/CharChoice.unity
+    guid: 8d3eea8eb57834d67a391a8e02cacbcc
+  - enabled: 1
+    path: Assets/Abdox/Screens/OptionsMenus.unity
+    guid: b00f31039a96b40bab5178c4b9d1595e
+  - enabled: 1
+    path: Assets/Abdox/Screens/Pause.unity
+    guid: e80ba2eba5a614072a8cba59a8ca16c7
+  - enabled: 1
+    path: Assets/Abdox/Screens/SelectLevel.unity
+    guid: bca9ddf1a71da4f388ce461096a68e8b
+  - enabled: 1
+    path: Assets/Abdox/Screens/win screen.unity
+    guid: 2512f53beb42fe14ab9be553917f8855
+  - enabled: 1
+    path: Assets/Abdox/Screens/GameOver.unity
+    guid: 30fe59abd011547a6a991d1b5468d4c2
+  - enabled: 1
+    path: Assets/ZA GAME/Dock Thing 1.unity
+    guid: c965c3e711fc8224dbafb46a61cb77fe
+  - enabled: 1
+    path: Assets/ZA GAME/Demo Blue.unity
+    guid: b41165c90130c5f4c931141e1038d14d
   m_configObjects: {}

@@ -12,6 +12,8 @@ public class Potions : MonoBehaviour
 
     public GameObject mainCamera;
 
+    public Camera minimapCamera;
+
 
     void Start()
     {
@@ -30,6 +32,8 @@ public class Potions : MonoBehaviour
             if (potentialPosition != Vector3.zero && IsValidSpawnPoint(potentialPosition, spawnedPositions))
             {
                 GameObject spawnedPotion = Instantiate(potionPrefab, potentialPosition, Quaternion.identity);
+
+                spawnedPotion.GetComponentInChildren<Canvas>().worldCamera = minimapCamera.GetComponent<Camera>();
 
                 // Add Collectable component
                 CollectablePotion collectablePotion = spawnedPotion.AddComponent<CollectablePotion>();
@@ -92,15 +96,8 @@ public class PotionAnimation : MonoBehaviour
     void Update()
     {
         // Continuous rotation
-        transform.Rotate(Vector3.up, rotationSpeed * Time.deltaTime);
+        // transform.Rotate(Vector3.up, rotationSpeed * Time.deltaTime);
 
-        // Floating up and down
-        float newY = startPosition.y + Mathf.Sin((Time.time * floatSpeed) + randomOffset) * floatHeight;
-        transform.position = new Vector3(
-            transform.position.x,
-            newY,
-            transform.position.z
-        );
     }
 }
 
