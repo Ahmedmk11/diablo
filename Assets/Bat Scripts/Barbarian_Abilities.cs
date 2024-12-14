@@ -114,6 +114,7 @@ public class Barbarian_Abilities : MonoBehaviour
         // Wildcard Ability: Press Q
         if (Input.GetKeyDown(KeyCode.Q) && !IsAbilityOnCooldown("Wildcard") && !WildcardAbilityLockedBarb)
         {
+            StopAgentAtCurrentPosition();
             TriggerWildcardAbility();
         }
 
@@ -241,6 +242,21 @@ public class Barbarian_Abilities : MonoBehaviour
     StartCoroutine(DisableShieldAfterDuration(3f));
 }
 
+    private void StopAgentAtCurrentPosition()
+    {
+        if (agent != null)
+        {
+            agent.isStopped = true; // Stop the agent
+            agent.ResetPath(); // Clear the current path to prevent further movement
+            Debug.Log("Agent stopped at its current position.");
+        }
+        else
+        {
+            Debug.LogWarning("NavMeshAgent is not initialized!");
+        }
+
+    }
+
     private void TriggerWildcardAbility()
     {
         animator.SetTrigger("TriggerWildCard");
@@ -286,7 +302,6 @@ public class Barbarian_Abilities : MonoBehaviour
             animator.SetTrigger("TriggerUltimate");  // Continue ultimate ability animation
             DamageUltimate();
 
-            // Start the cooldown only after the ultimate logic is complete
             StartCooldown("Ultimate");
         }
     }
@@ -308,13 +323,19 @@ public class Barbarian_Abilities : MonoBehaviour
         {
             if (hit.collider.CompareTag("Enemy"))
             {
-                // wahwah
-                findAndDamageEnemy(100, hit.collider);
-                Debug.Log($"Damaged enemy: {hit.collider.name}");
+                StartCoroutine(DamageEnemyWithDelay(hit.collider, 100, 2f));
             }
         }
     }
+    private IEnumerator DamageEnemyWithDelay(Collider enemyCollider, int damage, float delay)
+    {
+        yield return new WaitForSeconds(delay);
 
+        // Perform the damage logic (e.g., find the enemy component and apply damage)
+        findAndDamageEnemy(damage, enemyCollider);
+
+        Debug.Log($"Damaged enemy after delay: {enemyCollider.name}");
+    }   
     private void TriggerUltimateAbility()
     {
         if (IsAbilityOnCooldown("Ultimate")) return;  // If on cooldown, do nothing
@@ -344,10 +365,10 @@ public class Barbarian_Abilities : MonoBehaviour
                 StartCoroutine(startStartingTheCooldown("Defensive", 0, abilityName));
                 break;
             case "Wildcard":
-                StartCoroutine(startStartingTheCooldown("Wildcard", 2, abilityName));
+                StartCoroutine(startStartingTheCooldown("Wildcard", 0, abilityName));
                 break;
             case "Ultimate":
-                StartCoroutine(startStartingTheCooldown("Ultimate", 5, abilityName));
+                StartCoroutine(startStartingTheCooldown("Ultimate", 0, abilityName));
                 break;
         }
         
