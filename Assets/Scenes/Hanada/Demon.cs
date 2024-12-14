@@ -55,6 +55,9 @@ public class Demon : MonoBehaviour
         transform.GetChild(8).GetChild(5).GetChild(0).GetComponent<Slider>().value = 1;
 
         StartCoroutine(PatrolRandomly());
+
+        transform.GetChild(8).GetChild(6).GetComponent<Canvas>().worldCamera = campManager.minimapCamera.GetComponent<Camera>();
+
     }
 
     private void Update()

@@ -24,6 +24,8 @@ public class CampManager : MonoBehaviour
     public GameObject runePrefab;
     public GameObject mainCamera;
 
+    public Camera minimapCamera;
+
     private void Start()
     {
         float initialDistanceToCenter = Vector3.Distance(player.position, centerPoint);
@@ -155,6 +157,8 @@ public class CampManager : MonoBehaviour
             print("Camp is dead");
             GameObject rune = Instantiate(runePrefab,
                 new Vector3(centerPoint.x, 7.2f, centerPoint.z), Quaternion.identity);
+            rune.GetComponentInChildren<Canvas>().worldCamera = minimapCamera.GetComponent<Camera>();
+
             rune.AddComponent<CollectableRune>();
         }
     }
