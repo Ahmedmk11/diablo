@@ -48,6 +48,7 @@ public class Dash : MonoBehaviour
 
                 isSelecting = false;
                 animator.SetTrigger("Dash");
+                FindObjectOfType<audiomanager>().PlaySFX("dashSFX");
                 StartCoroutine(ExecuteDashWithDelay(position));
                 StartCoroutine(Cooldown());
             }

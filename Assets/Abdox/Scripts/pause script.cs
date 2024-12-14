@@ -19,11 +19,29 @@ public class pausescript : MonoBehaviour
 
     private void resumeClick()
     {
+        string sceneName = SceneManager.GetActiveScene().name;
+        if (sceneName == "Demo Blue")
+        {
+            FindObjectOfType<audiomanager>().PlayMusic("bosslevelMusic");
+        }
+        else
+        {
+            FindObjectOfType<audiomanager>().PlayMusic("baselevelMusic");
+        }
         GetComponent<yarab>().pause();
     }
 
     private void restartClick()
     {
+        string sceneName = SceneManager.GetActiveScene().name;
+        if (sceneName == "Demo Blue")
+        {
+            FindObjectOfType<audiomanager>().PlayMusic("bosslevelMusic");
+        }
+        else
+        {
+            FindObjectOfType<audiomanager>().PlayMusic("baselevelMusic");
+        }
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         Time.timeScale = 1;
 

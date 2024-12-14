@@ -74,6 +74,7 @@ public class SorcererManager : MonoBehaviour
                         transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, 1f); 
 
                         animator.SetTrigger("Cast fireball");
+                        FindObjectOfType<audiomanager>().PlaySFX("fireballSFX");
                         castFireBall(hit.collider.gameObject); // Pass the clicked enemy
                         lastFireballTime = Time.time; // Update last usage time
                         StartCoroutine(CooldownRoutine(GameObject.Find("Basic").GetComponent<UnityEngine.UI.Image>(), (int)fireballCooldown, "Basic"));
@@ -157,6 +158,7 @@ public class SorcererManager : MonoBehaviour
                 else if (isCastingInferno)
                 {
                     animator.SetTrigger("Cast Inferno");
+                    FindObjectOfType<audiomanager>().PlaySFX("abilitySFX");
                     castInferno(hit.point); // Place inferno at clicked position
                     isCastingInferno = false; // Exit targeting mode
                     lastInfernoTime = Time.time; // Update cooldown
@@ -292,6 +294,7 @@ void castTeleport()
         void castClone(Vector3 position)
     {
         // Instantiate the clone at the selected position
+        FindObjectOfType<audiomanager>().PlaySFX("abilitySFX");
         GameObject clone = Instantiate(clonePrefab, position, Quaternion.identity);
         clone.GetComponent<Animator>().runtimeAnimatorController = cloneAnimator;
         cloneActive = true;
@@ -328,6 +331,7 @@ void castTeleport()
 
         // Log and deal damage to nearby enemies
         Debug.Log("Clone exploded!");
+        FindObjectOfType<audiomanager>().PlaySFX("explosionSFX");
 
         Collider[] hitEnemies = Physics.OverlapSphere(clone.transform.position, cloneExplosionRadius);
         foreach (Collider enemy in hitEnemies)

@@ -241,11 +241,18 @@ public class yarab : MonoBehaviour
             PlayerPrefs.SetInt("unlockAbilityCheat", unlockAbilityCheat ? 1 : 0);
 
             SceneManager.LoadScene("Demo Blue");
+            FindObjectOfType<audiomanager>().PlayMusic("bosslevelMusic");
         }
 
         if (level == 2 && !stopRotation)
         {
+            currentBoss.transform.rotation = Quaternion.Euler(
+            0,
+            transform.rotation.eulerAngles.y,
+            0
+            );
             currentBoss.transform.LookAt(currentCharacter.transform);
+            
         }
 
         if(currentCharacterName == "Sorceress" && !currentCharacter.GetComponent<SorcererManager>().WildcardAbilityLockedSorc && level == 1)
@@ -282,6 +289,7 @@ public class yarab : MonoBehaviour
         {
             print("Lilith is dead");
             // game over you won screen
+            FindObjectOfType<audiomanager>().PlayMusic("mainMenuMusic");
             SceneManager.LoadScene("win screen");
         }
 
@@ -301,6 +309,7 @@ public class yarab : MonoBehaviour
         {
             if (potions > 0 && health < maxHealth)
             {
+                FindObjectOfType<audiomanager>().PlaySFX("healingSFX");
                 animator.SetTrigger("heal");
                 StartCoroutine(WaitForAnimationToHeal(0.5f));
             }
@@ -453,6 +462,7 @@ public class yarab : MonoBehaviour
 
     public void pause()
     {
+        FindObjectOfType<audiomanager>().PlayMusic("mainMenuMusic");
         Time.timeScale = Time.timeScale == 0 ? 1 : 0;
         pauseCanvas.active = !pauseCanvas.active;
         canvasObject.active = !canvasObject.active;
@@ -529,8 +539,10 @@ public class yarab : MonoBehaviour
 
     private IEnumerator WaitForAnimationToDie(float clipLength)
     {
+        FindObjectOfType<audiomanager>().PlaySFX("playerDeathSFX");
         animator.SetTrigger("death");
         yield return new WaitForSeconds(clipLength);
+        FindObjectOfType<audiomanager>().PlayMusic("mainMenuMusic");
         SceneManager.LoadScene("GameOver");
     }
 
@@ -540,7 +552,12 @@ public class yarab : MonoBehaviour
 
         if (health > 0) 
         {
-            animator.SetTrigger("hit reaction");
+            FindObjectOfType<audiomanager>().PlaySFX("playerHitSFX");
+            animator.SetBool("hit reaction", true);
+            AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
+            float aclipLength = stateInfo.length;
+            yield return new WaitForSeconds(aclipLength);
+            animator.SetBool("hit reaction", false);
         }
     }
 

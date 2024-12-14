@@ -62,6 +62,7 @@ public class PlayerAnimationTrigger : MonoBehaviour
             {
                 // Set the "Arrow" trigger in the Animator
                 animator.SetTrigger("Arrow");
+                FindObjectOfType<audiomanager>().PlaySFX("arrowHitSFX");
                 findAndDamageEnemy(5, selectedEnemy.GetComponent<Collider>());
                 StartCoroutine(DelayFunctionCall());
                 StartCoroutine(Cooldown());

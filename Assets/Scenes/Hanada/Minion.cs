@@ -173,6 +173,7 @@ public class Minion : MonoBehaviour
     public void Die()
     {
         Debug.Log("Minion died");
+        FindObjectOfType<audiomanager>().PlaySFX("enemyDeathSFX");
         animator.SetTrigger("isDying");
         yarabScript.gainXP((int)xp);
 

@@ -26,6 +26,9 @@ public class audiomanager : MonoBehaviour
     [SerializeField] private AudioClip summonSFX; //
     [SerializeField] private AudioClip bossHitSFX; //
     [SerializeField] private AudioClip arrowHitSFX; //
+    [SerializeField] private AudioClip earthquakeSFX;
+
+    private Dictionary<string, AudioClip> audios;
 
     void Awake()
     {
@@ -39,7 +42,30 @@ public class audiomanager : MonoBehaviour
 
             sfxSource = gameObject.AddComponent<AudioSource>();
 
-            PlayMusic(mainMenuMusic);
+            audios = new Dictionary<string, AudioClip>
+            {
+                { "mainMenuMusic", mainMenuMusic },
+                { "bosslevelMusic", bosslevelMusic },
+                { "baselevelMusic", baselevelMusic },
+                { "healingSFX", healingSFX },
+                { "abilitySFX", abilitySFX },
+                { "dashSFX", dashSFX },
+                { "playerDeathSFX", playerDeathSFX },
+                { "bossDeathSFX", bossDeathSFX },
+                { "bossAuraSFX", bossAuraSFX },
+                { "explosionSFX", explosionSFX },
+                { "fireballSFX", fireballSFX },
+                { "itemPickupSFX", itemPickupSFX },
+                { "summonSFX", summonSFX },
+                { "bossHitSFX", bossHitSFX },
+                { "arrowHitSFX", arrowHitSFX },
+                { "enemyDeathSFX", enemyDeathSFX },
+                { "playerHitSFX", playerHitSFX },
+                { "bossSpikesSFX", bossSpikesSFX },
+                { "earthquakeSFX", earthquakeSFX }
+            };
+
+            PlayMusic("mainMenuMusic");
         }
         else
         {
@@ -67,14 +93,16 @@ public class audiomanager : MonoBehaviour
         sfxSource.volume = volume;
     }
 
-    public void PlayMusic(AudioClip music)
+    public void PlayMusic(string musicString)
     {
+        AudioClip music = audios[musicString];
         musicSource.clip = music;
         musicSource.Play();
     }
 
-    public void PlaySFX(AudioClip sfx)
+    public void PlaySFX(string sfxString)
     {
+        AudioClip sfx = audios[sfxString];
         sfxSource.PlayOneShot(sfx);
     }
 }

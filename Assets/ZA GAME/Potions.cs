@@ -116,6 +116,7 @@ public class CollectablePotion : MonoBehaviour
             }
             if (potionsInstance.mainCamera.GetComponent<yarab>().getPotions() < 3)
             {
+                FindObjectOfType<audiomanager>().PlaySFX("itemPickupSFX");
                 potionsInstance.mainCamera.GetComponent<yarab>().IncreasePotions();
 
                 // Destroy the potion object

@@ -810,6 +810,7 @@ MonoBehaviour:
   summonSFX: {fileID: 8300000, guid: 742015c81bbb3234baa055dbd8a51124, type: 3}
   bossHitSFX: {fileID: 8300000, guid: 3bb578927bc50c2419ce72d958120180, type: 3}
   arrowHitSFX: {fileID: 8300000, guid: 503409141ce613546ac2bde27a9aed4a, type: 3}
+  earthquakeSFX: {fileID: 8300000, guid: bebf1ec0afd12214cae17beef9989bdd, type: 3}
 --- !u!4 &1178207124
 Transform:
   m_ObjectHideFlags: 0

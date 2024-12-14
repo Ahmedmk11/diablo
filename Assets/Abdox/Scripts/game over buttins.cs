@@ -17,6 +17,7 @@ public class gameoverbuttins : MonoBehaviour
     private void restartClick()
     {
         UnityEngine.SceneManagement.SceneManager.LoadScene("Dock Thing 1");
+        FindObjectOfType<audiomanager>().PlayMusic("baselevelMusic");
     }
 
     private void mainMenuClick()

@@ -47,8 +47,18 @@ public class CharacterSelection : MonoBehaviour
 
     private void SelectClick()
     {
-        if (FromSelectLevel == 2) UnityEngine.SceneManagement.SceneManager.LoadScene("Demo Blue");
-        else UnityEngine.SceneManagement.SceneManager.LoadScene("Dock Thing 1");
+        if (FromSelectLevel == 2)
+        {  
+            UnityEngine.SceneManagement.SceneManager.LoadScene("Demo Blue");
+            FindObjectOfType<audiomanager>().PlayMusic("bosslevelMusic");
+
+        }
+        else 
+        {
+            UnityEngine.SceneManagement.SceneManager.LoadScene("Dock Thing 1");
+            FindObjectOfType<audiomanager>().PlayMusic("baselevelMusic");
+        }
+
     }
 
     private void backClick()

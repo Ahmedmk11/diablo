@@ -241,7 +241,7 @@ public class CollectableRune : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             print("Player collected rune");
-
+            FindObjectOfType<audiomanager>().PlaySFX("itemPickupSFX");
             campInstance.mainCamera.GetComponent<yarab>().IncreaseRunes();
 
             // Destroy the potion object

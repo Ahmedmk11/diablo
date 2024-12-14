@@ -3,7 +3,26 @@ guid: 2df746910636bc64e89398f83cc7243c
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - mainMenuMusic: {instanceID: 0}
+  - bosslevelMusic: {instanceID: 0}
+  - baselevelMusic: {instanceID: 0}
+  - healingSFX: {instanceID: 0}
+  - abilitySFX: {instanceID: 0}
+  - bossSpikesSFX: {instanceID: 0}
+  - dashSFX: {instanceID: 0}
+  - enemyDeathSFX: {instanceID: 0}
+  - playerHitSFX: {instanceID: 0}
+  - playerDeathSFX: {instanceID: 0}
+  - bossDeathSFX: {instanceID: 0}
+  - bossAuraSFX: {instanceID: 0}
+  - explosionSFX: {instanceID: 0}
+  - fireballSFX: {instanceID: 0}
+  - itemPickupSFX: {instanceID: 0}
+  - summonSFX: {instanceID: 0}
+  - bossHitSFX: {instanceID: 0}
+  - arrowHitSFX: {instanceID: 0}
+  - earthquakeSFX: {fileID: 8300000, guid: bebf1ec0afd12214cae17beef9989bdd, type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

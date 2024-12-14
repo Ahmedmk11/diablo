@@ -227,6 +227,7 @@ public class Demon : MonoBehaviour
     public void Die()
     {
         Debug.Log("Demon died");
+        FindObjectOfType<audiomanager>().PlaySFX("enemyDeathSFX");
         animator.SetTrigger("isDying");
         yarabScript.gainXP((int)xp);
 
@@ -293,6 +294,7 @@ public class Demon : MonoBehaviour
     {
         particleSystemInstance.Stop();
         yield return new WaitForSeconds(delay);
+        FindObjectOfType<audiomanager>().PlaySFX("explosionSFX");
         particleSystemInstance.Play();
     }
 }

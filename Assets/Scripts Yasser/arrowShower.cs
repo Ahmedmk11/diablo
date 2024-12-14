@@ -55,6 +55,7 @@ public class ArrowShower : MonoBehaviour
                 agent.transform.LookAt(targetPosition);
                 isSelecting = false;
                 animator.SetTrigger("ArrowShower");
+                FindObjectOfType<audiomanager>().PlaySFX("arrowHitSFX");
                 ShootShower(position);
                 StartCoroutine(Cooldown());
                 arrow.isShower = true;

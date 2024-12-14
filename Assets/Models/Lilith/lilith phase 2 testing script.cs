@@ -114,6 +114,7 @@ public class lilithphase2testingscript : MonoBehaviour
         }
         else if (hasShield)
         {
+            FindObjectOfType<audiomanager>().PlaySFX("bossHitSFX");
             phase2Anim.SetTrigger("hitReaction");
             if (damage > shield)
             {
@@ -121,6 +122,7 @@ public class lilithphase2testingscript : MonoBehaviour
                 health -= healthDamage;
                 if (health <= 0)
                 {
+                    FindObjectOfType<audiomanager>().PlaySFX("bossDeathSFX");
                     phase2Anim.SetTrigger("death");
                 }
                 hasShield = false;
@@ -165,6 +167,7 @@ public class lilithphase2testingscript : MonoBehaviour
     {
         // Delay for a second
         yield return new WaitForSeconds(1.3f);
+        FindObjectOfType<audiomanager>().PlaySFX("bossSpikesSFX");
         Quaternion rotation = Quaternion.Euler(90, 3, transform.rotation.eulerAngles.y);
         particleSystemInstance.transform.rotation = rotation;
         Vector3 spawnPosition = transform.position + transform.forward * distanceInFront;
@@ -207,6 +210,7 @@ public class lilithphase2testingscript : MonoBehaviour
     {
         // Delay for a second
         yield return new WaitForSeconds(1.3f);
+        FindObjectOfType<audiomanager>().PlaySFX("bossAuraSFX");
         aura.enabled = true;
         hasReflectiveAura = true;
     }

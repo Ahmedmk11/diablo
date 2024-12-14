@@ -97,9 +97,11 @@ public class LilithBehavior : MonoBehaviour
             // Play dying animation and disable behavior
             print("abouz gamed");
             health -= damage;
+            FindObjectOfType<audiomanager>().PlaySFX("bossHitSFX");
             animator.SetTrigger("Hit reaction");
             if (health <= 0)
             {
+                FindObjectOfType<audiomanager>().PlaySFX("bossDeathSFX");
                 animator.SetTrigger("Dying");
                 // Disable the script to prevent further attacks
                 dead = true;
@@ -113,6 +115,7 @@ public class LilithBehavior : MonoBehaviour
         if (!dead)
         {
             Debug.Log("Lilith is summoning!");
+            FindObjectOfType<audiomanager>().PlaySFX("summonSFX");
             animator.SetBool("Summon", true);
 
             // Spawn minions at random positions
@@ -175,6 +178,7 @@ public class LilithBehavior : MonoBehaviour
         {
             animator.SetTrigger("Dwarf Idle");
             Debug.Log("Lilith is performing Divebomb!");
+            FindObjectOfType<audiomanager>().PlaySFX("earthquakeSFX");
             animator.SetTrigger("Divebomb");
             animator.SetBool("Summon", false);
 

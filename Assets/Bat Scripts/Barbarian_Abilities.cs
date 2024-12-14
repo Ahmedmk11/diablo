@@ -232,6 +232,7 @@ public class Barbarian_Abilities : MonoBehaviour
     private void TriggerDefensiveAbility(){
     if (shieldLight != null)
     {
+        FindObjectOfType<audiomanager>().PlaySFX("abilitySFX");
         shieldLight.SetActive(true);
         shieldActive = true;
     }
@@ -300,6 +301,7 @@ public class Barbarian_Abilities : MonoBehaviour
             isUltimateActive = false; // Deactivate the ultimate ability once movement starts
             isSelectingUltimatePosition = false; // End the position selection state
             animator.SetTrigger("TriggerUltimate");  // Continue ultimate ability animation
+            FindObjectOfType<audiomanager>().PlaySFX("dashSFX");
             DamageUltimate();
 
             StartCooldown("Ultimate");
