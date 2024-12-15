@@ -32,6 +32,7 @@ public class Demon : MonoBehaviour
     private bool isStunned = false;
     public string demonName;
 
+    private bool alreadyDead = false;
     private void Start()
     {
         if (agent == null)
@@ -215,7 +216,7 @@ public class Demon : MonoBehaviour
     {
         hp -= damage;
         animator.SetTrigger("isTakingDamage");
-        if (hp <= 0)
+        if (hp <= 0 && !alreadyDead)
         {
             Die();
         }
@@ -226,6 +227,7 @@ public class Demon : MonoBehaviour
 
     public void Die()
     {
+        alreadyDead = true;
         Debug.Log("Demon died");
         FindObjectOfType<audiomanager>().PlaySFX("enemyDeathSFX");
         animator.SetTrigger("isDying");

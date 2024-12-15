@@ -20,11 +20,12 @@ public class pausescript : MonoBehaviour
     private void resumeClick()
     {
         string sceneName = SceneManager.GetActiveScene().name;
+        print(sceneName);
         if (sceneName == "Demo Blue")
         {
             FindObjectOfType<audiomanager>().PlayMusic("bosslevelMusic");
         }
-        else
+        else if (sceneName == "Dock Thing 1")
         {
             FindObjectOfType<audiomanager>().PlayMusic("baselevelMusic");
         }

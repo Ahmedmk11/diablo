@@ -182,7 +182,7 @@ public class LilithBehavior : MonoBehaviour
             animator.SetBool("Summon", false);
 
             // Define the radius of effect and get the position for the sphere
-            float radius = 5f; // Adjust radius as needed
+            float radius = 10f; // Adjust radius as needed
             Vector3 explosionPosition = transform.position; // Assuming the divebomb's impact point is Lilith's position
 
             // Detect all colliders within the radius

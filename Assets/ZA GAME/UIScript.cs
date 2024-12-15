@@ -88,7 +88,7 @@ public class UIScript : MonoBehaviour
 
     void updateBossHealth()
     {
-        if(!camera.GetComponent<yarab>().enteredPhase2ForUI)
+        if(!camera.GetComponent<yarab>().enteredPhase2ForUI && camera.GetComponent<yarab>().currentBoss != null && camera.GetComponent<yarab>().currentBoss.GetComponent<LilithBehavior>() != null)
         {
             Slider slider = bossHealth.GetComponent<Slider>();
             TMP_Text text = bossHealth.transform.Find("HP Text").GetComponent<TMP_Text>();
@@ -96,7 +96,7 @@ public class UIScript : MonoBehaviour
             slider.value = (float)((float)camera.GetComponent<yarab>().currentBoss.GetComponent<LilithBehavior>().health / 50f);
             text.text = camera.GetComponent<yarab>().currentBoss.GetComponent<LilithBehavior>().health.ToString();
         }
-        else
+        else if (camera.GetComponent<yarab>().currentBoss != null && camera.GetComponent<yarab>().currentBoss.GetComponent<lilithphase2testingscript>())
         {
             if (first)
             {

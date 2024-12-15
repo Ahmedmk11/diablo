@@ -22,6 +22,8 @@ public class Minion : MonoBehaviour
     private bool isAttacking = false;
     private bool isStunned = false;
 
+    private bool alreadyDead = false;
+
     private void Start()
     {
         if (agent == null)
@@ -160,7 +162,7 @@ public class Minion : MonoBehaviour
     {
         hp -= damage;
         animator.SetTrigger("isTakingDamage");
-        if (hp <= 0)
+        if (hp <= 0 && !alreadyDead)
         {
             Die();
         }
@@ -171,6 +173,7 @@ public class Minion : MonoBehaviour
 
     public void Die()
     {
+        alreadyDead = true;
         Debug.Log("Minion died");
         FindObjectOfType<audiomanager>().PlaySFX("enemyDeathSFX");
         animator.SetTrigger("isDying");

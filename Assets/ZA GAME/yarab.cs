@@ -84,10 +84,16 @@ public class yarab : MonoBehaviour
 
     public bool enteredPhase2 = false;
     public bool enteredPhase2ForUI = false;
-    private bool stopRotation = false;
+    public bool stopRotation = false;
+
+    public bool paused = false;
 
     public GameObject pauseCanvas;
     GameObject canvasObject;
+
+    private float anazhe2t = -Mathf.Infinity;
+    Quaternion rotationnn;
+
 
     // Start is called before the first frame update
     void Start()
@@ -246,7 +252,7 @@ public class yarab : MonoBehaviour
             FindObjectOfType<audiomanager>().PlayMusic("bosslevelMusic");
         }
 
-        if (level == 2 && !stopRotation)
+        if (level == 2 && !stopRotation && currentBoss != null)
         {
             currentBoss.transform.rotation = Quaternion.Euler(
             0,
@@ -280,19 +286,22 @@ public class yarab : MonoBehaviour
             }
         }
 
-        if (level == 2 && !enteredPhase2 && currentBoss.GetComponent<LilithBehavior>().health <= 0) //entering phase 2
+        if (level == 2 && !enteredPhase2 && currentBoss != null && currentBoss.GetComponent<LilithBehavior>() != null && currentBoss.GetComponent<LilithBehavior>().health <= 0) //entering phase 2
         {
             stopRotation = true;
             enteredPhase2 = true;
-            StartCoroutine(WaitForLilithToDie());
+            rotationnn = currentBoss.transform.rotation;
+            print("da5alt el if");
+            WaitForLilithToDie();
+            // StartCoroutine(de7kLawEshtaghal());
         }
 
-        if(enteredPhase2ForUI && currentBoss.GetComponent<lilithphase2testingscript>().health <= 0)
+        if (enteredPhase2ForUI && currentBoss != null && currentBoss.GetComponent<lilithphase2testingscript>() != null && currentBoss.GetComponent<lilithphase2testingscript>().health <= 0)
         {
             print("Lilith is dead");
             // game over you won screen
-            FindObjectOfType<audiomanager>().PlayMusic("mainMenuMusic");
-            SceneManager.LoadScene("win screen");
+            StartCoroutine(Wait());
+            
         }
 
         if (characterLevel < 4)
@@ -462,18 +471,54 @@ public class yarab : MonoBehaviour
         }
     }
 
+    private IEnumerator Wait()
+    {
+        yield return new WaitForSeconds(5);
+        FindObjectOfType<audiomanager>().PlayMusic("mainMenuMusic");
+        SceneManager.LoadScene("win screen");
+    }
+
     public void pause()
     {
-        FindObjectOfType<audiomanager>().PlayMusic("mainMenuMusic");
+        if (Time.timeScale == 1)
+        {
+            paused = true;
+            FindObjectOfType<audiomanager>().PlayMusic("mainMenuMusic");
+        }
+        else
+        {
+            paused = false;
+            string sceneName = SceneManager.GetActiveScene().name;
+            print(sceneName);
+            if (sceneName == "Demo Blue")
+            {
+                FindObjectOfType<audiomanager>().PlayMusic("bosslevelMusic");
+            }
+            else if (sceneName == "Dock Thing 1")
+            {
+                FindObjectOfType<audiomanager>().PlayMusic("baselevelMusic");
+            }
+        }
         Time.timeScale = Time.timeScale == 0 ? 1 : 0;
         pauseCanvas.active = !pauseCanvas.active;
         canvasObject.active = !canvasObject.active;
     }
 
-    private IEnumerator WaitForLilithToDie()
+    private void WaitForLilithToDie()
     {
         print("Crash");
-        StartCoroutine(StopRotation());
+
+        // get the roation of currentboss upon death
+
+        // StartCoroutine(StopRotation());
+        DestroyImmediate(currentBoss);
+        print("ha craete lilith");
+        currentBoss = Instantiate(lilith, new Vector3(-36.8f, 4.02f, 37.6f), rotationnn);
+        currentBoss.AddComponent<BoxCollider>();
+        currentBoss.GetComponent<BoxCollider>().center = new Vector3(0, 2, 0);
+        currentBoss.GetComponent<BoxCollider>().size = new Vector3(1, 4, 1);
+        currentBoss.tag = "Enemy";
+        currentBoss.GetComponent<Animator>().applyRootMotion = false;
         currentBoss.GetComponent<Animator>().runtimeAnimatorController = lilithAnimatorPhase2;
         currentBoss.AddComponent<lilithphase2testingscript>();
         currentBoss.GetComponent<lilithphase2testingscript>().phase2controller = lilithAnimatorPhase2;
@@ -482,14 +527,15 @@ public class yarab : MonoBehaviour
         currentBoss.GetComponent<lilithphase2testingscript>().particleSystem = bloodySpikes;
         currentBoss.GetComponent<lilithphase2testingscript>().camera = camera;
         enteredPhase2ForUI = true;
-        yield return new WaitForSeconds(10);
+        //yield return new WaitForSeconds(5);
+        //stopRotation = false;
 
     }
 
     private IEnumerator StopRotation()
     {
-        yield return new WaitForSeconds(5);
         stopRotation = false;
+        yield return new WaitForSeconds(5);
     }
 
     private IEnumerator WaitForAnimationToHeal(float v)
