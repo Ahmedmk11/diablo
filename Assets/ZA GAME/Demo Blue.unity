@@ -6958,7 +6958,8 @@ MonoBehaviour:
   SorcererManager: {fileID: 607552199}
   fireball: {fileID: 812045143420203222, guid: 0e7544bd6e7ec224aa525d0c0c17199b, type: 3}
   clone: {fileID: 919132149155446097, guid: 01387240fe6a726439f7d962cba8b19e, type: 3}
-  inferno: {fileID: 165136, guid: ae91537edf47d13498977a9722e13875, type: 3}
+  inferno: {fileID: 184752, guid: 44b2fcc235ca79b4aa173e904446a1b3, type: 3}
+  cloneExplosion: {fileID: 4799787391677844021, guid: 749f0fd9bc2624a77b08b1b87ee345ff, type: 3}
   cloneAnimator: {fileID: 9100000, guid: c5f4a584cf4c93341bf1cd8f17a56a53, type: 2}
   playerAnimationTrigger: {fileID: 704810930}
   arrowShower: {fileID: 704810931}

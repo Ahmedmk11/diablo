@@ -21,10 +21,14 @@ public class Dash : MonoBehaviour
 
     private bool isSelecting = false;
 
+    private bool isSpeedModified = false;
+    public PlayerAnimationTrigger arrow;
+
     void Start()
     {
         animator = GetComponent<Animator>();
         agent = GetComponent<NavMeshAgent>();
+        arrow = GetComponent<PlayerAnimationTrigger>();
     }
 
     void Update()
@@ -51,13 +55,25 @@ public class Dash : MonoBehaviour
                 FindObjectOfType<audiomanager>().PlaySFX("dashSFX");
                 StartCoroutine(ExecuteDashWithDelay(position));
                 StartCoroutine(Cooldown());
+                arrow.isDash = true;
             }
         }
 
         if (Input.GetKeyDown(KeyCode.Q) && !isCooldown)
         {
             isSelecting = true;
+            arrow.isDash = false;
             
+        }
+
+        if (isSpeedModified && !agent.pathPending && agent.remainingDistance <= agent.stoppingDistance)
+        {
+            if (!agent.hasPath || agent.velocity.sqrMagnitude == 0f)
+            {
+                agent.speed = agent.speed / 2; // Reset the speed
+                isSpeedModified = false; // Mark that the speed has been reset
+                Debug.Log("Agent has reached the destination, speed reset.");
+            }
         }
     }
 
@@ -72,8 +88,11 @@ public class Dash : MonoBehaviour
 
     void DashAb(Vector3 position)
     {
-        agent.transform.position = position;
+        // agent.transform.position = position;
+        agent.speed = agent.speed * 2;
         agent.SetDestination(position);
+        // after arriving at the destination, reset the speed
+        isSpeedModified = true;
     }
 
     IEnumerator Cooldown()

@@ -14,6 +14,7 @@ public class PlayerAnimationTrigger : MonoBehaviour
     public Transform arrowSpawnPoint; // Assign the transform from where the arrow is spawned
     public GameObject selectedEnemy;
     public bool isShower = true;
+    public bool isDash = true;
 
     private bool isCooldown = false; // Cooldown flag
     private float cooldownTime = 1f; // Cooldown duration
@@ -32,7 +33,7 @@ public class PlayerAnimationTrigger : MonoBehaviour
     void Update()
     {
 
-        if (Input.GetMouseButtonDown(1) && isShower) // Right-click
+        if (Input.GetMouseButtonDown(1) && isShower && isDash) // Right-click
         {
             // Create a ray from the camera to the mouse position
             Ray ray = camera.ScreenPointToRay(Input.mousePosition);

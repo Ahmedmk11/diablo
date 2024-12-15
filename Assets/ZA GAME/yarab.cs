@@ -58,6 +58,7 @@ public class yarab : MonoBehaviour
     public GameObject fireball;
     public GameObject clone;
     public GameObject inferno;
+    public GameObject cloneExplosion;
     public RuntimeAnimatorController cloneAnimator;
 
     public PlayerAnimationTrigger playerAnimationTrigger;
@@ -137,6 +138,7 @@ public class yarab : MonoBehaviour
             currentCharacter.GetComponent<SorcererManager>().fireball = fireball;
             currentCharacter.GetComponent<SorcererManager>().clonePrefab = clone;
             currentCharacter.GetComponent<SorcererManager>().infernoPrefab = inferno;
+            currentCharacter.GetComponent<SorcererManager>().cloneExplosionPrefab = cloneExplosion;
             currentCharacter.GetComponent<SorcererManager>().cloneAnimator = cloneAnimator;
         }
         else if (character == 3)

@@ -9,14 +9,14 @@ public class Barbarian_Abilities : MonoBehaviour
     public Camera camera;
 
     private Animator animator;
-    private Transform targetEnemy; // The currently selected enemy
-    private bool isAttacking = false; // Flag to indicate attacking state
+    private Transform targetEnemy;
+    private bool isAttacking = false; 
 
-    private bool isUltimateActive = false; // Flag to indicate if the ultimate ability is active
-    private Vector3 ultimateTargetPosition; // The position to reach for the ultimate ability
-    private bool isUltimateMoving = false; // Flag to control when the player is moving to the target
-    private bool canMoveAfterUltimate = true;  // Flag to check if normal movement can happen after ultimate ability
-    private bool isSelectingUltimatePosition = false;  // Flag to track whether the player is selecting a position
+    private bool isUltimateActive = false; 
+    private Vector3 ultimateTargetPosition; 
+    private bool isUltimateMoving = false; 
+    private bool canMoveAfterUltimate = true;  
+    private bool isSelectingUltimatePosition = false;  
 
     public float attackRange = 2f;
     public float moveSpeed = 5f;
@@ -25,13 +25,14 @@ public class Barbarian_Abilities : MonoBehaviour
     public GameObject shieldLight; 
     public bool shieldActive = false; 
    
-    private NavMeshAgent agent; // NavMeshAgent for movement
+    private NavMeshAgent agent; 
 
     public bool DefensiveAbilityLockedBarb = true;
     public bool WildcardAbilityLockedBarb = true;
     public bool UltimateAbilityLockedBarb = true;
 
-    // Cooldown durations for abilities
+    private bool DONT = false;
+
     private Dictionary<string, float> abilityCooldowns = new Dictionary<string, float>
     {
         { "Basic", 1f },
@@ -62,23 +63,21 @@ public class Barbarian_Abilities : MonoBehaviour
 
     private void Update()
     {
-        HandleInput();  // Handle other inputs such as abilities
-        UpdateCooldownTimers();  // Update cooldown timers for all abilities
+        HandleInput();  
+        UpdateCooldownTimers();  
 
-        // Handle normal movement, for example, using left-click to move the player
         if (targetEnemy != null && !isAttacking)
         {
-            MoveAndFaceEnemy();  // Continue moving toward the enemy if needed
+            MoveAndFaceEnemy();  
         }
 
-        // If ultimate is active, disable normal movement
         if (isUltimateActive && !isUltimateMoving)
         {
-            agent.isStopped = true;  // Prevent movement until position is selected
+            agent.isStopped = true; 
         }
         else if (canMoveAfterUltimate)
         {
-            agent.isStopped = false;  // Allow normal movement after the ultimate is complete
+            agent.isStopped = false;  
         }
         if(camera.GetComponent<yarab>().resetCooldowns)
         {
@@ -92,39 +91,34 @@ public class Barbarian_Abilities : MonoBehaviour
 
     private void HandleInput()
     {
-        // Right-click to select an enemy or a position for ultimate
-        if (Input.GetMouseButtonDown(1)) // Right mouse button
+        if (Input.GetMouseButtonDown(1)) 
         {
-            if (isSelectingUltimatePosition) // If ultimate ability is activated, select the position
+            if (isSelectingUltimatePosition) 
             {
                 SelectUltimatePosition();
             }
             else
             {
-                SelectEnemy(); // Select an enemy for the basic or wildcard abilities
+                SelectEnemy(); 
             }
         }
 
-        // Defensive Ability: Press W
         if (Input.GetKeyDown(KeyCode.W) && !IsAbilityOnCooldown("Defensive") && !DefensiveAbilityLockedBarb)
         {
             TriggerDefensiveAbility();
         }
 
-        // Wildcard Ability: Press Q
-        if (Input.GetKeyDown(KeyCode.Q) && !IsAbilityOnCooldown("Wildcard") && !WildcardAbilityLockedBarb)
+        if (Input.GetKeyDown(KeyCode.Q) && !IsAbilityOnCooldown("Wildcard") && !WildcardAbilityLockedBarb && !DONT)
         {
             StopAgentAtCurrentPosition();
             TriggerWildcardAbility();
         }
 
-        // Ultimate Ability: Press E
-        if (Input.GetKeyDown(KeyCode.E) && !IsAbilityOnCooldown("Ultimate") && !isUltimateActive && !UltimateAbilityLockedBarb)
+        if (Input.GetKeyDown(KeyCode.E) && !IsAbilityOnCooldown("Ultimate") && !isUltimateActive && !UltimateAbilityLockedBarb && !DONT)
         {
-            TriggerUltimateAbility(); // Set up to select position
+            TriggerUltimateAbility(); 
         }
 
-        // Reset triggers when in Idle state
         if (animator.GetCurrentAnimatorStateInfo(0).IsName("Idle"))
         {
             ResetTriggers();
@@ -141,7 +135,6 @@ public class Barbarian_Abilities : MonoBehaviour
                 targetEnemy = hit.collider.transform;
                 Debug.Log($"Enemy selected: {targetEnemy.name}");
 
-                // Start moving towards the enemy using NavMeshAgent
                 print(targetEnemy.position);
                 agent.SetDestination(targetEnemy.position);
                 if (agent.hasPath)
@@ -156,7 +149,7 @@ public class Barbarian_Abilities : MonoBehaviour
                 {
                     Debug.Log("Agent is not on the NavMesh.");
                 }
-                agent.speed = moveSpeed; // Ensure the speed is set
+                agent.speed = moveSpeed; 
             }
             else
             {
@@ -173,21 +166,18 @@ public class Barbarian_Abilities : MonoBehaviour
     {
         if (targetEnemy == null) return;
 
-        // Calculate distance to the enemy
         float distanceToEnemy = Vector3.Distance(transform.position, targetEnemy.position);
 
         if (distanceToEnemy > attackRange)
         {
-            // Continue moving towards the enemy
-            agent.isStopped = false; // Ensure the agent is not stopped
-            agent.SetDestination(targetEnemy.position); // Keep updating the destination
-            RotateTowardsEnemy(); // Face the enemy while moving
+            agent.isStopped = false; 
+            agent.SetDestination(targetEnemy.position);
+            RotateTowardsEnemy(); 
         }
         else
         {
-            // Stop the agent and trigger the attack
             agent.isStopped = true;
-            agent.ResetPath(); // Clear the NavMeshAgent path to avoid residual movement
+            agent.ResetPath(); 
             StartCoroutine(AttackEnemy());
         }
     }
@@ -197,9 +187,8 @@ public class Barbarian_Abilities : MonoBehaviour
         if (targetEnemy == null) return;
 
         Vector3 directionToEnemy = (targetEnemy.position - transform.position).normalized;
-        directionToEnemy.y = 0; // Ignore vertical rotation
+        directionToEnemy.y = 0; 
 
-        // Instantly rotate towards the enemy
         Quaternion lookRotation = Quaternion.LookRotation(directionToEnemy);
         transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * rotationSpeed);
     }
@@ -211,21 +200,18 @@ public class Barbarian_Abilities : MonoBehaviour
 
         isAttacking = true;
 
-        // Trigger the Basic Ability animation
         animator.SetTrigger("TriggerBasic");
 
         // wahwah
         findAndDamageEnemy(5, null);
 
-        yield return new WaitForSeconds(1f); // Wait for the ability duration
+        yield return new WaitForSeconds(1f); 
 
-        // Start the cooldown only after the ability is done
         StartCooldown("Basic");
 
-        // Clear the target and allow movement again
         targetEnemy = null;
         isAttacking = false;
-        agent.isStopped = false; // Re-enable movement
+        agent.isStopped = false; 
     }
 
 
@@ -247,8 +233,8 @@ public class Barbarian_Abilities : MonoBehaviour
     {
         if (agent != null)
         {
-            agent.isStopped = true; // Stop the agent
-            agent.ResetPath(); // Clear the current path to prevent further movement
+            agent.isStopped = true; 
+            agent.ResetPath(); 
             Debug.Log("Agent stopped at its current position.");
         }
         else
@@ -270,15 +256,12 @@ public class Barbarian_Abilities : MonoBehaviour
     {
         float damageRadius = 2f;
 
-        // Find all colliders within the damage radius
         Collider[] colliders = Physics.OverlapSphere(transform.position, damageRadius);
 
         foreach (var collider in colliders)
         {
-            // Check if the collider belongs to an enemy
             if (collider.CompareTag("Enemy"))
             {
-                // wahwah
                 findAndDamageEnemy(10, collider);
                 Debug.Log($"Damaged enemy: {collider.name}");
             }
@@ -289,18 +272,17 @@ public class Barbarian_Abilities : MonoBehaviour
         Ray ray = camera.ScreenPointToRay(Input.mousePosition);
         if (Physics.Raycast(ray, out RaycastHit hit))
         {
-            ultimateTargetPosition = hit.point; // Set the target position
+            ultimateTargetPosition = hit.point; 
             Debug.Log($"Ultimate target position set to: {ultimateTargetPosition}");
 
-            // Set the destination for the NavMeshAgent to move toward the target position
             agent.SetDestination(ultimateTargetPosition);
-            agent.speed = moveSpeed; // Ensure proper movement speed
-            agent.isStopped = false; // Ensure movement starts
+            agent.speed = moveSpeed; 
+            agent.isStopped = false; 
 
-            isUltimateMoving = true;  // Mark the ability as in movement state
-            isUltimateActive = false; // Deactivate the ultimate ability once movement starts
-            isSelectingUltimatePosition = false; // End the position selection state
-            animator.SetTrigger("TriggerUltimate");  // Continue ultimate ability animation
+            isUltimateMoving = true;  
+            isUltimateActive = false; 
+            isSelectingUltimatePosition = false;
+            animator.SetTrigger("TriggerUltimate");  
             FindObjectOfType<audiomanager>().PlaySFX("dashSFX");
             DamageUltimate();
 
@@ -311,14 +293,11 @@ public class Barbarian_Abilities : MonoBehaviour
 
     private void DamageUltimate()
     {
-        // Define the width of the ultimate ability's area of effect
         float width = 1.5f;
 
-        // Create a ray from the player to the ultimate destination
         Vector3 direction = (ultimateTargetPosition - transform.position).normalized;
         float distance = Vector3.Distance(transform.position, ultimateTargetPosition);
 
-        // Cast a SphereCast along the path to detect all enemies in the way
         RaycastHit[] hits = Physics.SphereCastAll(transform.position, width, direction, distance);
 
         foreach (var hit in hits)
@@ -333,17 +312,16 @@ public class Barbarian_Abilities : MonoBehaviour
     {
         yield return new WaitForSeconds(delay);
 
-        // Perform the damage logic (e.g., find the enemy component and apply damage)
         findAndDamageEnemy(damage, enemyCollider);
 
         Debug.Log($"Damaged enemy after delay: {enemyCollider.name}");
     }   
     private void TriggerUltimateAbility()
     {
-        if (IsAbilityOnCooldown("Ultimate")) return;  // If on cooldown, do nothing
+        if (IsAbilityOnCooldown("Ultimate")) return; 
         Debug.Log("Ultimate ability activated. Please select a target position with right-click.");
-        isUltimateActive = true;  // Activate the ultimate ability
-        isSelectingUltimatePosition = true;  // Enable position selection
+        isUltimateActive = true; 
+        isSelectingUltimatePosition = true;  
     }
 
 
@@ -367,10 +345,10 @@ public class Barbarian_Abilities : MonoBehaviour
                 StartCoroutine(startStartingTheCooldown("Defensive", 0, abilityName));
                 break;
             case "Wildcard":
-                StartCoroutine(startStartingTheCooldown("Wildcard", 0, abilityName));
+                StartCoroutine(startStartingTheCooldown("Wildcard", 2, abilityName));
                 break;
             case "Ultimate":
-                StartCoroutine(startStartingTheCooldown("Ultimate", 0, abilityName));
+                StartCoroutine(startStartingTheCooldown("Ultimate", 5, abilityName));
                 break;
         }
         
@@ -378,7 +356,10 @@ public class Barbarian_Abilities : MonoBehaviour
 
     private IEnumerator startStartingTheCooldown(string type, int time, string abilityName)
     {
+        if (type == "Wildcard" || type == "Ultimate")
+            DONT = true;
         yield return new WaitForSeconds(time);
+        DONT = false;
         if (type == "Basic") StartCoroutine(CooldownRoutine(GameObject.Find(type).GetComponent<UnityEngine.UI.Image>(), (int)abilityCooldowns[type], type));
         else
         StartCoroutine(CooldownRoutine(GameObject.Find(type).GetComponent<UnityEngine.UI.Image>(), (int)abilityCooldowns[type]));
@@ -421,7 +402,6 @@ public class Barbarian_Abilities : MonoBehaviour
 
         Debug.Log("Shield Deactivated");
 
-        // Start the cooldown only after the ability finishes
         StartCooldown("Defensive");
     }
 
@@ -456,7 +436,6 @@ public class Barbarian_Abilities : MonoBehaviour
 
     private IEnumerator CooldownRoutine(UnityEngine.UI.Image img, int cooldown, string type = "")
     {
-        // find tmp text with a specific name
         GameObject gameObject;
         if (type == "Basic") gameObject = img.transform.GetChild(2).gameObject;
         else gameObject = img.transform.GetChild(3).gameObject;
@@ -465,12 +444,10 @@ public class Barbarian_Abilities : MonoBehaviour
         gameObject.SetActive(true);
 
         float decreasing = cooldown;
-        // Get the fill GameObject and set its fill amount to 0
         Transform fill = img.transform.Find("Fill");
         UnityEngine.UI.Image fillImage = fill.GetComponent<UnityEngine.UI.Image>();
         fillImage.fillAmount = 0;
 
-        // Increment the fill amount over the cooldown period
         float elapsed = 0;
         while (elapsed < cooldown)
         {
