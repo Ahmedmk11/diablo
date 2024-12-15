@@ -1,13 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.Animations;
 using UnityEngine;
 using UnityEngine.AI;
 
 public class LilithBehavior : MonoBehaviour
 {
     public Camera cameraForYarab;
-    public AnimatorController animatorController; // Reference to Animator Controller
+    public RuntimeAnimatorController animatorController; // Reference to Animator Controller
     public GameObject minionPrefab; // Minion prefab (Ch25_nonPBR)
     public float attackInterval = 5f; // Time between attacks
     public int maxMinions = 3; // Maximum number of minions Lilith can summon
@@ -19,7 +18,7 @@ public class LilithBehavior : MonoBehaviour
     private Animator animator; // Reference to Animator component
     private GameObject[] activeMinions; // Array to track currently summoned minions
 
-    public AnimatorController minionController;
+    public RuntimeAnimatorController minionController;
     public GameObject player;
 
     private bool isStunned = false;

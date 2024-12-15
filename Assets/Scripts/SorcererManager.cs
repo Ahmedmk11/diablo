@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
-using UnityEditor.Animations;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -45,7 +44,7 @@ public class SorcererManager : MonoBehaviour
 
     public bool cloneActive = false;
     public Transform clonePosition;
-    public AnimatorController cloneAnimator;
+    public RuntimeAnimatorController cloneAnimator;
 
     // Start is called before the first frame update
     void Start()

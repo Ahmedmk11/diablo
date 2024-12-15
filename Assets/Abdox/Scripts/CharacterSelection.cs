@@ -49,6 +49,7 @@ public class CharacterSelection : MonoBehaviour
     {
         if (FromSelectLevel == 2)
         {  
+            FromSelectLevel = 0;
             UnityEngine.SceneManagement.SceneManager.LoadScene("Demo Blue");
             FindObjectOfType<audiomanager>().PlayMusic("bosslevelMusic");
 

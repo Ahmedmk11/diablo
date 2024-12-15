@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.Animations;
 using UnityEngine;
 
 public class lilithphase2testingscript : MonoBehaviour
@@ -20,7 +19,7 @@ public class lilithphase2testingscript : MonoBehaviour
    //  public Transform playerPos;
 
     public GameObject particleSystem;
-    public AnimatorController phase2controller;
+    public RuntimeAnimatorController phase2controller;
     public Camera camera;
 
 

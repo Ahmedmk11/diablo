@@ -17309,7 +17309,7 @@ MonoBehaviour:
   LilithPhase1: {fileID: 0}
   Lilithphase2: {fileID: 0}
   SorcererManager: {fileID: 1858325861}
-  fireball: {fileID: 9220849310273169300, guid: 0e7544bd6e7ec224aa525d0c0c17199b, type: 3}
+  fireball: {fileID: 812045143420203222, guid: 0e7544bd6e7ec224aa525d0c0c17199b, type: 3}
   clone: {fileID: 919132149155446097, guid: 01387240fe6a726439f7d962cba8b19e, type: 3}
   inferno: {fileID: 165136, guid: ae91537edf47d13498977a9722e13875, type: 3}
   cloneAnimator: {fileID: 9100000, guid: c5f4a584cf4c93341bf1cd8f17a56a53, type: 2}
@@ -41771,6 +41771,7 @@ MonoBehaviour:
   camera: {fileID: 0}
   arrowSpawnPoint: {fileID: 0}
   selectedEnemy: {fileID: 0}
+  isShower: 1
   launchForce: 20
   arrowLifetime: 5
 --- !u!114 &1858325857
@@ -41791,6 +41792,7 @@ MonoBehaviour:
   selectedEnemy: {fileID: 0}
   showerEffect: {fileID: 0}
   position: {x: 0, y: 0, z: 0}
+  arrow: {fileID: 0}
   launchForce: 20
   arrowLifetime: 5
   enemyLayer:

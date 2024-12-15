@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
-using UnityEditor.Animations;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.SceneManagement;
@@ -32,12 +31,12 @@ public class yarab : MonoBehaviour
     public Light lilithAura;
     public GameObject bloodySpikes;
 
-    public AnimatorController barbAnimator;
-    public AnimatorController sorcAnimator;
-    public AnimatorController rogueAnimator;
-    public AnimatorController lilithAnimatorPhase1;
-    public AnimatorController lilithAnimatorPhase2;
-    public AnimatorController minionAnimator;
+    public RuntimeAnimatorController barbAnimator;
+    public RuntimeAnimatorController sorcAnimator;
+    public RuntimeAnimatorController rogueAnimator;
+    public RuntimeAnimatorController lilithAnimatorPhase1;
+    public RuntimeAnimatorController lilithAnimatorPhase2;
+    public RuntimeAnimatorController minionAnimator;
 
 
     public Movement movement;
@@ -59,7 +58,7 @@ public class yarab : MonoBehaviour
     public GameObject fireball;
     public GameObject clone;
     public GameObject inferno;
-    public AnimatorController cloneAnimator;
+    public RuntimeAnimatorController cloneAnimator;
 
     public PlayerAnimationTrigger playerAnimationTrigger;
     public ArrowShower arrowShower;
@@ -193,7 +192,7 @@ public class yarab : MonoBehaviour
         }
         canvasObject = GameObject.Find("Canvas");
 
-        if (level == 2 && PlayerPrefs.GetInt("level") != 69)
+        if (level == 2 && selectlevel.enterBossDirectly != 69)
         {
             maxHealth = PlayerPrefs.GetInt("maxHealth");
             health = PlayerPrefs.GetInt("health");
@@ -207,6 +206,7 @@ public class yarab : MonoBehaviour
             ultimateAbilityLocked = PlayerPrefs.GetInt("ultimateAbilityLocked") == 1;
             unlockAbilityCheat = PlayerPrefs.GetInt("unlockAbilityCheat") == 1;
         }
+        if (selectlevel.enterBossDirectly == 69) selectlevel.enterBossDirectly = 0;
 
     }
     // private bool on = true; // remove

@@ -8,6 +8,8 @@ public class selectlevel : MonoBehaviour
     [SerializeField] private Button back;
     [SerializeField] private Button baseLevel;
     [SerializeField] private Button boss;
+
+    public static int enterBossDirectly = 0;
     // Start is called before the first frame update
     void Start()
     {
@@ -22,7 +24,7 @@ public class selectlevel : MonoBehaviour
         boss.onClick.AddListener(() =>
         {
             CharacterSelection.FromSelectLevel = 2;
-            PlayerPrefs.SetInt("level", 69);
+            enterBossDirectly = 69;
             UnityEngine.SceneManagement.SceneManager.LoadScene("CharChoice");
         });
     }

@@ -1,4 +1,3 @@
-using UnityEditor.Animations;
 using UnityEngine;
 using UnityEngine.AI;
 using System.Collections.Generic;
@@ -10,8 +9,8 @@ public class CreateCamp : MonoBehaviour
     public Transform player;
     public GameObject demonPrefab;
     public GameObject minionPrefab;
-    public AnimatorController demonController;
-    public AnimatorController minionController;
+    public RuntimeAnimatorController demonController;
+    public RuntimeAnimatorController minionController;
     public List<Vector3> campPositions;
     private float demonsPatrolRadius = 8f;
     private float minionsIdleRadius = 1.5f;

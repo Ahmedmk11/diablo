@@ -15,9 +15,6 @@ EditorBuildSettings:
     path: Assets/Abdox/Screens/OptionsMenus.unity
     guid: b00f31039a96b40bab5178c4b9d1595e
   - enabled: 1
-    path: Assets/Abdox/Screens/Pause.unity
-    guid: e80ba2eba5a614072a8cba59a8ca16c7
-  - enabled: 1
     path: Assets/Abdox/Screens/SelectLevel.unity
     guid: bca9ddf1a71da4f388ce461096a68e8b
   - enabled: 1

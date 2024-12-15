@@ -96,7 +96,7 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
-  m_LightingDataAsset: {fileID: 0}
+  m_LightingDataAsset: {fileID: 112000000, guid: f2fa9c58751201943ae753970cbed452, type: 2}
   m_LightingSettings: {fileID: 4890085278179872738, guid: dc60166ef3d6a3c45a15795f5c4fe17c, type: 2}
 --- !u!196 &4
 NavMeshSettings:
@@ -6934,7 +6934,8 @@ MonoBehaviour:
   arrow1: {fileID: 1566359048267273319, guid: 215c729eb6cf80c4c8a8ad9eed918f7b, type: 3}
   shower: {fileID: 6240992605899186232, guid: 759bb212fcb79224ea53e36b8e6fc3bc, type: 3}
   smoke: {fileID: 2522079221440020892, guid: fea3ce10f04060240be32c1d98584399, type: 3}
-  spark: {fileID: 2523170635868714095, guid: f063682089c3a6343a01ffe730347ead, type: 3}
+  smokeEffect: {fileID: 7429298357567298572, guid: a1b6bde4a3b8e094a94f4f2d9530a61f, type: 3}
+  spark: {fileID: 2523170635868714095, guid: ff39e61e9b455b2429570041e0a3a68f, type: 3}
   lilithShield: {fileID: 1503744549}
   lilithAura: {fileID: 736364902}
   bloodySpikes: {fileID: 298693270}
@@ -6955,9 +6956,9 @@ MonoBehaviour:
   LilithPhase1: {fileID: 607552197}
   Lilithphase2: {fileID: 607552196}
   SorcererManager: {fileID: 607552199}
-  fireball: {fileID: 9220849310273169300, guid: 0e7544bd6e7ec224aa525d0c0c17199b, type: 3}
+  fireball: {fileID: 812045143420203222, guid: 0e7544bd6e7ec224aa525d0c0c17199b, type: 3}
   clone: {fileID: 919132149155446097, guid: 01387240fe6a726439f7d962cba8b19e, type: 3}
-  inferno: {fileID: 184752, guid: 1b42e0a83c48f0e44a0eba8da42982d8, type: 3}
+  inferno: {fileID: 165136, guid: ae91537edf47d13498977a9722e13875, type: 3}
   cloneAnimator: {fileID: 9100000, guid: c5f4a584cf4c93341bf1cd8f17a56a53, type: 2}
   playerAnimationTrigger: {fileID: 704810930}
   arrowShower: {fileID: 704810931}
@@ -24401,6 +24402,7 @@ MonoBehaviour:
   camera: {fileID: 0}
   arrowSpawnPoint: {fileID: 0}
   selectedEnemy: {fileID: 0}
+  isShower: 1
   launchForce: 20
   arrowLifetime: 5
 --- !u!114 &704810931
@@ -24419,7 +24421,9 @@ MonoBehaviour:
   camera: {fileID: 0}
   arrowSpawnPoint: {fileID: 0}
   selectedEnemy: {fileID: 0}
+  showerEffect: {fileID: 0}
   position: {x: 0, y: 0, z: 0}
+  arrow: {fileID: 0}
   launchForce: 20
   arrowLifetime: 5
   enemyLayer:
