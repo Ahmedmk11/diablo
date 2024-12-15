@@ -104,7 +104,7 @@ public class Bomb : MonoBehaviour
     }
     IEnumerator DelayedShootBomb()
     {
-        yield return new WaitForSeconds(1f); // Delay for 2 seconds
+        yield return new WaitForSeconds(2f); // Delay for 2 seconds
         ShootBomb(); // Call the original ShootBomb method
     }
 

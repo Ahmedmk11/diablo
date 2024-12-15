@@ -11,13 +11,14 @@ public class Dash : MonoBehaviour
     private RaycastHit hit;
     public Camera camera;
     private NavMeshAgent agent;
+    private bool coolWindw = true;
     
     
     public Vector3 position;
 
     private bool isCooldown = false; // Cooldown flag
     private float cooldownTime = 5f; // Cooldown duration
-    private float dashDelay = 2.3f; // Delay before executing the dash
+    private float dashDelay = 1.3f; // Delay before executing the dash
 
     private bool isSelecting = false;
 
@@ -33,7 +34,7 @@ public class Dash : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetMouseButtonDown(1) && isSelecting) // Right-click
+        if (Input.GetMouseButtonDown(1) && isSelecting && coolWindw) // Right-click
         {
             // Create a ray from the camera to the mouse position
             Ray ray = camera.ScreenPointToRay(Input.mousePosition);
@@ -49,17 +50,17 @@ public class Dash : MonoBehaviour
 
                 // Make the player look at the target position
                 agent.transform.LookAt(targetPosition);
-
+               
                 isSelecting = false;
                 animator.SetTrigger("Dash");
-                FindObjectOfType<audiomanager>().PlaySFX("dashSFX");
+                StartCoroutine(Sound());
                 StartCoroutine(ExecuteDashWithDelay(position));
-                StartCoroutine(Cooldown());
+                StartCoroutine(AdjustCooldown());
                 arrow.isDash = true;
             }
         }
 
-        if (Input.GetKeyDown(KeyCode.Q) && !isCooldown)
+        if (Input.GetKeyDown(KeyCode.Q) && !isCooldown && coolWindw)
         {
             isSelecting = true;
             arrow.isDash = false;
@@ -88,12 +89,42 @@ public class Dash : MonoBehaviour
 
     void DashAb(Vector3 position)
     {
-        // agent.transform.position = position;
-        agent.speed = agent.speed * 2;
-        agent.SetDestination(position);
-        // after arriving at the destination, reset the speed
-        isSpeedModified = true;
+        if (!isSpeedModified)
+        {
+            StartCoroutine(SpeedBoost(position));
+        }
     }
+    private IEnumerator SpeedBoost(Vector3 position)
+    {
+        // Set the destination and boost the speed
+        isSpeedModified = true;
+        float originalSpeed = agent.speed;
+        agent.speed = originalSpeed * 10; // Increase speed
+        agent.SetDestination(position);
+
+        // Wait for 2 seconds
+        yield return new WaitForSeconds(2);
+
+        // Reset the speed
+        agent.speed = originalSpeed;
+        isSpeedModified = false;
+    }
+
+    IEnumerator AdjustCooldown()
+    {
+        coolWindw = false;
+        yield return new WaitForSeconds(3);
+        coolWindw = true;
+        StartCoroutine(Cooldown());
+     }
+
+    IEnumerator Sound()
+    {
+        yield return new WaitForSeconds(1);
+        FindObjectOfType<audiomanager>().PlaySFX("dashSFX");
+
+
+      }
 
     IEnumerator Cooldown()
     {
