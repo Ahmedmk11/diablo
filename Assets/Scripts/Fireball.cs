@@ -1,19 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class Fireball : MonoBehaviour
 {
-    // Start is called before the first frame update
+    [SerializeField] private LayerMask navMeshSurfaceLayer;
+    [SerializeField] private float lifetime = 5f;
     void Start()
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        Destroy(gameObject, lifetime);
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -23,6 +19,15 @@ public class Fireball : MonoBehaviour
             findAndDamageEnemy(5, collision.transform);
             Destroy(gameObject);
         }
+        else if (IsNavMeshSurface(collision))
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    private bool IsNavMeshSurface(Collision collision)
+    {
+        return (navMeshSurfaceLayer.value & (1 << collision.gameObject.layer)) > 0;
     }
 
     private void findAndDamageEnemy(int damage, Transform target)
