@@ -26,14 +26,16 @@ public class Movement : MonoBehaviour
         {
             //print("mouse down");
             Ray ray = camera.ScreenPointToRay(Input.mousePosition);
-            if (Physics.Raycast(ray, out hit) && !UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject())
+            if (Physics.Raycast(ray, out hit) && !UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject() && !camera.GetComponent<yarab>().paused && camera.GetComponent<yarab>().health > 0)
             {
 
                 agent.SetDestination(hit.point);
                 Vector3 direction = hit.point - transform.position;
 
+                
                 Quaternion rotation = Quaternion.LookRotation(direction);
                 transform.rotation = Quaternion.Lerp(transform.rotation, rotation, 0.5f);
+                
 
             }
             

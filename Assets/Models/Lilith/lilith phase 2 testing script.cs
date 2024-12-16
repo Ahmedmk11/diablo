@@ -31,6 +31,7 @@ public class lilithphase2testingscript : MonoBehaviour
     private bool waitBetweenCycles = true;
 
     private bool isStunned = false;
+    private bool startTakingDamage = false;
 
     // Start is called before the first frame update
     void Start()
@@ -54,7 +55,8 @@ public class lilithphase2testingscript : MonoBehaviour
         particleSystemInstance.gameObject.SetActive(false);
 
         aura.enabled = false;
-
+        halo.enabled = false;
+        print("fy start script zizo");
         StartCoroutine(DelayUpdateLogic(10f));
     }
 
@@ -103,10 +105,15 @@ public class lilithphase2testingscript : MonoBehaviour
     {
         yield return new WaitForSeconds(delay);
         isUpdateDelayed = false; 
+        camera.GetComponent<yarab>().stopRotation = false;
+        halo.enabled = true;
+        startTakingDamage = true;
     }
 
     public void takeDamage(int damage)
     {
+        if (!startTakingDamage)
+            return;
         if (hasReflectiveAura)
         {
             camera.GetComponent<yarab>().takeDamage(damage + 15);
@@ -142,8 +149,13 @@ public class lilithphase2testingscript : MonoBehaviour
         else
         {
             health -= damage;
+            if (health < 0)
+            {
+                health = 0;
+            }
             if (health <= 0)
             {
+                camera.GetComponent<yarab>().stopRotation = true;
                 phase2Anim.SetTrigger("death");
             }
         }

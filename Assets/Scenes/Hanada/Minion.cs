@@ -21,6 +21,8 @@ public class Minion : MonoBehaviour
     public yarab yarabScript;
     private bool isAttacking = false;
     private bool isStunned = false;
+
+    private bool alreadyDead = false;
     public float playerHp;
 
     private void Start()
@@ -161,7 +163,7 @@ public class Minion : MonoBehaviour
     {
         hp -= damage;
         animator.SetTrigger("isTakingDamage");
-        if (hp <= 0)
+        if (hp <= 0 && !alreadyDead)
         {
             Die();
         }
@@ -172,6 +174,7 @@ public class Minion : MonoBehaviour
 
     public void Die()
     {
+        alreadyDead = true;
         FindObjectOfType<audiomanager>().PlaySFX("enemyDeathSFX");
         animator.SetTrigger("isDying");
         yarabScript.gainXP((int)xp);

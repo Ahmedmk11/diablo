@@ -63,7 +63,6 @@ public class PlayerAnimationTrigger : MonoBehaviour
             {
                 // Set the "Arrow" trigger in the Animator
                 animator.SetTrigger("Arrow");
-                FindObjectOfType<audiomanager>().PlaySFX("arrowHitSFX");
                 findAndDamageEnemy(5, selectedEnemy.GetComponent<Collider>());
                 StartCoroutine(DelayFunctionCall());
                 StartCoroutine(Cooldown());
@@ -78,7 +77,7 @@ public class PlayerAnimationTrigger : MonoBehaviour
     void ShootArrow()
     {
         Debug.Log("Arrow Shot");
-
+        FindObjectOfType<audiomanager>().PlaySFX("arrowHitSFX");
         // Adjust position and rotation of the arrow
         Quaternion adjustedRotation = Quaternion.Euler(
             arrowPrefab.transform.rotation.eulerAngles.x,

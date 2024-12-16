@@ -95,6 +95,7 @@ public class audiomanager : MonoBehaviour
 
     public void PlayMusic(string musicString)
     {
+        musicSource.Stop();
         AudioClip music = audios[musicString];
         musicSource.clip = music;
         musicSource.Play();

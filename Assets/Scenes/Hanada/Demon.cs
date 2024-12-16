@@ -33,6 +33,7 @@ public class Demon : MonoBehaviour
     public string demonName;
     public float playerHp;
 
+    private bool alreadyDead = false;
     private void Start()
     {
         if (agent == null)
@@ -215,7 +216,7 @@ public class Demon : MonoBehaviour
     {
         hp -= damage;
         animator.SetTrigger("isTakingDamage");
-        if (hp <= 0)
+        if (hp <= 0 && !alreadyDead)
         {
             Die();
         }
@@ -226,6 +227,7 @@ public class Demon : MonoBehaviour
 
     public void Die()
     {
+        alreadyDead = true;
         FindObjectOfType<audiomanager>().PlaySFX("enemyDeathSFX");
         animator.SetTrigger("isDying");
         yarabScript.gainXP((int)xp);
