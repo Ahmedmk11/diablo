@@ -98,6 +98,7 @@ public class CreateCamp : MonoBehaviour
                 
                 Minion minionScript = agent.AddComponent<Minion>();
                 minionScript.campManager = campManagerInstance;
+                minionScript.playerHp = yarabScript.health;
                 minionScript.player = player.gameObject;
                 minionScript.yarabScript = yarabScript;
 
@@ -140,6 +141,7 @@ public class CreateCamp : MonoBehaviour
 
             Demon demonScript = agent.AddComponent<Demon>();
             demonScript.campManager = campManagerInstance;
+            demonScript.playerHp = yarabScript.health;
             demonScript.player = player.gameObject;
             demonScript.yarabScript = yarabScript;
             demonScript.particleSystem = particleSystem;

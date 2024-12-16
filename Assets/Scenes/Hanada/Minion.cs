@@ -21,6 +21,7 @@ public class Minion : MonoBehaviour
     public yarab yarabScript;
     private bool isAttacking = false;
     private bool isStunned = false;
+    public float playerHp;
 
     private void Start()
     {
@@ -39,6 +40,7 @@ public class Minion : MonoBehaviour
         if (campManager != null)
         {
             campManager.RegisterMinion(this);
+            campManager.playerHp = playerHp;
         }
 
         transform.GetChild(1).GetChild(3).GetChild(0).GetComponent<Slider>().value = 1;
@@ -134,7 +136,6 @@ public class Minion : MonoBehaviour
             return;
         }
 
-        Debug.Log("Minion punch");
         animator.SetTrigger("isPunching");
         
         AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
@@ -171,7 +172,6 @@ public class Minion : MonoBehaviour
 
     public void Die()
     {
-        Debug.Log("Minion died");
         FindObjectOfType<audiomanager>().PlaySFX("enemyDeathSFX");
         animator.SetTrigger("isDying");
         yarabScript.gainXP((int)xp);

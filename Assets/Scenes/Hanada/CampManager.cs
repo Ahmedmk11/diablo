@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using System;
 
 public class CampManager : MonoBehaviour
 {
@@ -20,48 +21,36 @@ public class CampManager : MonoBehaviour
     private bool playerDied = false;
     public int playerHealth;
     public string name;
-
+    private bool campDeadFlag = false;
     public GameObject runePrefab;
     public GameObject mainCamera;
 
     public Camera minimapCamera;
-
-    private void Start()
-    {
-        float initialDistanceToCenter = Vector3.Distance(player.position, centerPoint);
-        isPlayerInsideCampRadius = initialDistanceToCenter <= campRadius;
-    }
+    public float playerHp;
 
     private void Update()
     {
         float distanceToCenter = Vector3.Distance(player.position, centerPoint);
 
-        if (demons.Count != 0)
+        if (playerHp > 0 && !isPlayerInsideCampRadius && distanceToCenter <= campRadius)
         {
-            if (demons[0].yarabScript.health > 0 && !isPlayerInsideCampRadius && distanceToCenter <= campRadius)
-            {
-                Debug.Log("Player is in camp radius");
-                isPlayerInsideCampRadius = true;
-                AlertNearbyEntities();
-            }
-            else if (isPlayerInsideCampRadius && distanceToCenter > campRadius)
-            {
-                Debug.Log("Player out of camp radius");
-                isPlayerInsideCampRadius = false;
-                ResetNearbyEntities();
-            }
+            Debug.Log("Player is in camp radius");
+            isPlayerInsideCampRadius = true;
+            AlertNearbyEntities();
         }
-        
-        if(demons.Count != 0)
+        else if (isPlayerInsideCampRadius && distanceToCenter > campRadius)
         {
-            if (!playerDied && demons[0].yarabScript.health <= 0)
-            // if (!playerDied && playerHealth <= 0)
-            {
-                playerDied = true;
-                ResetNearbyEntities();
-                Debug.Log("Player died (testing reset)");
-            }
+            Debug.Log("Player out of camp radius");
+            isPlayerInsideCampRadius = false;
+            ResetNearbyEntities();
         }
+
+        if (!playerDied && playerHp <= 0)
+        {
+            playerDied = true;
+            ResetNearbyEntities();
+        }
+
         
     }
 
@@ -115,8 +104,9 @@ public class CampManager : MonoBehaviour
             }
         }
 
-        if (IsCampDead())
+        if (IsCampDead() && !campDeadFlag)
         {
+            campDeadFlag = true;
             print("Camp is dead");
             GameObject rune = Instantiate(runePrefab, 
                 new Vector3(centerPoint.x, 7.2f, centerPoint.z), Quaternion.identity);
@@ -152,8 +142,9 @@ public class CampManager : MonoBehaviour
             }
         }
 
-        if (IsCampDead())
+        if (IsCampDead() && !campDeadFlag)
         {
+            campDeadFlag = true;
             print("Camp is dead");
             GameObject rune = Instantiate(runePrefab,
                 new Vector3(centerPoint.x, 7.2f, centerPoint.z), Quaternion.identity);
@@ -207,13 +198,12 @@ public class CampManager : MonoBehaviour
 
     private void ResetNearbyEntities()
     {
+        Debug.Log("Resetting alerted entities");
         foreach (Demon demon in alertedDemons)
         {
             demon.goingBack = true;
             demon.agent.ResetPath();
-            Debug.Log("before: Resetting demon path to initial");
             demon.agent.SetDestination(demonPositions[demon]);
-            Debug.Log("after: Resetting demon path to initial");
             demon.StopFollowingPlayer();
             demon.patrolling = true;
         }
@@ -224,8 +214,6 @@ public class CampManager : MonoBehaviour
             minion.agent.SetDestination(minionPositions[minion]);
             minion.StopFollowingPlayer();
         }
-
-        Debug.Log("Resetting alerted entities");
 
         alertedDemons.Clear();
         alertedMinions.Clear();
@@ -285,7 +273,7 @@ public class RotationAnimation : MonoBehaviour
     void Start()
     {
         startPosition = transform.position;
-        randomOffset = Random.Range(0f, 2f * Mathf.PI);
+        randomOffset = UnityEngine.Random.Range(0f, 2f * Mathf.PI);
     }
 
     void Update()

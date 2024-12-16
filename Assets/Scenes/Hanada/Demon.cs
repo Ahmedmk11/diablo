@@ -31,6 +31,7 @@ public class Demon : MonoBehaviour
     private ParticleSystem particleSystemInstance;
     private bool isStunned = false;
     public string demonName;
+    public float playerHp;
 
     private void Start()
     {
@@ -49,6 +50,7 @@ public class Demon : MonoBehaviour
         }
 
         campManager.RegisterDemon(this);
+        campManager.playerHp = playerHp;
 
         transform.GetChild(8).GetChild(5).GetComponent<Canvas>().worldCamera = yarabScript.camera;
 
@@ -184,7 +186,6 @@ public class Demon : MonoBehaviour
             return;
         }
 
-        Debug.Log("Demon Swing");
         animator.SetTrigger("isSwinging");
 
         AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
@@ -200,7 +201,6 @@ public class Demon : MonoBehaviour
             return;
         }
 
-        Debug.Log("Explosion");
         swings = 0;
         animator.SetTrigger("isThrowing");
 
@@ -226,7 +226,6 @@ public class Demon : MonoBehaviour
 
     public void Die()
     {
-        Debug.Log("Demon died");
         FindObjectOfType<audiomanager>().PlaySFX("enemyDeathSFX");
         animator.SetTrigger("isDying");
         yarabScript.gainXP((int)xp);

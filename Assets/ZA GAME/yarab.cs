@@ -530,12 +530,12 @@ public class yarab : MonoBehaviour
         {
             isDead = true;
             StartCoroutine(WaitForAnimationToDie(5)); 
-            Debug.Log("took damage from " + attacker + " and died");
+            // Debug.Log("took damage from " + attacker + " and died");
         }
         else
         {
             StartCoroutine(WaitForAnimationToGetHit(clipLength)); 
-            Debug.Log("took damage from " + attacker + " " + health);
+            // Debug.Log("took damage from " + attacker + " " + health);
         }
     }
 
