@@ -31,7 +31,10 @@ public class Barbarian_Abilities : MonoBehaviour
     public bool WildcardAbilityLockedBarb = true;
     public bool UltimateAbilityLockedBarb = true;
 
-    private bool DONT = false;
+    private bool DONTwild = false;
+    private bool DONTult = false;
+    private bool DONTdef = false;
+
 
     private Dictionary<string, float> abilityCooldowns = new Dictionary<string, float>
     {
@@ -103,18 +106,18 @@ public class Barbarian_Abilities : MonoBehaviour
             }
         }
 
-        if (Input.GetKeyDown(KeyCode.W) && !IsAbilityOnCooldown("Defensive") && !DefensiveAbilityLockedBarb)
+        if (Input.GetKeyDown(KeyCode.W) && !IsAbilityOnCooldown("Defensive") && !DefensiveAbilityLockedBarb && !DONTdef)
         {
             TriggerDefensiveAbility();
         }
 
-        if (Input.GetKeyDown(KeyCode.Q) && !IsAbilityOnCooldown("Wildcard") && !WildcardAbilityLockedBarb && !DONT)
+        if (Input.GetKeyDown(KeyCode.Q) && !IsAbilityOnCooldown("Wildcard") && !WildcardAbilityLockedBarb && !DONTwild)
         {
             StopAgentAtCurrentPosition();
             TriggerWildcardAbility();
         }
 
-        if (Input.GetKeyDown(KeyCode.E) && !IsAbilityOnCooldown("Ultimate") && !isUltimateActive && !UltimateAbilityLockedBarb && !DONT)
+        if (Input.GetKeyDown(KeyCode.E) && !IsAbilityOnCooldown("Ultimate") && !isUltimateActive && !UltimateAbilityLockedBarb && !DONTult)
         {
             TriggerUltimateAbility(); 
         }
@@ -216,17 +219,18 @@ public class Barbarian_Abilities : MonoBehaviour
 
 
     private void TriggerDefensiveAbility(){
-    if (shieldLight != null)
-    {
-        FindObjectOfType<audiomanager>().PlaySFX("abilitySFX");
-        shieldLight.SetActive(true);
-        shieldActive = true;
-    }
+        if (shieldLight != null)
+        {
+            FindObjectOfType<audiomanager>().PlaySFX("abilitySFX");
+            shieldLight.SetActive(true);
+            shieldActive = true;
+        }
 
-    animator.SetTrigger("TriggerDefensive");
-    Debug.Log("Defensive ability triggered.");
+        animator.SetTrigger("TriggerDefensive");
+        Debug.Log("Defensive ability triggered.");
 
-    StartCoroutine(DisableShieldAfterDuration(3f));
+        StartCooldown("Defensive");
+        StartCoroutine(DisableShieldAfterDuration(3f));
 }
 
     private void StopAgentAtCurrentPosition()
@@ -254,7 +258,7 @@ public class Barbarian_Abilities : MonoBehaviour
 
     private void DamageWildCard()
     {
-        float damageRadius = 2f;
+        float damageRadius = 4f;
 
         Collider[] colliders = Physics.OverlapSphere(transform.position, damageRadius);
 
@@ -262,7 +266,8 @@ public class Barbarian_Abilities : MonoBehaviour
         {
             if (collider.CompareTag("Enemy"))
             {
-                findAndDamageEnemy(10, collider);
+                StartCoroutine(DamageEnemyWithDelay(collider, 10, 0.5f));
+                // findAndDamageEnemy(10, collider);
                 Debug.Log($"Damaged enemy: {collider.name}");
             }
         }
@@ -284,14 +289,14 @@ public class Barbarian_Abilities : MonoBehaviour
             isSelectingUltimatePosition = false;
             animator.SetTrigger("TriggerUltimate");  
             FindObjectOfType<audiomanager>().PlaySFX("dashSFX");
-            DamageUltimate();
+            StartCoroutine(DamageUltimate());
 
             StartCooldown("Ultimate");
         }
     }
 
 
-    private void DamageUltimate()
+    /*private void DamageUltimate()
     {
         float width = 1.5f;
 
@@ -307,7 +312,44 @@ public class Barbarian_Abilities : MonoBehaviour
                 StartCoroutine(DamageEnemyWithDelay(hit.collider, 100, 2f));
             }
         }
+    }*/
+
+    private IEnumerator DamageUltimate()
+    {
+        float width = 1.5f; 
+        float stepDistance = 1f; 
+        float speed = 5f; 
+        Vector3 startPosition = transform.position;
+        Vector3 direction = (ultimateTargetPosition - startPosition).normalized;
+        float totalDistance = Vector3.Distance(startPosition, ultimateTargetPosition);
+        float traveledDistance = 0f;
+        print(totalDistance);
+        while (traveledDistance < totalDistance)
+        {
+            print(traveledDistance);
+            Vector3 currentPosition = startPosition + direction * traveledDistance;
+
+            RaycastHit[] hits = Physics.SphereCastAll(currentPosition, width, direction, stepDistance);
+            foreach (var hit in hits)
+            {
+                if (hit.collider.CompareTag("Enemy"))
+                {
+                    StartCoroutine(DamageEnemyWithDelay(hit.collider, 100, 0f));
+                }
+            }
+
+            // Move forward
+            traveledDistance += speed * Time.deltaTime;
+
+            transform.position = currentPosition;
+
+            yield return null; 
+        }
+
+        transform.position = ultimateTargetPosition;
     }
+
+
     private IEnumerator DamageEnemyWithDelay(Collider enemyCollider, int damage, float delay)
     {
         yield return new WaitForSeconds(delay);
@@ -342,7 +384,7 @@ public class Barbarian_Abilities : MonoBehaviour
                 StartCoroutine(startStartingTheCooldown("Basic", 0, abilityName));
                 break;
             case "Defensive":
-                StartCoroutine(startStartingTheCooldown("Defensive", 0, abilityName));
+                StartCoroutine(startStartingTheCooldown("Defensive", 3, abilityName));
                 break;
             case "Wildcard":
                 StartCoroutine(startStartingTheCooldown("Wildcard", 2, abilityName));
@@ -356,10 +398,37 @@ public class Barbarian_Abilities : MonoBehaviour
 
     private IEnumerator startStartingTheCooldown(string type, int time, string abilityName)
     {
-        if (type == "Wildcard" || type == "Ultimate")
-            DONT = true;
+        if (type == "Wildcard")
+        {
+            DONTwild = true;
+        }
+
+        if (type == "Ultimate")
+        {
+            DONTult = true;
+        }
+
+        if (type == "Defensive")
+        {
+            DONTdef = true;
+        }
+
         yield return new WaitForSeconds(time);
-        DONT = false;
+
+        if (type == "Wildcard")
+        {
+            DONTwild = false;
+        }
+
+        if (type == "Ultimate")
+        {
+            DONTult = false;
+        }
+
+        if (type == "Defensive")
+        {
+            DONTdef = false;
+        }
         if (type == "Basic") StartCoroutine(CooldownRoutine(GameObject.Find(type).GetComponent<UnityEngine.UI.Image>(), (int)abilityCooldowns[type], type));
         else
         StartCoroutine(CooldownRoutine(GameObject.Find(type).GetComponent<UnityEngine.UI.Image>(), (int)abilityCooldowns[type]));
@@ -392,6 +461,7 @@ public class Barbarian_Abilities : MonoBehaviour
 
     private IEnumerator DisableShieldAfterDuration(float duration)
     {
+        duration = 3f;
         yield return new WaitForSeconds(duration);
 
         if (shieldLight != null)
@@ -402,7 +472,7 @@ public class Barbarian_Abilities : MonoBehaviour
 
         Debug.Log("Shield Deactivated");
 
-        StartCooldown("Defensive");
+        // StartCooldown("Defensive");
     }
 
     private void findAndDamageEnemy(int damage, Collider collider)

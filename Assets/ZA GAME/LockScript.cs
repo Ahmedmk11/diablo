@@ -22,6 +22,13 @@ public class LockScript : MonoBehaviour
         }
     }
 
+    public void level2unlocker()
+    {
+        GetComponentInParent<UnityEngine.UI.Button>().interactable = false; // Make the parent button interactable
+        GetComponent<UnityEngine.UI.Button>().interactable = false; // Make this button non-interactable
+        gameObject.SetActive(false); // Hide this component
+    }
+
     public void OnUnlockButtonClick()
     {
        

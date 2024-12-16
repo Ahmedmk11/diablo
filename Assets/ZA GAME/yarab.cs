@@ -80,6 +80,10 @@ public class yarab : MonoBehaviour
     public bool ultimateAbilityLocked = true;
     private bool unlockAbilityCheat = false;
 
+    private bool defLockedLevel2 = true;
+    private bool wildLockedLevel2 = true;
+    private bool ultLockedLevel2 = true;
+
     public bool resetCooldowns = false;
 
     public bool enteredPhase2 = false;
@@ -209,10 +213,28 @@ public class yarab : MonoBehaviour
             abilityPoints = PlayerPrefs.GetInt("abilityPoints");
             potions = PlayerPrefs.GetInt("potions");
             runes = PlayerPrefs.GetInt("runes");
-            defensiveAbilityLocked = PlayerPrefs.GetInt("defensiveAbilityLocked") == 1;
-            wildacrdAbilityLocked = PlayerPrefs.GetInt("wildacrdAbilityLocked") == 1;
-            ultimateAbilityLocked = PlayerPrefs.GetInt("ultimateAbilityLocked") == 1;
+            defLockedLevel2 = PlayerPrefs.GetInt("defLockedLevel2") == 1;
+            wildLockedLevel2 = PlayerPrefs.GetInt("wildLockedLevel2") == 1;
+            ultLockedLevel2 = PlayerPrefs.GetInt("ultLockedLevel2") == 1;
             unlockAbilityCheat = PlayerPrefs.GetInt("unlockAbilityCheat") == 1;
+            if (!defLockedLevel2)
+            {
+                GameObject.FindGameObjectsWithTag("def")[0].GetComponent<LockScript>().level2unlocker();
+                defensiveAbilityLocked = false;
+                abilityPoints++;
+            }
+            if (!wildLockedLevel2)
+            {
+                GameObject.FindGameObjectsWithTag("wild")[0].GetComponent<LockScript>().level2unlocker();
+                wildacrdAbilityLocked = false;
+                abilityPoints++;
+            }
+            if (!ultLockedLevel2)
+            {
+                GameObject.FindGameObjectsWithTag("ult")[0].GetComponent<LockScript>().level2unlocker();
+                ultimateAbilityLocked = false;
+                abilityPoints++;
+            }
         }
         if (selectlevel.enterBossDirectly == 69) selectlevel.enterBossDirectly = 0;
 
@@ -243,9 +265,9 @@ public class yarab : MonoBehaviour
             PlayerPrefs.SetInt("abilityPoints", abilityPoints);
             PlayerPrefs.SetInt("potions", potions);
             PlayerPrefs.SetInt("runes", runes - 3);
-            PlayerPrefs.SetInt("defensiveAbilityLocked", defensiveAbilityLocked ? 1 : 0);
-            PlayerPrefs.SetInt("wildacrdAbilityLocked", wildacrdAbilityLocked ? 1 : 0);
-            PlayerPrefs.SetInt("ultimateAbilityLocked", ultimateAbilityLocked ? 1 : 0);
+            PlayerPrefs.SetInt("defLockedLevel2", defLockedLevel2 ? 1 : 0);
+            PlayerPrefs.SetInt("wildLockedLevel2", wildLockedLevel2 ? 1 : 0);
+            PlayerPrefs.SetInt("ultLockedLevel2", ultLockedLevel2 ? 1 : 0);
             PlayerPrefs.SetInt("unlockAbilityCheat", unlockAbilityCheat ? 1 : 0);
 
             SceneManager.LoadScene("Demo Blue");
@@ -333,6 +355,7 @@ public class yarab : MonoBehaviour
             {
                 if(!unlockAbilityCheat) abilityPoints--;
                 defensiveAbilityLocked = true;
+                defLockedLevel2 = false;
                 currentCharacter.AddComponent<Bomb>();
                 currentCharacter.GetComponent<Bomb>().arrowPrefab = smoke;
                 currentCharacter.GetComponent<Bomb>().camera = camera;
@@ -346,6 +369,7 @@ public class yarab : MonoBehaviour
             {
                 if (!unlockAbilityCheat) abilityPoints--;
                 wildacrdAbilityLocked = true;
+                wildLockedLevel2 = false;
                 currentCharacter.AddComponent<Dash>();
                 currentCharacter.GetComponent<Dash>().camera = camera;
             }
@@ -353,6 +377,7 @@ public class yarab : MonoBehaviour
             {
                 if (!unlockAbilityCheat) abilityPoints--;
                 ultimateAbilityLocked = true;
+                ultLockedLevel2 = false;
                 currentCharacter.AddComponent<ArrowShower>();
                 currentCharacter.GetComponent<ArrowShower>().arrowPrefab = shower;
                 currentCharacter.GetComponent<ArrowShower>().camera = camera;
@@ -369,18 +394,21 @@ public class yarab : MonoBehaviour
             {
                 if (!unlockAbilityCheat) abilityPoints--;
                 defensiveAbilityLocked = true;
+                defLockedLevel2 = false;
                 currentCharacter.GetComponent<Barbarian_Abilities>().DefensiveAbilityLockedBarb = false;
             }
             if (!wildacrdAbilityLocked)
             {
                 if (!unlockAbilityCheat) abilityPoints--;
                 wildacrdAbilityLocked = true;
+                wildLockedLevel2 = false;
                 currentCharacter.GetComponent<Barbarian_Abilities>().WildcardAbilityLockedBarb = false;
             }
             if (!ultimateAbilityLocked)
             {
                 if (!unlockAbilityCheat) abilityPoints--;
                 ultimateAbilityLocked = true;
+                ultLockedLevel2 = false;
                 currentCharacter.GetComponent<Barbarian_Abilities>().UltimateAbilityLockedBarb = false;
             }
         }
@@ -390,18 +418,21 @@ public class yarab : MonoBehaviour
             {
                 if (!unlockAbilityCheat) abilityPoints--;
                 defensiveAbilityLocked = true;
+                defLockedLevel2 = false;
                 currentCharacter.GetComponent<SorcererManager>().DefensiveAbilityLockedSorc = false;
             }
             if (!wildacrdAbilityLocked)
             {
                 if (!unlockAbilityCheat) abilityPoints--;
                 wildacrdAbilityLocked = true;
+                wildLockedLevel2 = false;
                 currentCharacter.GetComponent<SorcererManager>().WildcardAbilityLockedSorc = false;
             }
             if (!ultimateAbilityLocked)
             {
                 if (!unlockAbilityCheat) abilityPoints--;
                 ultimateAbilityLocked = true;
+                ultLockedLevel2 = false;
                 currentCharacter.GetComponent<SorcererManager>().UltimateAbilityLockedSorc = false;
             }
         }

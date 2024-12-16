@@ -8311,8 +8311,8 @@ Transform:
   m_GameObject: {fileID: 400425556}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 0.38268343, z: -0, w: 0.92387956}
-  m_LocalPosition: {x: 49.818, y: 4.29, z: 47.738}
-  m_LocalScale: {x: 1, y: 1, z: 0.93954}
+  m_LocalPosition: {x: 49.973, y: 4.29, z: 47.895}
+  m_LocalScale: {x: 1, y: 1, z: 0.96499366}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 849963532}
@@ -17329,6 +17329,8 @@ MonoBehaviour:
   resetCooldowns: 0
   enteredPhase2: 0
   enteredPhase2ForUI: 0
+  stopRotation: 0
+  paused: 0
   pauseCanvas: {fileID: 1149245943}
 --- !u!114 &798920631
 MonoBehaviour:
@@ -37992,8 +37994,8 @@ Transform:
   m_GameObject: {fileID: 1680379034}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 0.38268343, z: -0, w: 0.92387956}
-  m_LocalPosition: {x: 42.836, y: 4.29, z: 54.634003}
-  m_LocalScale: {x: 0.95139, y: 1, z: 0.93954}
+  m_LocalPosition: {x: 42.99, y: 4.29, z: 54.79}
+  m_LocalScale: {x: 0.95139, y: 1, z: 0.96499366}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 849963532}
@@ -41785,6 +41787,7 @@ MonoBehaviour:
   arrowSpawnPoint: {fileID: 0}
   selectedEnemy: {fileID: 0}
   isShower: 1
+  isDash: 1
   launchForce: 20
   arrowLifetime: 5
 --- !u!114 &1858325857
@@ -41849,6 +41852,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   camera: {fileID: 0}
   position: {x: 0, y: 0, z: 0}
+  arrow: {fileID: 0}
 --- !u!114 &1858325860
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -43042,8 +43046,8 @@ Transform:
   m_GameObject: {fileID: 1907508750}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 0.38268343, z: -0, w: 0.92387956}
-  m_LocalPosition: {x: 63.922, y: 4.29, z: 33.512}
-  m_LocalScale: {x: 1, y: 1, z: 0.93954}
+  m_LocalPosition: {x: 64.076, y: 4.29, z: 33.668}
+  m_LocalScale: {x: 1, y: 1, z: 0.96499366}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 849963532}
@@ -43498,8 +43502,8 @@ Transform:
   m_GameObject: {fileID: 1927890729}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 0.38268343, z: -0, w: 0.92387956}
-  m_LocalPosition: {x: 56.86, y: 4.29, z: 40.61}
-  m_LocalScale: {x: 1, y: 1, z: 0.93954}
+  m_LocalPosition: {x: 57.014, y: 4.29, z: 40.766}
+  m_LocalScale: {x: 1, y: 1, z: 0.96499366}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 849963532}

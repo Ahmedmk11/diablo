@@ -6976,6 +6976,8 @@ MonoBehaviour:
   resetCooldowns: 0
   enteredPhase2: 0
   enteredPhase2ForUI: 0
+  stopRotation: 0
+  paused: 0
   pauseCanvas: {fileID: 734836760}
 --- !u!114 &150665593
 MonoBehaviour:
@@ -24404,6 +24406,7 @@ MonoBehaviour:
   arrowSpawnPoint: {fileID: 0}
   selectedEnemy: {fileID: 0}
   isShower: 1
+  isDash: 1
   launchForce: 20
   arrowLifetime: 5
 --- !u!114 &704810931
@@ -24468,6 +24471,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   camera: {fileID: 0}
   position: {x: 0, y: 0, z: 0}
+  arrow: {fileID: 0}
 --- !u!1 &709369736
 GameObject:
   m_ObjectHideFlags: 0
@@ -41212,7 +41216,7 @@ GameObject:
   - component: {fileID: 1398374588}
   m_Layer: 5
   m_Name: Locked
-  m_TagString: Untagged
+  m_TagString: ult
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -42919,7 +42923,7 @@ GameObject:
   - component: {fileID: 1470109622}
   m_Layer: 5
   m_Name: Locked
-  m_TagString: Untagged
+  m_TagString: wild
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -52772,7 +52776,7 @@ GameObject:
   - component: {fileID: 1863532729}
   m_Layer: 5
   m_Name: Locked
-  m_TagString: Untagged
+  m_TagString: def
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

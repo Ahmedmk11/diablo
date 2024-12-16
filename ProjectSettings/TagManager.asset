@@ -29,6 +29,9 @@ TagManager:
   - Ground
   - Enemy
   - rune
+  - def
+  - wild
+  - ult
   layers:
   - Default
   - TransparentFX
